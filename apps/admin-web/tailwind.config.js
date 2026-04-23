@@ -4,13 +4,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        tier: {
-          green: '#16a34a',
-          blue: '#1a6ef5',
-          vip: '#7c3aed',
-          exhibitor: '#b45309',
-          press: '#0369a1',
+        brand: {
+          primary: '#14464F',
+          sky:     '#05B6C4',
+          sand:    '#F5D9A8',
         },
+        tier: {
+          green:     '#059669',
+          blue:      '#05B6C4',
+          vip:       '#8B5CF6',
+          exhibitor: '#D97706',
+          press:     '#0369A1',
+        },
+      },
+      fontFamily: {
+        sans: ['Manrope', 'ui-sans-serif', 'system-ui'],
       },
     },
   },

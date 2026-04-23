@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/theme.dart';
 import 'digital_id_repository.dart';
 import 'profile_repository.dart';
 
@@ -88,20 +89,18 @@ class _TierBadge extends StatelessWidget {
   const _TierBadge({required this.tier});
   @override
   Widget build(BuildContext context) {
-    final (color, label) = switch (tier) {
-      'vip' => (const Color(0xFF7C3AED), '💎 VIP'),
-      'blue' => (const Color(0xFF1A6EF5), '🔵 Blue Zone'),
-      'exhibitor' => (const Color(0xFFB45309), '🏢 Exhibitor'),
-      'press' => (const Color(0xFF0369A1), '📰 Press'),
-      _ => (const Color(0xFF16A34A), '🟢 Green Zone'),
-    };
+    final color = tierColor(tier);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(8),
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(CopRadius.pill),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
-      child: Text(label, style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600)),
+      child: Text(
+        '${tierEmoji(tier)} ${tierLabel(tier)}',
+        style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w700),
+      ),
     );
   }
 }

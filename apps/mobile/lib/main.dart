@@ -20,7 +20,7 @@ class Cop17App extends ConsumerWidget {
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'COP17',
-      theme: cop17Theme,
+      theme: buildCop17Theme(),
       routerConfig: router,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

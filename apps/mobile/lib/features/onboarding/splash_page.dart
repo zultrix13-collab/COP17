@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/theme.dart';
 import '../../core/supabase_client.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -14,32 +15,121 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _decide());
+    // Small delay so the brand is visible for a beat on cold start.
+    Future<void>.delayed(const Duration(milliseconds: 700), _decide);
   }
 
   void _decide() {
+    if (!mounted) return;
     final session = supabase.auth.currentSession;
-    if (session == null) {
-      context.go('/onboarding/email');
-    } else {
-      context.go('/home');
-    }
+    context.go(session == null ? '/onboarding/email' : '/home');
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('🌿', style: TextStyle(fontSize: 48)),
-            SizedBox(height: 8),
-            Text('COP17', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-            Text('Улаанбаатар 2026', style: TextStyle(color: Color(0xFF16A34A))),
-          ],
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(gradient: copBrandGradient),
+        width: double.infinity,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              // Subtle steppe-dune motif in the background.
+              Positioned.fill(
+                child: CustomPaint(painter: _DunePainter()),
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(CopRadius.xl),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.15),
+                            blurRadius: 40,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        'assets/brand/cop17-logo.png',
+                        width: 180,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    const Text(
+                      'Ulaanbaatar · Mongolia',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'August 17–28, 2026',
+                      style: TextStyle(
+                        color: Color(0xFFE0F7FA),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: 24,
+                left: 0, right: 0,
+                child: Center(
+                  child: Text(
+                    'The Land of the Eternal Blue Sky',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                      fontSize: 11,
+                      letterSpacing: 1.2,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _DunePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.white.withValues(alpha: 0.04);
+    final path = Path()
+      ..moveTo(0, size.height * 0.78)
+      ..quadraticBezierTo(size.width * 0.25, size.height * 0.72, size.width * 0.55, size.height * 0.82)
+      ..quadraticBezierTo(size.width * 0.8, size.height * 0.90, size.width, size.height * 0.80)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(path, paint);
+
+    final paint2 = Paint()..color = Colors.white.withValues(alpha: 0.06);
+    final path2 = Path()
+      ..moveTo(0, size.height * 0.90)
+      ..quadraticBezierTo(size.width * 0.4, size.height * 0.85, size.width * 0.7, size.height * 0.93)
+      ..quadraticBezierTo(size.width * 0.9, size.height * 0.98, size.width, size.height * 0.92)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(path2, paint2);
+  }
+
+  @override
+  bool shouldRepaint(_) => false;
 }

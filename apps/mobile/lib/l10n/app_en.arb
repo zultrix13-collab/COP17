@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "appTitle": "COP17",
+  "navHome": "Home",
+  "navProgramme": "Programme",
+  "navInfo": "Info",
+  "navServices": "Services",
+  "navMap": "Map",
+  "navProfile": "Profile",
+  "tierGreen": "Green Zone",
+  "tierBlue": "Blue Zone",
+  "tierVip": "VIP",
+  "otpPrompt": "Please enter your email",
+  "otpSend": "Send code",
+  "languageMn": "Монгол",
+  "languageEn": "English"
+}

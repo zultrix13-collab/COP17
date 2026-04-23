@@ -1,0 +1,20 @@
+{
+  "app": { "title": "COP17 Admin" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "bulk": "Bulk tier",
+    "programme": "Programme",
+    "meetings": "Meetings",
+    "payments": "Payments",
+    "alerts": "Alerts",
+    "reports": "Reports"
+  },
+  "tier": {
+    "green": "Green Zone",
+    "blue": "Blue Zone",
+    "vip": "VIP",
+    "exhibitor": "Exhibitor",
+    "press": "Press"
+  }
+}

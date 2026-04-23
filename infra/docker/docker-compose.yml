@@ -1,0 +1,17 @@
+# Supabase CLI-ийн үүсгэдэг Postgres/Studio/Auth/Realtime/Storage-тай зэрэгцэн
+# ажиллах нэмэлт дэд үйлчилгээнүүд (Redis — job queue, Meilisearch — full-text).
+# Postgres-ийг нэмж оруулахгүй — `supabase start` өөрийн Postgres-ийг гаргана.
+services:
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    environment:
+      MEILI_MASTER_KEY: cop17-dev-key
+    ports: ["7700:7700"]
+    volumes: ["meili_data:/meili_data"]
+
+volumes:
+  meili_data:

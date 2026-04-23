@@ -1,0 +1,7 @@
+{
+  "name": "@cop17/design-tokens",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.json",
+  "files": ["index.json", "tokens.dart"]
+}

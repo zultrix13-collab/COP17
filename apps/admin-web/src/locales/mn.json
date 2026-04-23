@@ -1,0 +1,20 @@
+{
+  "app": { "title": "COP17 Admin" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Хэрэглэгчид",
+    "bulk": "Bulk tier",
+    "programme": "Хөтөлбөр",
+    "meetings": "Meetings",
+    "payments": "Төлбөр",
+    "alerts": "Alerts",
+    "reports": "Тайлан"
+  },
+  "tier": {
+    "green": "Green Zone",
+    "blue": "Blue Zone",
+    "vip": "VIP",
+    "exhibitor": "Exhibitor",
+    "press": "Press"
+  }
+}

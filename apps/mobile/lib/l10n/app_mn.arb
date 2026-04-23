@@ -1,0 +1,17 @@
+{
+  "@@locale": "mn",
+  "appTitle": "COP17",
+  "navHome": "Нүүр",
+  "navProgramme": "Хөтөлбөр",
+  "navInfo": "Мэдээлэл",
+  "navServices": "Үйлчилгээ",
+  "navMap": "Газрын зураг",
+  "navProfile": "Профайл",
+  "tierGreen": "Green Zone",
+  "tierBlue": "Blue Zone",
+  "tierVip": "VIP",
+  "otpPrompt": "Та и-мэйл хаягаа оруулна уу",
+  "otpSend": "Код илгээх",
+  "languageMn": "Монгол",
+  "languageEn": "English"
+}

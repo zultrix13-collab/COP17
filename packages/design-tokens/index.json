@@ -1,0 +1,36 @@
+{
+  "color": {
+    "tier": {
+      "green":     { "value": "#16A34A" },
+      "blue":      { "value": "#1A6EF5" },
+      "vip":       { "value": "#7C3AED" },
+      "exhibitor": { "value": "#B45309" },
+      "press":     { "value": "#0369A1" }
+    },
+    "semantic": {
+      "background": { "value": "#F0F0F0" },
+      "surface":    { "value": "#FFFFFF" },
+      "text":       { "value": "#111111" },
+      "muted":      { "value": "#888888" },
+      "border":     { "value": "#E0E0E0" },
+      "success":    { "value": "#16A34A" },
+      "warning":    { "value": "#B45309" },
+      "danger":     { "value": "#DC2626" },
+      "info":       { "value": "#1A6EF5" }
+    }
+  },
+  "spacing": {
+    "xs": { "value": 4 }, "sm": { "value": 8 }, "md": { "value": 12 },
+    "lg": { "value": 16 }, "xl": { "value": 24 }, "2xl": { "value": 32 }
+  },
+  "radius": {
+    "sm": { "value": 5 }, "md": { "value": 8 }, "lg": { "value": 10 }, "xl": { "value": 20 }
+  },
+  "font": {
+    "family": { "value": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" },
+    "size": {
+      "xs": { "value": 9 }, "sm": { "value": 10 }, "md": { "value": 12 },
+      "lg": { "value": 15 }, "xl": { "value": 20 }
+    }
+  }
+}

@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COP17 App — Wireframe V4 Final</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: 32px;
+  color: #111;
+}
+
+h1 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.subtitle { font-size: 12px; color: #888; margin-bottom: 10px; }
+.pm-note {
+  background: #fff8e1; border: 1px solid #f59e0b; border-radius: 8px;
+  padding: 10px 14px; font-size: 11px; color: #92400e; margin-bottom: 24px; line-height: 1.6;
+}
+.pm-note strong { font-weight: 700; }
+
+h2 {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: #999;
+  margin: 40px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
+}
+
+.legend { display: flex; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+.leg { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #555; }
+.leg-swatch { width: 12px; height: 12px; border-radius: 3px; }
+
+.flow-row {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0;
+  background: #fff; border: 1px solid #e0e0e0; border-radius: 10px;
+  padding: 12px 14px; margin-bottom: 24px;
+}
+.flow-label { font-size: 9px; color: #999; margin-bottom: 8px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.fn { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 72px; }
+.fb { font-size: 10px; font-weight: 600; text-align: center; padding: 5px 9px; border-radius: 14px; line-height: 1.3; white-space: nowrap; }
+.fb-u { background: #e8f0fe; color: #1a6ef5; }
+.fb-s { background: #dcfce7; color: #16a34a; }
+.fb-a { background: #fef3c7; color: #b45309; }
+.fr { font-size: 9px; color: #aaa; }
+.fa { font-size: 13px; color: #ccc; padding: 0 4px; align-self: center; margin-top: -12px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.phone {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+.phone.new    { border: 2px solid #16a34a; }
+.phone.fix    { border: 2px solid #b45309; }
+.phone.info   { border: 2px solid #1a6ef5; }
+.phone.base   { border: 1.5px solid #d0d0d0; }
+.phone.pm     { border: 2px solid #7c3aed; }
+.phone.home   { border: 2px solid #0ea5e9; }
+.phone.del    { border: 2px dashed #dc2626; opacity:.5; }
+
+.ph {
+  font-size: 11px; font-weight: 700;
+  padding: 10px 13px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex; justify-content: space-between; align-items: center;
+  background: #fff;
+}
+.ptag { font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+.ptag-new   { background: #dcfce7; color: #16a34a; }
+.ptag-fix   { background: #fef3c7; color: #b45309; }
+.ptag-user  { background: #e8f0fe; color: #1a6ef5; }
+.ptag-admin { background: #fef3c7; color: #b45309; }
+.ptag-pm    { background: #ede9fe; color: #7c3aed; }
+.ptag-del   { background: #fee2e2; color: #dc2626; }
+.ptag-home  { background: #e0f2fe; color: #0369a1; }
+
+.pb { padding: 11px 13px; }
+
+.wb { border: 1px solid #ebebeb; border-radius: 8px; padding: 7px 9px; margin-bottom: 7px; background: #fff; }
+.wb.hi-green  { border-color: #16a34a; background: #f0fdf4; }
+.wb.hi-blue   { border-color: #1a6ef5; background: #eff6ff; }
+.wb.hi-red    { border-color: #dc2626; background: #fff5f5; }
+.wb.hi-gray   { background: #fafafa; }
+.wb.hi-purple { border-color: #7c3aed; background: #faf5ff; }
+.wb.hi-sky    { border-color: #0ea5e9; background: #f0f9ff; }
+.wb.hi-amber  { border-color: #f59e0b; background: #fffbeb; }
+.wbt { font-size: 10px; font-weight: 700; color: #111; margin-bottom: 2px; }
+.wbs { font-size: 9px; color: #aaa; line-height: 1.4; }
+
+.wbtn {
+  font-size: 10px; font-weight: 600; padding: 6px 10px;
+  border-radius: 7px; margin-bottom: 5px; text-align: center;
+  border: 1px solid #d0d0d0; color: #111; display: block;
+}
+.wbtn.p   { background: #111; color: #fff; border: none; }
+.wbtn.ok  { border-color: #16a34a; color: #16a34a; }
+.wbtn.d   { border-color: #dc2626; color: #dc2626; }
+.wbtn.bl  { border-color: #1a6ef5; color: #1a6ef5; }
+.wbtn.warn{ border-color: #b45309; color: #b45309; }
+.wbtn.pur { border-color: #7c3aed; color: #7c3aed; }
+.wbtn.sky { border-color: #0ea5e9; color: #0ea5e9; }
+
+.wbtn-row { display: flex; gap: 5px; }
+.wbtn-row .wbtn { flex: 1; margin-bottom: 0; }
+
+.winput {
+  border: 1px solid #d0d0d0; border-radius: 7px; padding: 6px 9px;
+  font-size: 10px; color: #aaa; margin-bottom: 7px;
+  display: flex; align-items: center; gap: 5px; background: #fafafa;
+}
+.winput.active { border-color: #1a6ef5; background: #fff; color: #111; }
+
+.wtabs {
+  display: flex; gap: 3px; margin-bottom: 8px;
+  border-bottom: 1px solid #ebebeb; padding-bottom: 6px;
+  flex-wrap: wrap;
+}
+.wtab { font-size: 9px; padding: 2px 7px; border-radius: 5px; color: #aaa; }
+.wtab.a { background: #e8f0fe; color: #1a6ef5; font-weight: 700; }
+
+.badge { font-size: 9px; padding: 2px 7px; border-radius: 8px; font-weight: 600; display: inline-block; }
+.badge.ok   { background: #dcfce7; color: #16a34a; }
+.badge.warn { background: #fef3c7; color: #b45309; }
+.badge.info { background: #e8f0fe; color: #1a6ef5; }
+.badge.red  { background: #fee2e2; color: #dc2626; }
+.badge.gray { background: #ebebeb; color: #666; }
+.badge.vip  { background: #fdf4ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+.badge.gold { background: #fef9c3; color: #854d0e; }
+.badge.sky  { background: #e0f2fe; color: #0369a1; }
+
+.wrow { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 5px; }
+.wdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; background: #ccc; }
+.wdot.b { background: #1a6ef5; }
+.wdot.g { background: #16a34a; }
+.wdot.w { background: #b45309; }
+.wdot.r { background: #dc2626; }
+.wdot.p { background: #7c3aed; }
+.wdot.s { background: #0ea5e9; }
+.wlabel { font-size: 10px; color: #555; flex: 1; line-height: 1.4; }
+
+.wdiv { border: none; border-top: 1px solid #ebebeb; margin: 7px 0; }
+
+.wnav {
+  display: flex; justify-content: space-around; padding: 8px 0 4px;
+  border-top: 1px solid #ebebeb; margin-top: 8px;
+}
+.wni { font-size: 9px; text-align: center; color: #aaa; line-height: 1.5; }
+.wni.a { color: #1a6ef5; font-weight: 700; }
+
+.wbar-wrap { margin-bottom: 6px; }
+.wbar-meta { display: flex; justify-content: space-between; margin-bottom: 2px; }
+.wbar-meta span { font-size: 9px; color: #aaa; }
+.wbar-track { background: #ebebeb; border-radius: 4px; height: 7px; }
+.wbar-fill { height: 100%; border-radius: 4px; }
+.wbar-fill.g { background: #16a34a; opacity:.8; }
+.wbar-fill.b { background: #1a6ef5; opacity:.8; }
+.wbar-fill.r { background: #dc2626; opacity:.8; }
+.wbar-fill.w { background: #b45309; opacity:.8; }
+.wbar-fill.p { background: #7c3aed; opacity:.8; }
+
+.stat-row { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; flex-wrap: wrap; }
+
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; flex-shrink: 0;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+
+.card-dark {
+  background: #111; border-radius: 10px; padding: 12px; text-align: center; margin-bottom: 8px;
+}
+.card-dark .lbl { font-size: 9px; color: rgba(255,255,255,.5); margin-bottom: 2px; }
+.card-dark .val { font-size: 20px; font-weight: 800; color: #fff; }
+.card-dark .sub { font-size: 9px; color: rgba(255,255,255,.4); margin-top: 2px; }
+
+.stat-card {
+  background: #fafafa; border-radius: 7px; padding: 8px; text-align: center;
+}
+.stat-card .sv { font-size: 15px; font-weight: 800; }
+.stat-card .sk { font-size: 8px; color: #aaa; margin-top: 2px; }
+
+.toggle {
+  width: 28px; height: 16px; border-radius: 8px;
+  display: flex; align-items: center; padding: 2px; flex-shrink: 0;
+}
+.toggle.on  { background: #16a34a; justify-content: flex-end; }
+.toggle.off { background: #ddd; justify-content: flex-start; }
+.toggle-knob { width: 12px; height: 12px; border-radius: 50%; background: #fff; }
+
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0; border-bottom: 1px solid #f0f0f0;
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-lft { display: flex; align-items: center; gap: 7px; }
+.setting-lft .ic { font-size: 12px; }
+.setting-lft .sl { font-size: 10px; color: #111; }
+.setting-rgt { font-size: 9px; color: #aaa; }
+
+.qr-box {
+  border: 1.5px dashed #d0d0d0; border-radius: 10px;
+  padding: 16px; text-align: center; margin-bottom: 8px;
+}
+.qr-inner {
+  width: 60px; height: 60px; border: 1.5px dashed #ccc; border-radius: 6px;
+  margin: 0 auto 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #bbb; font-weight: 600;
+}
+
+/* Role tier display */
+.role-tier {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 8px; border-radius: 7px; margin-bottom: 5px;
+}
+.role-tier.green  { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.role-tier.blue   { background: #eff6ff; border: 1px solid #bfdbfe; }
+.role-tier.vip    { background: #faf5ff; border: 1px solid #e9d5ff; }
+.role-tier .rt-icon { font-size: 14px; }
+.role-tier .rt-info { flex: 1; }
+.role-tier .rt-name { font-size: 10px; font-weight: 700; }
+.role-tier .rt-desc { font-size: 8px; color: #888; }
+
+/* Status bar fake */
+.statusbar {
+  background: #f8f8f8; padding: 4px 13px;
+  display: flex; justify-content: space-between;
+  font-size: 8px; color: #aaa; border-bottom: 1px solid #f0f0f0;
+}
+
+/* Section divider inside page */
+.section-note {
+  font-size: 9px; color: #7c3aed; font-weight: 700;
+  padding: 4px 8px; background: #ede9fe; border-radius: 5px;
+  display: inline-block; margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>COP17 App — Wireframe V4 Final</h1>
+<p class="subtitle">Бүрэн wireframe · Email-only Onboarding · Admin-driven User Classification · Home + бүх tab дэлгэцүүд · System Requirements нийцтэй</p>
+
+<div class="pm-note">
+  <strong>🧠 V4 PM Шийдвэрүүд (Riyadh COP16 + System Requirements суурьтай):</strong><br>
+  1. <strong>Home tab нэмсэн</strong> — COP16 Riyadh-ийн загварт санаа авсан: Zone мэдэгдэл, sponsor showcase, CO₂ widget, цаг агаар, хурдан хандалтын shortcuts<br>
+  2. <strong>Onboarding хялбарчлав</strong> — Email + OTP + Хэл = 3 алхам. Дүр сонголтыг устгасан. Default = Green Zone<br>
+  3. <strong>Admin classification</strong> — VIP, Blue Zone, Exhibitor, Press бүгд admin тохируулна. Audit log, Bulk upgrade нэмсэн<br>
+  4. <strong>Бүх 8 tab дэлгэц</strong>: Home · Programme · Information · Services · Media · Help · Map · Profile<br>
+  5. <strong>Системийн шаардлагатай нийцсэн</strong>: AUTH-01~05, PROG-01~06, SVC-01~08, PAY-01~05, MAP-01~05, NOTIF-01~06, AI-01~02
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="leg-swatch" style="background:#0ea5e9"></div> Home (шинэ)</div>
+  <div class="leg"><div class="leg-swatch" style="background:#16a34a"></div> Шинэ дэлгэц</div>
+  <div class="leg"><div class="leg-swatch" style="background:#b45309"></div> Засагдсан</div>
+  <div class="leg"><div class="leg-swatch" style="background:#1a6ef5"></div> Дэлгэрэнгүй</div>
+  <div class="leg"><div class="leg-swatch" style="background:#7c3aed"></div> V4 PM шийдвэр</div>
+  <div class="leg"><div class="leg-swatch" style="background:#dc2626"></div> Устгагдсан</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ① ONBOARDING V4 — Email only
+════════════════════════════════════════════════ -->
+<h2>① Onboarding V4 — Email-only бүртгэл (3 алхам, friction багасгасан)</h2>
+
+<p class="flow-label">Нэвтрэлтийн урсгал — V4</p>
+<div class="flow-row">
+  <div class="fn"><div class="fb fb-u">Email оруулна</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">OTP илгээнэ</div><div class="fr">system</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Код баталгаа</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Хэл сонгоно</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">Home</div><div class="fr">system</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-a">Admin ангилна</div><div class="fr">дараа</div></div>
+</div>
+
+<div class="grid">
+
+  <!-- Splash / Landing -->
+  <div class="phone pm">
+    <div class="ph">Splash <span class="ptag ptag-pm">V4 шинэ</span></div>
+    <div class="pb">
+      <div style="text-align:center;padding:14px 0 10px">
+        <div style="font-size:32px;margin-bottom:8px">🌿</div>
+        <div style="font-size:15px;font-weight:800;color:#111;letter-spacing:-.3px">COP17</div>
+        <div style="font-size:10px;font-weight:600;color:#16a34a">Улаанбаатар 2026</div>
+        <div style="font-size:9px;color:#aaa;margin-top:3px">Apr 12–23, 2026</div>
+        <div style="font-size:8px;color:#aaa;margin-top:2px">UNCCD Талуудын 17-р Бага Хурал</div>
+      </div>
+      <div style="background:#f0fdf4;border-radius:10px;padding:9px;margin-bottom:9px">
+        <div style="font-size:9px;color:#16a34a;text-align:center;font-weight:600">Монгол Улс · Нийслэл Улаанбаатар</div>
+      </div>
+      <div class="wbtn p">Нэвтрэх →</div>
+      <p style="font-size:9px;color:#aaa;text-align:center;margin-top:6px">Бүртгэлтэй оролцогчдод зориулсан</p>
+    </div>
+  </div>
+
+  <!-- Email Entry -->
+  <div class="phone pm">
+    <div class="ph">И-мэйл оруулах <span class="ptag ptag-pm">V4 шинэ</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:9px;line-height:1.4">Бүртгэлтэй и-мэйл хаягаа оруулна уу. Нэвтрэх код таны и-мэйлд ирнэ.</p>
+      <div class="winput active">✉ <span style="color:#111">bold@example.mn</span></div>
+      <div class="wrow" style="margin-bottom:9px">
+        <div class="wdot g"></div>
+        <div class="wlabel">6 оронтой OTP код, 5 минут хүчинтэй</div>
+      </div>
+      <div class="wrow" style="margin-bottom:9px">
+        <div class="wdot b"></div>
+        <div class="wlabel">Биометр нэвтрэлт (Face ID / Fingerprint) дараагийн удаа идэвхжинэ</div>
+      </div>
+      <div class="wbtn p">Код илгээх →</div>
+      <p style="font-size:9px;color:#aaa;text-align:center;margin-top:7px">Бүртгэл алга? Зохион байгуулагчтай холбогдоно уу</p>
+    </div>
+  </div>
+
+  <!-- OTP -->
+  <div class="phone pm">
+    <div class="ph">OTP баталгаа <span class="ptag ptag-pm">AUTH-01</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:4px">bold@example.mn руу код илгээлээ</p>
+      <p style="font-size:9px;color:#aaa;margin-bottom:12px">Дуусах: <strong style="color:#111">04:47</strong> · 5 оролдлого үлдсэн</p>
+      <div style="display:flex;gap:5px;margin-bottom:10px;justify-content:center">
+        <div style="width:32px;height:38px;border:1.5px solid #1a6ef5;border-radius:7px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">3</div>
+        <div style="width:32px;height:38px;border:1.5px solid #1a6ef5;border-radius:7px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">8</div>
+        <div style="width:32px;height:38px;border:1.5px solid #1a6ef5;border-radius:7px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">4</div>
+        <div style="width:32px;height:38px;border:1.5px solid #d0d0d0;border-radius:7px;background:#fafafa;display:flex;align-items:center;justify-content:center;font-size:15px;color:#aaa">_</div>
+        <div style="width:32px;height:38px;border:1px solid #d0d0d0;border-radius:7px;background:#fafafa;"></div>
+        <div style="width:32px;height:38px;border:1px solid #d0d0d0;border-radius:7px;background:#fafafa;"></div>
+      </div>
+      <div class="wbtn p">Баталгаажуулах</div>
+      <p style="font-size:9px;color:#1a6ef5;text-align:center;margin-top:6px">Дахин илгээх</p>
+    </div>
+  </div>
+
+  <!-- Language Select -->
+  <div class="phone fix">
+    <div class="ph">Хэл сонгох <span class="ptag ptag-fix">Хялбарчилсан</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:9px">Аппын хэлийг сонгоно уу</p>
+      <div class="wb hi-blue">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div class="wbt">🇲🇳 Монгол</div><div class="wbs">Анхдагч</div></div>
+          <div style="width:16px;height:16px;border-radius:50%;background:#1a6ef5;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700">✓</div>
+        </div>
+      </div>
+      <div class="wb"><div class="wbt">🇬🇧 English</div><div class="wbs">Available</div></div>
+      <div class="wrow" style="margin:6px 0"><div class="wdot b"></div><div class="wlabel">Мэдэгдлүүд таны хэл дээр ирнэ (NOTIF-05)</div></div>
+      <div class="wbtn p">Эхлэх →</div>
+    </div>
+  </div>
+
+  <!-- Permissions -->
+  <div class="phone new">
+    <div class="ph">Зөвшөөрөл <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:10px;line-height:1.4">Апп илүү сайн ажиллахад зөвшөөрлүүд хэрэгтэй</p>
+      <div class="wb">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:18px">📍</div>
+          <div><div class="wbt">Байршил</div><div class="wbs">Яаралтай тусламж + алхалт тоолох</div></div>
+        </div>
+        <div class="wbtn ok" style="margin-top:7px;font-size:9px">Зөвшөөрөх</div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:18px">🔔</div>
+          <div><div class="wbt">Мэдэгдэл</div><div class="wbs">Push notification (NOTIF-01, NOTIF-04)</div></div>
+        </div>
+        <div class="wbtn ok" style="margin-top:7px;font-size:9px">Зөвшөөрөх</div>
+      </div>
+      <p style="font-size:9px;color:#aaa;text-align:center;margin-top:4px">Settings-ээс өөрчлөх боломжтой</p>
+    </div>
+  </div>
+
+  <!-- Welcome -->
+  <div class="phone pm">
+    <div class="ph">Тавтай морил <span class="ptag ptag-pm">V4 шинэ</span></div>
+    <div class="pb">
+      <div style="text-align:center;padding:8px 0 6px">
+        <div style="font-size:26px;margin-bottom:5px">🌿</div>
+        <div style="font-size:12px;font-weight:700;color:#111">Тавтай морил, Б.Болд!</div>
+        <div style="font-size:9px;color:#aaa;margin-top:2px">COP17 · Apr 12–23, 2026</div>
+      </div>
+      <div class="wdiv"></div>
+      <div class="wb hi-green">
+        <div class="wbt" style="font-size:9px;color:#888;margin-bottom:4px">ТАНЫ ХАНДАЛТЫН ЭРХ</div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="font-size:18px">🟢</div>
+          <div>
+            <div style="font-size:11px;font-weight:700">Green Zone</div>
+            <div style="font-size:8px;color:#16a34a">Admin тохируулсан · Дүр өөрчлөгдвөл мэдэгдэнэ</div>
+          </div>
+        </div>
+      </div>
+      <div class="wrow"><div class="wdot b"></div><div class="wlabel">QR кодоор ирцийг бүртгүүлнэ</div></div>
+      <div class="wrow"><div class="wdot b"></div><div class="wlabel">Яаралтай → Help tab</div></div>
+      <div class="wbtn p" style="margin-top:7px">Эхэлцгээе →</div>
+    </div>
+  </div>
+
+  <!-- DELETED screen -->
+  <div class="phone del">
+    <div class="ph" style="background:#fff5f5">Дүр сонгох <span class="ptag ptag-del">Устгав</span></div>
+    <div class="pb">
+      <p style="font-size:9px;color:#dc2626;text-align:center;padding:15px 5px;line-height:1.5">
+        🗑 V4-д устгагдсан.<br><br>
+        <strong>PM шалтгаан:</strong> Accreditation процестой зөрчилддөг. Admin classification-аар орлуулсан.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ② HOME TAB — COP16 Riyadh санаа
+════════════════════════════════════════════════ -->
+<h2>② Home Tab — Нүүр хуудас (COP16 Riyadh санааг авсан)</h2>
+
+<p class="flow-label">Home tab агуулгын бүтэц</p>
+<div class="flow-row">
+  <div class="fn"><div class="fb fb-s">Zone мэдэгдэл</div><div class="fr">header</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">CO₂ / Цаг агаар</div><div class="fr">widget</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Өнөөдрийн хөтөлбөр</div><div class="fr">quick view</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">Sponsor showcase</div><div class="fr">banner</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Quick links</div><div class="fr">shortcuts</div></div>
+</div>
+
+<div class="grid">
+
+  <!-- Home Main - Green Zone user -->
+  <div class="phone home">
+    <div class="ph">Home · Green Zone <span class="ptag ptag-home">Нүүр</span></div>
+    <div class="pb">
+      <!-- Zone header bar -->
+      <div class="wb hi-green" style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="font-size:14px">🟢</div>
+            <div>
+              <div style="font-size:10px;font-weight:700">Green Zone</div>
+              <div style="font-size:8px;color:#16a34a">#C17-2847 · Б. Болд</div>
+            </div>
+          </div>
+          <div class="qr-inner" style="width:28px;height:28px;margin:0;font-size:7px">QR</div>
+        </div>
+      </div>
+
+      <!-- CO2 + Weather widgets -->
+      <div class="grid-2" style="margin-bottom:8px">
+        <div class="wb hi-green" style="margin-bottom:0;text-align:center;padding:8px">
+          <div style="font-size:9px;color:#aaa">🌿 CO₂ хэмнэлт</div>
+          <div style="font-size:14px;font-weight:800;color:#16a34a">12.4 кг</div>
+          <div style="font-size:8px;color:#aaa">340 / 500 оноо</div>
+        </div>
+        <div class="wb hi-sky" style="margin-bottom:0;text-align:center;padding:8px">
+          <div style="font-size:9px;color:#aaa">🌤 Улаанбаатар</div>
+          <div style="font-size:14px;font-weight:800;color:#0369a1">+8°C</div>
+          <div style="font-size:8px;color:#aaa">Цэлмэг · Салхи 3 м/с</div>
+        </div>
+      </div>
+
+      <!-- Today's schedule preview -->
+      <div class="wb hi-sky" style="margin-bottom:7px">
+        <div class="wbt">📅 Өнөөдрийн хөтөлбөр</div>
+        <div style="margin-top:5px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <div>
+              <div style="font-size:9px;font-weight:700">Land Degradation Panel</div>
+              <div style="font-size:8px;color:#aaa">10:00 · Hall A · Going ✓</div>
+            </div>
+            <span class="badge ok">10:00</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:9px;font-weight:700">VIP Dinner</div>
+              <div style="font-size:8px;color:#aaa">19:00 · Hall 3 · Урилга</div>
+            </div>
+            <span class="badge vip">19:00</span>
+          </div>
+        </div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:6px;margin-bottom:0">Бүх хөтөлбөр →</div>
+      </div>
+
+      <!-- Quick links -->
+      <div class="grid-2" style="margin-bottom:0">
+        <div class="wbtn sky" style="font-size:9px;margin-bottom:0;text-align:center">🗺 Газрын зураг</div>
+        <div class="wbtn ok" style="font-size:9px;margin-bottom:0;text-align:center">💳 Wallet</div>
+        <div class="wbtn" style="font-size:9px;margin-bottom:0;text-align:center">🤖 AI Туслах</div>
+        <div class="wbtn warn" style="font-size:9px;margin-bottom:0;text-align:center">🚨 Яаралтай</div>
+      </div>
+    </div>
+    <div class="wnav">
+      <div class="wni a">🏠<br>Home</div>
+      <div class="wni">📅<br>Prog</div>
+      <div class="wni">ℹ️<br>Info</div>
+      <div class="wni">🛍<br>Serv</div>
+      <div class="wni">🗺<br>Map</div>
+    </div>
+  </div>
+
+  <!-- Home - VIP version -->
+  <div class="phone home">
+    <div class="ph">Home · VIP <span class="ptag ptag-pm">Admin-upgraded</span></div>
+    <div class="pb">
+      <!-- VIP Zone header -->
+      <div class="wb hi-purple" style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="font-size:14px">💎</div>
+            <div>
+              <div style="font-size:10px;font-weight:700">VIP Guest</div>
+              <div style="font-size:8px;color:#7c3aed">#C17-0091 · C. Carter</div>
+            </div>
+          </div>
+          <div class="qr-inner" style="width:28px;height:28px;margin:0;font-size:7px;border-color:#7c3aed">QR</div>
+        </div>
+      </div>
+
+      <!-- CO2 + Weather -->
+      <div class="grid-2" style="margin-bottom:8px">
+        <div class="wb hi-green" style="margin-bottom:0;text-align:center;padding:8px">
+          <div style="font-size:9px;color:#aaa">🌿 CO₂</div>
+          <div style="font-size:14px;font-weight:800;color:#16a34a">9.1 кг</div>
+        </div>
+        <div class="wb hi-sky" style="margin-bottom:0;text-align:center;padding:8px">
+          <div style="font-size:9px;color:#aaa">🌤 UB</div>
+          <div style="font-size:14px;font-weight:800;color:#0369a1">+8°C</div>
+        </div>
+      </div>
+
+      <!-- VIP exclusive widget -->
+      <div class="wb hi-purple" style="margin-bottom:7px">
+        <div class="wbt">💎 VIP Exclusive</div>
+        <div class="wrow" style="margin-top:5px"><div class="wdot p"></div><div class="wlabel">VIP Lounge · Hall 3, 2F · Нээлттэй</div></div>
+        <div class="wrow"><div class="wdot p"></div><div class="wlabel">VIP Dinner — Apr 15, 19:00 · 12 суудал үлдсэн</div></div>
+        <div class="wrow"><div class="wdot p"></div><div class="wlabel">Concierge: +976 99001234</div></div>
+      </div>
+
+      <!-- Quick links -->
+      <div class="grid-2">
+        <div class="wbtn pur" style="font-size:9px;margin-bottom:0">💎 VIP Lounge</div>
+        <div class="wbtn sky" style="font-size:9px;margin-bottom:0">🗺 Газрын зураг</div>
+        <div class="wbtn" style="font-size:9px;margin-bottom:0">🤖 AI Туслах</div>
+        <div class="wbtn warn" style="font-size:9px;margin-bottom:0">🚨 Яаралтай</div>
+      </div>
+    </div>
+    <div class="wnav">
+      <div class="wni a">🏠<br>Home</div>
+      <div class="wni">📅<br>Prog</div>
+      <div class="wni">ℹ️<br>Info</div>
+      <div class="wni">🛍<br>Serv</div>
+      <div class="wni">🗺<br>Map</div>
+    </div>
+  </div>
+
+  <!-- Sponsor Showcase (Home scroll item) -->
+  <div class="phone home">
+    <div class="ph">Home · Sponsor Banner <span class="ptag ptag-home">Нүүр</span></div>
+    <div class="pb">
+      <div class="wb hi-amber" style="margin-bottom:7px">
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="width:30px;height:30px;border-radius:6px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:16px">🌱</div>
+          <div>
+            <div style="font-size:9px;font-weight:700">Platinum Sponsor</div>
+            <div style="font-size:10px;font-weight:800;color:#111">GreenTech Mongolia</div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:#555;margin-top:5px;line-height:1.4">Монголын тэргүүлэх нарны эрчим хүчний компани — Booth G-14</div>
+        <div class="wbtn warn" style="font-size:9px;margin-top:6px;margin-bottom:0">Дэлгэрэнгүй →</div>
+      </div>
+
+      <!-- Зарлал / News ticker -->
+      <div class="wb" style="background:#f0f9ff;border-color:#bae6fd">
+        <div class="wbt">📢 Шинэ мэдэгдэл</div>
+        <div class="wrow" style="margin-top:4px"><div class="wdot s"></div><div class="wlabel">Hall B Press Conference — 14:00 эхэлнэ</div></div>
+        <div class="wrow"><div class="wdot s"></div><div class="wlabel">Opening Ceremony — 982 оролцогч</div></div>
+      </div>
+
+      <!-- Days counter -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:5px">
+        <div class="stat-card"><div class="sv" style="color:#1a6ef5">7</div><div class="sk">Өдөр үлдсэн</div></div>
+        <div class="stat-card"><div class="sv" style="color:#16a34a">2,847</div><div class="sk">Оролцогч</div></div>
+        <div class="stat-card"><div class="sv" style="color:#7c3aed">142</div><div class="sk">Session</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ③ PROGRAMME TAB
+════════════════════════════════════════════════ -->
+<h2>③ Programme Tab — Хөтөлбөр, Session, Going, Feedback (PROG-01~06)</h2>
+
+<p class="flow-label">Session бүртгэлийн урсгал</p>
+<div class="flow-row">
+  <div class="fn"><div class="fb fb-u">Хөтөлбөр</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Session дарна</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Дэлгэрэнгүй</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">Going → QR</div><div class="fr">system</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Feedback</div><div class="fr">user</div></div>
+</div>
+
+<div class="grid">
+
+  <!-- Programme Calendar -->
+  <div class="phone new">
+    <div class="ph">Хөтөлбөр <span class="ptag ptag-new">PROG-01</span></div>
+    <div class="pb">
+      <div class="wtabs">
+        <div class="wtab a">Бүгд</div>
+        <div class="wtab">Миний</div>
+        <div class="wtab">Green</div>
+        <div class="wtab">Blue</div>
+      </div>
+      <div style="font-size:9px;color:#888;font-weight:600;margin-bottom:5px">Apr 14, 2026</div>
+
+      <div class="wb hi-sky">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:8px;color:#0369a1;font-weight:700">10:00 – 12:00 · Hall A</div>
+            <div class="wbt">Land Degradation Panel</div>
+            <div class="wbs">Dr. Sarah Kim · UNCCD</div>
+          </div>
+          <span class="badge ok">Going ✓</span>
+        </div>
+      </div>
+
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:8px;color:#aaa;font-weight:700">13:30 – 15:00 · Hall B</div>
+            <div class="wbt">Mongolia Desert Strategy</div>
+            <div class="wbs">Тавдугаар хуралдаан</div>
+          </div>
+          <span class="badge info">47 / 100</span>
+        </div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:5px;margin-bottom:0">Going →</div>
+      </div>
+
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:8px;color:#aaa;font-weight:700">16:00 – 17:30 · Room 4</div>
+            <div class="wbt">B2B Exhibition Networking</div>
+            <div class="wbs">Exhibitor only</div>
+          </div>
+          <span class="badge warn">Exhibitor</span>
+        </div>
+      </div>
+    </div>
+    <div class="wnav">
+      <div class="wni">🏠<br>Home</div>
+      <div class="wni a">📅<br>Prog</div>
+      <div class="wni">ℹ️<br>Info</div>
+      <div class="wni">🛍<br>Serv</div>
+      <div class="wni">🗺<br>Map</div>
+    </div>
+  </div>
+
+  <!-- Session Detail -->
+  <div class="phone new">
+    <div class="ph">Session дэлгэрэнгүй <span class="ptag ptag-new">PROG-02</span></div>
+    <div class="pb">
+      <div class="stat-row">
+        <span class="badge ok">Нээлттэй</span>
+        <span style="font-size:9px;color:#aaa">47 / 100 суудал</span>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#111;margin:4px 0 2px">Land Degradation Panel</div>
+      <div style="font-size:9px;color:#aaa;margin-bottom:8px">10:00–12:00 · Hall A · 🌐 Монгол / Англи</div>
+      <div class="wb">
+        <div class="wbt">Хэлэгч</div>
+        <div style="display:flex;align-items:center;gap:7px;margin-top:5px">
+          <div class="avatar" style="background:#e8f0fe">👤</div>
+          <div>
+            <div style="font-size:10px;font-weight:700">Dr. Sarah Kim</div>
+            <div style="font-size:9px;color:#aaa">UNCCD · Боннын хэлэлцэгч</div>
+          </div>
+        </div>
+      </div>
+      <div class="wb"><div class="wbt">Хэлэлцэх сэдэв</div><div class="wbs">Газрын доройтлыг сэргээх арга зам, Монголын туршлага...</div></div>
+      <div class="wrow"><div class="wdot b"></div><div class="wlabel">Синхрон орчуулга: Монгол / Англи</div></div>
+      <div class="wbtn p" style="margin-top:7px">Going — бүртгүүлэх ✓</div>
+      <div class="wbtn-row">
+        <div class="wbtn" style="font-size:9px">🗺 Байршил</div>
+        <div class="wbtn" style="font-size:9px">📤 Хуваалц</div>
+        <div class="wbtn" style="font-size:9px">🔔 Сануулга</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Going Confirm + QR -->
+  <div class="phone new">
+    <div class="ph">Going ✓ + QR <span class="ptag ptag-new">PROG-04</span></div>
+    <div class="pb">
+      <div style="text-align:center;padding:8px 0">
+        <div style="font-size:24px;margin-bottom:4px">✅</div>
+        <div style="font-size:12px;font-weight:700;color:#111">Бүртгэгдлээ!</div>
+        <div style="font-size:9px;color:#aaa;margin-top:2px">Land Degradation Panel · 10:00</div>
+      </div>
+      <div class="qr-box">
+        <div class="qr-inner">QR</div>
+        <div style="font-size:9px;color:#aaa">Үүдэнд скан хийнэ</div>
+        <div style="font-size:8px;color:#1a6ef5;margin-top:3px">15 минут тутам refresh · Expire: 10:15</div>
+      </div>
+      <div class="wbtn ok" style="font-size:9px">📅 Calendar-д нэмэх (iCal)</div>
+      <div class="wbtn" style="font-size:9px">Хөтөлбөр рүү буцах</div>
+    </div>
+  </div>
+
+  <!-- Waiting List -->
+  <div class="phone new">
+    <div class="ph">Хүлээлт <span class="ptag ptag-new">PROG-02</span></div>
+    <div class="pb">
+      <div class="wb hi-red"><div class="wbt" style="color:#dc2626">Суудал дүүрсэн</div><div class="wbs">VIP Dinner · 80 / 80</div></div>
+      <p style="font-size:10px;color:#555;margin-bottom:9px;line-height:1.4">Хүлээлтийн жагсаалтад нэмэгдэх үү? Суудал гарвал мэдэгдэл авна.</p>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px;text-align:center;margin-bottom:8px">
+        <div style="font-size:10px;color:#aaa">Таны дараалал</div>
+        <div style="font-size:22px;font-weight:800;color:#111;margin:3px 0">#7</div>
+        <div style="font-size:9px;color:#aaa">6 хүн урд байна</div>
+      </div>
+      <div class="wbtn warn">Хүлээлтэд нэмэгдэх</div>
+    </div>
+  </div>
+
+  <!-- Feedback -->
+  <div class="phone new">
+    <div class="ph">Үнэлгээ <span class="ptag ptag-new">PROG-05</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:7px">Land Degradation Panel — таны санал бодол</p>
+      <div style="text-align:center;margin-bottom:10px">
+        <div style="font-size:22px;letter-spacing:5px;color:#f59e0b">★★★★☆</div>
+        <div style="font-size:9px;color:#aaa;margin-top:3px">Дарж оноо өгнө</div>
+      </div>
+      <div class="winput active" style="height:52px;align-items:flex-start;padding-top:7px">Маш сонирхолтой илтгэл байлаа...</div>
+      <div class="wrow" style="margin-bottom:9px"><div class="wdot g"></div><div class="wlabel">Нэрсгүй илгээгдэнэ · +10 CO₂ оноо</div></div>
+      <div class="wbtn p">Илгээх</div>
+      <p style="font-size:9px;color:#aaa;text-align:center;margin-top:5px">Алгасах</p>
+    </div>
+  </div>
+
+  <!-- My Agenda -->
+  <div class="phone new">
+    <div class="ph">My Agenda <span class="ptag ptag-new">PROG-03</span></div>
+    <div class="pb">
+      <div class="wtabs">
+        <div class="wtab a">Өнөөдөр</div>
+        <div class="wtab">Маргааш</div>
+        <div class="wtab">Бүгд</div>
+      </div>
+      <div class="wb hi-sky">
+        <div style="font-size:8px;color:#0369a1;font-weight:700;margin-bottom:3px">10:00 · Hall A</div>
+        <div class="wbt">Land Degradation Panel</div>
+        <span class="badge ok">Going ✓</span>
+      </div>
+      <div class="wb">
+        <div style="font-size:8px;color:#aaa;font-weight:700;margin-bottom:3px">14:00 · Room 2</div>
+        <div class="wbt">GreenTech Meeting</div>
+        <span class="badge warn">Хүлээж байна</span>
+      </div>
+      <div class="wbtn ok" style="font-size:9px">📥 Google Calendar / Outlook sync</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ④ INFORMATION TAB
+════════════════════════════════════════════════ -->
+<h2>④ Information Tab — FAQ, Зарлал, Нислэг</h2>
+
+<div class="grid">
+
+  <!-- Information Main -->
+  <div class="phone new">
+    <div class="ph">Мэдээлэл <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="winput">🔍 FAQ, мэдэгдэл хайх...</div>
+      <div class="wb hi-sky">
+        <div class="wbt">📢 Шинэ мэдэгдлүүд</div>
+        <div class="wrow" style="margin-top:4px"><div class="wdot s"></div><div class="wlabel">Opening Ceremony — 09:00 эхэлнэ · Hall Main</div></div>
+        <div class="wrow"><div class="wdot s"></div><div class="wlabel">Shuttle F → Venue — 15 мин тутам</div></div>
+        <div class="wrow"><div class="wdot r"></div><div class="wlabel">⚠ Hall B 95% дүүрсэн</div></div>
+      </div>
+      <div class="wb">
+        <div class="wbt">✈ Нислэгийн мэдээлэл</div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px">
+          <span style="font-size:9px;color:#555">MN-402 · Бээжин</span>
+          <span class="badge ok">Ирсэн 08:47</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span style="font-size:9px;color:#555">OM-777 · Дубай</span>
+          <span class="badge warn">Хоцорч байна +35м</span>
+        </div>
+      </div>
+      <div class="wb">
+        <div class="wbt">❓ FAQ</div>
+        <div class="wrow" style="margin-top:4px"><div class="wdot b"></div><div class="wlabel">Blue Zone нэвтрэх эрхийг хэрхэн авах вэ?</div></div>
+        <div class="wrow"><div class="wdot b"></div><div class="wlabel">Wallet-ийг хэрхэн цэнэглэх вэ?</div></div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:4px;margin-bottom:0">Бүх FAQ харах →</div>
+      </div>
+    </div>
+    <div class="wnav">
+      <div class="wni">🏠<br>Home</div>
+      <div class="wni">📅<br>Prog</div>
+      <div class="wni a">ℹ️<br>Info</div>
+      <div class="wni">🛍<br>Serv</div>
+      <div class="wni">🗺<br>Map</div>
+    </div>
+  </div>
+
+  <!-- AI Chatbot -->
+  <div class="phone new">
+    <div class="ph">AI Туслах (Chatbot) <span class="ptag ptag-new">AI-01</span></div>
+    <div class="pb">
+      <div style="background:#f0fdf4;border-radius:10px;padding:9px;margin-bottom:9px;text-align:center">
+        <div style="font-size:16px;margin-bottom:2px">🤖</div>
+        <div style="font-size:10px;font-weight:700;color:#111">COP17 AI Туслах</div>
+        <div style="font-size:9px;color:#aaa">COP17 мэдээлэл, хөтөлбөр, FAQ</div>
+      </div>
+      <div style="background:#e8f0fe;border-radius:8px;padding:7px;margin-bottom:5px;margin-left:15px">
+        <div style="font-size:9px;color:#1a6ef5">🤖 Hall A хэдэнд нээгдэх вэ?</div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:7px;margin-bottom:9px;margin-right:15px">
+        <div style="font-size:9px;color:#555">Hall A нь өглөөний 08:00-д нээгдэж, 20:00 хүртэл ажиллана. Land Degradation Panel 10:00-д эхэлнэ.</div>
+        <div style="font-size:8px;color:#aaa;margin-top:3px">Эх сурвалж: COP17 Programme 2026</div>
+      </div>
+      <div class="winput active">Асуулт бичих...</div>
+      <div class="wrow"><div class="wdot g"></div><div class="wlabel">RAG архитектур · Монгол + Англи хэл</div></div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ⑤ SERVICES TAB
+════════════════════════════════════════════════ -->
+<h2>⑤ Services Tab — Wallet, Дэлгүүр, Тээвэр, Хоол, E-SIM, Lost&Found (SVC-01~08)</h2>
+
+<p class="flow-label">Wallet цэнэглэх → Худалдан авалт</p>
+<div class="flow-row">
+  <div class="fn"><div class="fb fb-u">Wallet</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Цэнэглэх</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">QPay / Карт</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">Баталгаа</div><div class="fr">system</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Худалдаа</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">QR / Receipt</div><div class="fr">system</div></div>
+</div>
+
+<div class="grid">
+
+  <!-- Services Hub -->
+  <div class="phone new">
+    <div class="ph">Services Hub <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="card-dark" style="margin-bottom:9px">
+        <div class="lbl">Wallet үлдэгдэл</div>
+        <div class="val">₮ 45,000</div>
+        <div class="sub">Б. Болд · #C17-2847</div>
+      </div>
+      <div class="grid-2" style="margin-bottom:8px">
+        <div class="wbtn p" style="font-size:9px;padding:7px 4px;margin-bottom:0;text-align:center">🛍 Дэлгүүр</div>
+        <div class="wbtn ok" style="font-size:9px;padding:7px 4px;margin-bottom:0;text-align:center">🍽 Хоол</div>
+        <div class="wbtn bl" style="font-size:9px;padding:7px 4px;margin-bottom:0;text-align:center">🚕 Тээвэр</div>
+        <div class="wbtn" style="font-size:9px;padding:7px 4px;margin-bottom:0;text-align:center">🏨 Буудал</div>
+        <div class="wbtn sky" style="font-size:9px;padding:7px 4px;margin-bottom:0;text-align:center">📱 E-SIM</div>
+        <div class="wbtn warn" style="font-size:9px;padding:7px 4px;margin-bottom:0;text-align:center">🔍 Lost&F</div>
+      </div>
+    </div>
+    <div class="wnav">
+      <div class="wni">🏠<br>Home</div>
+      <div class="wni">📅<br>Prog</div>
+      <div class="wni">ℹ️<br>Info</div>
+      <div class="wni a">🛍<br>Serv</div>
+      <div class="wni">🗺<br>Map</div>
+    </div>
+  </div>
+
+  <!-- Wallet -->
+  <div class="phone fix">
+    <div class="ph">Wallet <span class="ptag ptag-fix">Засагдсан</span></div>
+    <div class="pb">
+      <div class="card-dark">
+        <div class="lbl">Үлдэгдэл</div>
+        <div class="val">₮ 45,000</div>
+        <div class="sub">Б. Болд · #C17-2847</div>
+      </div>
+      <div class="grid-3" style="margin-bottom:9px">
+        <div class="wbtn p" style="font-size:9px;padding:5px 4px;margin-bottom:0">➕ Цэнэглэх</div>
+        <div class="wbtn bl" style="font-size:9px;padding:5px 4px;margin-bottom:0">📤 Илгээх</div>
+        <div class="wbtn" style="font-size:9px;padding:5px 4px;margin-bottom:0">📷 QR</div>
+      </div>
+      <div class="wbt" style="margin-bottom:6px">Сүүлийн гүйлгээ</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:9px;color:#555">Хоол · Lunch</span><span style="font-size:9px;font-weight:700;color:#dc2626">− ₮8,500</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:9px;color:#555">Цэнэглэлт · QPay</span><span style="font-size:9px;font-weight:700;color:#16a34a">+ ₮50,000</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:#555">Такси</span><span style="font-size:9px;font-weight:700;color:#dc2626">− ₮12,000</span></div>
+    </div>
+  </div>
+
+  <!-- Top-up -->
+  <div class="phone new">
+    <div class="ph">Цэнэглэх <span class="ptag ptag-new">PAY-01,03</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:7px">Цэнэглэх дүн оруулна</p>
+      <div class="winput active" style="font-size:13px;font-weight:700;color:#111">₮ 20,000</div>
+      <div class="grid-2" style="margin-bottom:10px">
+        <div class="wbtn" style="font-size:9px;margin-bottom:0">₮10,000</div>
+        <div class="wbtn ok" style="font-size:9px;margin-bottom:0">₮20,000</div>
+        <div class="wbtn" style="font-size:9px;margin-bottom:0">₮50,000</div>
+        <div class="wbtn" style="font-size:9px;margin-bottom:0">₮100,000</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">Төлбөрийн арга</div>
+        <div class="wbtn-row" style="margin-top:6px">
+          <div class="wbtn ok" style="font-size:9px;margin-bottom:0">📱 QPay</div>
+          <div class="wbtn" style="font-size:9px;margin-bottom:0">💳 Карт (PCI-DSS)</div>
+        </div>
+      </div>
+      <div class="wbtn p" style="margin-top:5px">Цэнэглэх</div>
+    </div>
+  </div>
+
+  <!-- Cart + Receipt -->
+  <div class="phone new">
+    <div class="ph">Сагс + Баримт <span class="ptag ptag-new">PAY-04</span></div>
+    <div class="pb">
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div class="wbt">Mongolian BBQ Combo</div><div class="wbs">₮12,500</div></div>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="width:20px;height:20px;border:1px solid #d0d0d0;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">−</div>
+            <div style="font-size:11px;font-weight:700">1</div>
+            <div style="width:20px;height:20px;border:1px solid #d0d0d0;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">+</div>
+          </div>
+        </div>
+      </div>
+      <div class="wdiv"></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+        <span style="font-size:10px;font-weight:700">Нийт дүн</span>
+        <span style="font-size:10px;font-weight:800">₮12,500</span>
+      </div>
+      <div style="font-size:9px;color:#16a34a;margin-bottom:7px">✓ Wallet: ₮45,000 — хангалттай</div>
+      <div class="wbtn p">Wallet-ээр төлөх</div>
+    </div>
+  </div>
+
+  <!-- Transport -->
+  <div class="phone new">
+    <div class="ph">Тээвэр <span class="ptag ptag-new">SVC-02</span></div>
+    <div class="pb">
+      <div class="wb hi-sky">
+        <div class="wbt">🚌 Шаттл маршрут</div>
+        <div class="wrow" style="margin-top:4px"><div class="wdot s"></div><div class="wlabel">F маршрут: Venue → Зочид буудал · 15 мин тутам</div></div>
+        <div class="wrow"><div class="wdot s"></div><div class="wlabel">A маршрут: Нисэх буудал → Venue</div></div>
+      </div>
+      <div class="wb">
+        <div class="wbt">🚕 Такси захиалга</div>
+        <div class="winput" style="margin-top:5px">📍 Хаашаа явах?</div>
+        <div class="wbtn bl" style="font-size:9px;margin-bottom:0">Такси захиалах →</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">✈ Нисэх буудлын тээвэр</div>
+        <div class="winput" style="margin-top:5px">✈ Нислэгийн дугаар</div>
+        <div class="wbtn" style="font-size:9px;margin-bottom:0">Захиалах →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- E-SIM -->
+  <div class="phone new">
+    <div class="ph">E-SIM <span class="ptag ptag-new">SVC-06</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:9px;line-height:1.4">Монголын операторуудын E-SIM-ийг аппаас шууд худалдан авна</p>
+      <div class="wb hi-sky">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="wbt">🇲🇳 MobiCom · 5G</div>
+            <div class="wbs">7 хоног · Хязгааргүй дата</div>
+          </div>
+          <div style="font-size:11px;font-weight:800;color:#111">₮25,000</div>
+        </div>
+        <div class="wbtn sky" style="font-size:9px;margin-top:6px;margin-bottom:0">Wallet-ээр авах</div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="wbt">🇲🇳 Unitel · 4G</div>
+            <div class="wbs">7 хоног · 10GB</div>
+          </div>
+          <div style="font-size:11px;font-weight:800;color:#111">₮18,000</div>
+        </div>
+        <div class="wbtn" style="font-size:9px;margin-top:6px;margin-bottom:0">Wallet-ээр авах</div>
+      </div>
+      <div class="wrow"><div class="wdot g"></div><div class="wlabel">QR payload-аар автоматаар суурилагдана</div></div>
+    </div>
+  </div>
+
+  <!-- Lost & Found -->
+  <div class="phone new">
+    <div class="ph">Lost & Found <span class="ptag ptag-new">SVC-07</span></div>
+    <div class="pb">
+      <div class="wtabs">
+        <div class="wtab a">Гэмтсэн/Гээсэн</div>
+        <div class="wtab">Олдсон</div>
+      </div>
+      <div class="wb hi-amber">
+        <div class="wbt">📋 Гэмтэлд мэдэгдэх</div>
+        <div class="winput" style="margin-top:5px">Юу гээлээ?</div>
+        <div style="border:1.5px dashed #d0d0d0;border-radius:7px;padding:12px;text-align:center;margin-bottom:7px">
+          <div style="font-size:20px">📷</div>
+          <div style="font-size:9px;color:#aaa">Зураг оруулах</div>
+        </div>
+        <div class="wbtn warn" style="margin-bottom:0">Мэдэгдэл илгээх</div>
+      </div>
+      <div class="wb">
+        <div class="stat-row"><span class="badge ok">Олдсон</span></div>
+        <div class="wbt">Улаан цүнх · Passport bag</div>
+        <div class="wbs">Hall A орцны стол · Нийтлэсэн: 12:30</div>
+        <div class="wbtn ok" style="font-size:9px;margin-top:5px;margin-bottom:0">Энэ минийх →</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ⑥ MAP TAB
+════════════════════════════════════════════════ -->
+<h2>⑥ Map Tab — Дотоод + Гадаад газрын зураг, Навигаци (MAP-01~05)</h2>
+
+<div class="grid">
+
+  <!-- Map Main -->
+  <div class="phone new">
+    <div class="ph">Газрын зураг <span class="ptag ptag-new">MAP-01,02</span></div>
+    <div class="pb">
+      <div class="wtabs">
+        <div class="wtab a">Дотоод</div>
+        <div class="wtab">Гадаад</div>
+        <div class="wtab">Offline</div>
+      </div>
+      <!-- Map placeholder -->
+      <div style="background:#e8f4fd;border-radius:10px;height:90px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;border:1.5px dashed #bae6fd;position:relative">
+        <div style="text-align:center">
+          <div style="font-size:20px">🗺</div>
+          <div style="font-size:9px;color:#0369a1">Хурлын байрны дотоод зураг</div>
+          <div style="font-size:8px;color:#aaa">MapBox / Indoor SVG floor plan</div>
+        </div>
+        <!-- POI markers -->
+        <div style="position:absolute;top:15px;left:30px;font-size:12px">📍</div>
+        <div style="position:absolute;top:35px;right:25px;font-size:12px">🍽</div>
+        <div style="position:absolute;bottom:15px;left:45px;font-size:12px">🚪</div>
+      </div>
+      <div class="wbt" style="margin-bottom:5px">Хурдан хандалт</div>
+      <div class="grid-2">
+        <div class="wbtn sky" style="font-size:9px;margin-bottom:0">📍 Миний байршил</div>
+        <div class="wbtn" style="font-size:9px;margin-bottom:0">🚪 Гарц / Үүд</div>
+        <div class="wbtn ok" style="font-size:9px;margin-bottom:0">🍽 Хоолны газар</div>
+        <div class="wbtn warn" style="font-size:9px;margin-bottom:0">🏥 Эмнэлэг</div>
+      </div>
+    </div>
+    <div class="wnav">
+      <div class="wni">🏠<br>Home</div>
+      <div class="wni">📅<br>Prog</div>
+      <div class="wni">ℹ️<br>Info</div>
+      <div class="wni">🛍<br>Serv</div>
+      <div class="wni a">🗺<br>Map</div>
+    </div>
+  </div>
+
+  <!-- Navigation result -->
+  <div class="phone new">
+    <div class="ph">Навигаци <span class="ptag ptag-new">MAP-03,04</span></div>
+    <div class="pb">
+      <div class="wb hi-blue">
+        <div style="display:flex;justify-content:space-between">
+          <div><div class="wbt">Hall A</div><div class="wbs">Land Degradation Panel</div></div>
+          <div style="text-align:right"><div style="font-size:11px;font-weight:800;color:#1a6ef5">4 мин</div><div style="font-size:8px;color:#aaa">350 м алхах</div></div>
+        </div>
+      </div>
+      <div style="background:#f0f9ff;border-radius:8px;height:70px;display:flex;align-items:center;justify-content:center;margin-bottom:7px">
+        <div style="font-size:9px;color:#0369a1;text-align:center">Turn-by-turn чиглүүлэлт<br>QR checkpoint / BLE Beacon (MAP-04)</div>
+      </div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">↑ Шулуун явна — 50 метр</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">→ Баруун тийш эргэнэ — 2-р давхар</div></div>
+      <div class="wrow"><div class="wdot g"></div><div class="wlabel">📍 Хүрсэн: Hall A</div></div>
+      <div class="wrow"><div class="wdot b"></div><div class="wlabel">Offline зураг урьдчилан татаж авсан (MAP-05)</div></div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ⑦ MEDIA + HELP TABS
+════════════════════════════════════════════════ -->
+<h2>⑦ Media & Help Tab — Хэвлэл, Шууд дамжуулалт, Яаралтай</h2>
+
+<div class="grid">
+
+  <!-- Media -->
+  <div class="phone new">
+    <div class="ph">Media <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="wtabs">
+        <div class="wtab a">Шууд</div>
+        <div class="wtab">Видео</div>
+        <div class="wtab">Фото</div>
+        <div class="wtab">Press Kit</div>
+      </div>
+      <!-- Live stream placeholder -->
+      <div style="background:#111;border-radius:8px;height:65px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <div style="text-align:center">
+          <div style="font-size:9px;color:#fff;font-weight:700">▶ ШУУД ДАМЖУУЛАЛТ</div>
+          <div style="font-size:8px;color:rgba(255,255,255,.5)">Opening Ceremony · Hall Main</div>
+          <span class="badge red" style="margin-top:3px;font-size:8px">● LIVE</span>
+        </div>
+      </div>
+      <div class="wb">
+        <div class="wbt">📰 Press Kit</div>
+        <div class="wrow" style="margin-top:4px"><div class="wdot b"></div><div class="wlabel">COP17 Ерөнхий баримт бичиг (PDF)</div></div>
+        <div class="wrow"><div class="wdot b"></div><div class="wlabel">Лого, зургийн сан (ZIP)</div></div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:4px;margin-bottom:0">Татаж авах →</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">🎤 Ярилцлага захиалга</div>
+        <div class="wbs">Хэвлэл мэдээлэлд зориулсан · Press badge шаардлагатай</div>
+        <div class="wbtn" style="font-size:9px;margin-top:5px;margin-bottom:0">Захиалах →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Tab -->
+  <div class="phone new">
+    <div class="ph">Тусламж <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <!-- Emergency CTA -->
+      <div class="wb hi-red" style="margin-bottom:9px">
+        <div class="wbt" style="color:#dc2626">🚨 Яаралтай тусламж</div>
+        <div class="wbtn-row" style="margin-top:7px">
+          <div class="wbtn d" style="font-size:9px;margin-bottom:0;font-weight:700">📞 103 Эмнэлэг</div>
+          <div class="wbtn d" style="font-size:9px;margin-bottom:0;font-weight:700">📞 102 Цагдаа</div>
+        </div>
+        <div class="wbtn warn" style="font-size:9px;margin-top:5px;margin-bottom:0">📍 Миний байршил явуулах</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">🤖 AI Chatbot</div>
+        <div class="wbs">COP17 мэдээлэл, FAQ, хөтөлбөр</div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:5px;margin-bottom:0">Нээх →</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">📞 Оператортой холбогдох</div>
+        <div class="wbs">Хүн хариулах · 08:00–22:00</div>
+        <div class="wbtn" style="font-size:9px;margin-top:5px;margin-bottom:0">Залгах</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">📋 Яаралтай журам</div>
+        <div class="wbs">Гал, газар хөдлөлт, эрүүл мэндийн тусламж</div>
+        <div class="wbtn warn" style="font-size:9px;margin-top:5px;margin-bottom:0">Харах →</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ⑧ PROFILE TAB
+════════════════════════════════════════════════ -->
+<h2>⑧ Profile Tab — Дижитал үнэмлэх, Биометр, CO₂, Тохиргоо (AUTH-02, AUTH-03)</h2>
+
+<div class="grid">
+
+  <!-- Digital ID / QR -->
+  <div class="phone new">
+    <div class="ph">Дижитал үнэмлэх <span class="ptag ptag-new">AUTH-03</span></div>
+    <div class="pb">
+      <div style="text-align:center;padding:8px 0">
+        <div class="avatar" style="background:#dcfce7;width:44px;height:44px;font-size:20px;margin:0 auto 7px">👤</div>
+        <div style="font-size:12px;font-weight:700;color:#111">Б. Болд</div>
+        <div style="font-size:9px;color:#aaa">bold@example.mn</div>
+        <div style="margin-top:5px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap">
+          <span class="badge ok">🟢 Green Zone</span>
+        </div>
+      </div>
+      <div class="qr-box">
+        <div class="qr-inner">QR</div>
+        <div style="font-size:9px;color:#aaa">Дижитал ID · Ирцийн бүртгэл</div>
+        <div style="font-size:8px;color:#1a6ef5;margin-top:3px">Expire: 15 мин · HMAC signature</div>
+      </div>
+      <div class="wbtn bl" style="font-size:9px">📳 NFC Tap (Дэмжих тохиолдолд)</div>
+      <div class="wrow"><div class="wdot b"></div><div class="wlabel">Offline горимд ажиллана</div></div>
+    </div>
+  </div>
+
+  <!-- Profile + Role badge -->
+  <div class="phone base">
+    <div class="ph">Профайл <span class="ptag ptag-user">Хэрэглэгч</span></div>
+    <div class="pb">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="avatar" style="background:#dcfce7;width:40px;height:40px;font-size:18px">👤</div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#111">Б. Болд</div>
+          <div style="font-size:9px;color:#aaa">bold@example.mn</div>
+          <span class="badge ok" style="margin-top:3px">🟢 Green Zone</span>
+        </div>
+      </div>
+      <div class="wb hi-green">
+        <div class="wbt" style="font-size:9px;color:#888">ХАНДАЛТЫН ЭРХҮҮД</div>
+        <div class="wrow" style="margin-top:5px"><div class="wdot g"></div><div class="wlabel">Хөтөлбөр, Going, Wallet</div></div>
+        <div class="wrow"><div class="wdot g"></div><div class="wlabel">QR / NFC ирцийн бүртгэл</div></div>
+        <div class="wrow"><div class="wdot b"></div><div class="wlabel" style="color:#aaa">VIP хандалт — Admin тохируулна</div></div>
+      </div>
+      <!-- Step count / CO2 -->
+      <div class="wbt" style="margin-bottom:5px;margin-top:3px">🏃 Алхам тоолох</div>
+      <div class="wbar-wrap">
+        <div class="wbar-meta"><span>Алхалт</span><span>18,450 алхам</span></div>
+        <div class="wbar-track"><div class="wbar-fill g" style="width:74%"></div></div>
+      </div>
+      <div class="wbtn d" style="font-size:9px;margin-top:7px">Гарах</div>
+    </div>
+  </div>
+
+  <!-- CO2 Sustainability -->
+  <div class="phone new">
+    <div class="ph">CO₂ Хэмнэлт <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div style="background:#f0fdf4;border-radius:10px;padding:12px;text-align:center;margin-bottom:9px">
+        <div style="font-size:22px;font-weight:800;color:#16a34a">12.4 кг</div>
+        <div style="font-size:9px;color:#16a34a">CO₂ хэмнэлт · Энэ арга хэмжааны туршид</div>
+      </div>
+      <div class="wbar-wrap">
+        <div class="wbar-meta"><span>Алхалт</span><span>18,450 алхам</span></div>
+        <div class="wbar-track"><div class="wbar-fill g" style="width:74%"></div></div>
+      </div>
+      <div class="wbar-wrap">
+        <div class="wbar-meta"><span>Тогтвортой байдлын оноо</span><span>340 / 500</span></div>
+        <div class="wbar-track"><div class="wbar-fill b" style="width:68%"></div></div>
+      </div>
+      <div class="wb" style="margin-top:5px">
+        <div class="wbt">🏆 Шагнал</div>
+        <div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap">
+          <span class="badge ok">🌿 Green Walker</span>
+          <span class="badge info">♻️ Low Carbon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="phone new">
+    <div class="ph">Тохиргоо <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="setting-row">
+        <div class="setting-lft"><span class="ic">🌐</span><span class="sl">Хэл</span></div>
+        <div class="setting-rgt">Монгол ›</div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-lft"><span class="ic">🔔</span><span class="sl">Мэдэгдэл</span></div>
+        <div class="setting-rgt">Бүгд идэвхтэй ›</div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-lft"><span class="ic">👁</span><span class="sl">Биометр нэвтрэлт</span></div>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-lft"><span class="ic">📍</span><span class="sl">Байршил</span></div>
+        <div class="setting-rgt">Ашиглах үед ›</div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-lft"><span class="ic">🔒</span><span class="sl">Нууцлал</span></div>
+        <div class="setting-rgt">Тохиргоо ›</div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-lft"><span class="ic">❓</span><span class="sl">Тусламж & FAQ</span></div>
+        <div class="setting-rgt"> ›</div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-lft"><span class="ic">📨</span><span class="sl">Санал / Хүсэлт</span></div>
+        <div class="setting-rgt"> ›</div>
+      </div>
+      <div class="wbtn d" style="margin-top:9px;font-size:9px">Гарах</div>
+    </div>
+  </div>
+
+  <!-- Notification Settings -->
+  <div class="phone new">
+    <div class="ph">Мэдэгдэл тохиргоо <span class="ptag ptag-new">NOTIF-01~06</span></div>
+    <div class="pb">
+      <div class="setting-row">
+        <div><div style="font-size:10px;color:#111">🚨 Яаралтай мэдэгдэл</div><div style="font-size:9px;color:#aaa">Унтраах боломжгүй (NOTIF-04)</div></div>
+        <div class="toggle on" style="opacity:.5"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div style="font-size:10px;color:#111">📅 Хуваарийн сануулга</div><div style="font-size:9px;color:#aaa">30 мин өмнө</div></div>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div style="font-size:10px;color:#111">📢 Зарлал</div></div>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div style="font-size:10px;color:#111">🤝 B2B Meeting</div></div>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div style="font-size:10px;color:#111">🎉 Sponsor мэдэгдэл</div></div>
+        <div class="toggle off"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="wrow" style="margin-top:6px"><div class="wdot g"></div><div class="wlabel">Монгол / Англи автомат орчуулга (NOTIF-05)</div></div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ⑨ B2B EXHIBITOR
+════════════════════════════════════════════════ -->
+<h2>⑨ B2B Exhibitor — Уулзалт захиалга, Профайл</h2>
+
+<p class="flow-label">B2B Уулзалт захиалах урсгал</p>
+<div class="flow-row">
+  <div class="fn"><div class="fb fb-u">Exhibitor хайна</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Профайл харна</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Цаг сонгоно</div><div class="fr">user</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">Хүсэлт илгээнэ</div><div class="fr">system</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-a">Admin батална</div><div class="fr">admin</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">Push хоёр талд</div><div class="fr">system</div></div>
+</div>
+
+<div class="grid">
+
+  <!-- Exhibitor Directory -->
+  <div class="phone new">
+    <div class="ph">B2B Exhibitors <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="winput">🔍 Компани, салбар хайх</div>
+      <div class="wtabs">
+        <div class="wtab a">Бүгд</div>
+        <div class="wtab">Energy</div>
+        <div class="wtab">Water</div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div class="wbt">GreenTech Mongolia</div><div class="wbs">Solar · 🇲🇳 · Booth G-14</div></div>
+          <div class="wbtn bl" style="font-size:9px;padding:4px 8px;margin-bottom:0">Meeting →</div>
+        </div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div class="wbt">Solar Corp Germany</div><div class="wbs">Wind · 🇩🇪 · Booth B-22</div></div>
+          <div class="wbtn bl" style="font-size:9px;padding:4px 8px;margin-bottom:0">Meeting →</div>
+        </div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div class="wbt">UNDP Mongolia</div><div class="wbs">Dev · 🇲🇳 · Booth A-05</div></div>
+          <div class="wbtn bl" style="font-size:9px;padding:4px 8px;margin-bottom:0">Meeting →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meeting Request -->
+  <div class="phone new">
+    <div class="ph">Meeting хүсэлт <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:8px">GreenTech Mongolia-тай уулзах</p>
+      <div class="wb">
+        <div class="wbt">Зорилго</div>
+        <div class="winput active" style="margin-top:6px;height:42px;align-items:flex-start;padding-top:6px">Хамтын ажиллагааны талаар ярилцах...</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">Цаг сонгох</div>
+        <div class="grid-2" style="margin-top:6px">
+          <div class="wbtn ok" style="font-size:9px;margin-bottom:0">Apr 14 · 10:00</div>
+          <div class="wbtn" style="font-size:9px;margin-bottom:0">Apr 14 · 14:00</div>
+          <div class="wbtn" style="font-size:9px;margin-bottom:0">Apr 15 · 09:00</div>
+          <div class="wbtn" style="font-size:9px;margin-bottom:0">Apr 15 · 16:00</div>
+        </div>
+      </div>
+      <div class="wrow"><div class="wdot b"></div><div class="wlabel">Room 3 · 30 минут</div></div>
+      <div class="wbtn p" style="margin-top:5px">Хүсэлт илгээх</div>
+    </div>
+  </div>
+
+  <!-- My Meetings -->
+  <div class="phone new">
+    <div class="ph">Миний Meetings <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="wtabs">
+        <div class="wtab a">Идэвхтэй (2)</div>
+        <div class="wtab">Дууссан</div>
+      </div>
+      <div class="wb">
+        <div class="stat-row"><span class="badge ok">Баталгаажсан</span></div>
+        <div class="wbt">GreenTech Mongolia</div>
+        <div class="wbs">Apr 14 · 10:00–10:30 · Room 3</div>
+        <div class="wbtn-row" style="margin-top:6px">
+          <div class="wbtn" style="font-size:9px;margin-bottom:0">🗺 Room</div>
+          <div class="wbtn d" style="font-size:9px;margin-bottom:0">Цуцлах</div>
+        </div>
+      </div>
+      <div class="wb">
+        <div class="stat-row"><span class="badge warn">Хүлээж байна</span></div>
+        <div class="wbt">Solar Corp Germany</div>
+        <div class="wbs">Apr 15 · 14:00 · Хянагдаж байна</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ⑩ ADMIN — USER CLASSIFICATION SYSTEM
+════════════════════════════════════════════════ -->
+<h2>⑩ Admin — Хэрэглэгч ангилах систем (V4 гол шинэ модул)</h2>
+
+<p class="flow-label">Admin tier тохируулах урсгал</p>
+<div class="flow-row">
+  <div class="fn"><div class="fb fb-a">Хэрэглэгч хайна</div><div class="fr">admin</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-a">Профайл нээнэ</div><div class="fr">admin</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-a">Tier сонгоно</div><div class="fr">admin</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-a">Тэмдэглэл нэмнэ</div><div class="fr">admin</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-s">Хадгалагдана</div><div class="fr">system</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fb fb-u">Push мэдэгдэл</div><div class="fr">user</div></div>
+</div>
+
+<div class="grid">
+
+  <!-- User Management List -->
+  <div class="phone new">
+    <div class="ph" style="font-size:10px">Хэрэглэгч удирдлага <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="winput">🔍 Нэр, и-мэйл, tier хайх</div>
+      <div class="wtabs">
+        <div class="wtab a">Бүгд (2,847)</div>
+        <div class="wtab">VIP (34)</div>
+        <div class="wtab">Blue (89)</div>
+        <div class="wtab">Exhibitor</div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="avatar" style="background:#dcfce7;font-size:11px">👤</div>
+            <div><div class="wbt">Б. Болд</div><div class="wbs">bold@example.mn</div></div>
+          </div>
+          <span class="badge ok">Green</span>
+        </div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:5px;margin-bottom:0">Профайл / Tier →</div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="avatar" style="background:#fdf4ff;font-size:11px">👤</div>
+            <div><div class="wbt">C. Carter</div><div class="wbs">carter@un.org</div></div>
+          </div>
+          <span class="badge vip">💎 VIP</span>
+        </div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:5px;margin-bottom:0">Профайл / Tier →</div>
+      </div>
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="avatar" style="background:#fef3c7;font-size:11px">👤</div>
+            <div><div class="wbt">D. Schmidt</div><div class="wbs">d@solarcorp.de</div></div>
+          </div>
+          <span class="badge warn">Exhibitor</span>
+        </div>
+        <div class="wbtn bl" style="font-size:9px;margin-top:5px;margin-bottom:0">Профайл / Tier →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier Edit Panel -->
+  <div class="phone pm">
+    <div class="ph" style="font-size:10px">Tier тохируулах <span class="ptag ptag-pm">V4 гол</span></div>
+    <div class="pb">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid #f0f0f0">
+        <div class="avatar" style="background:#dcfce7;font-size:14px">👤</div>
+        <div>
+          <div style="font-size:11px;font-weight:700">Б. Болд</div>
+          <div style="font-size:9px;color:#aaa">bold@example.mn · #C17-2847</div>
+        </div>
+        <span class="badge ok" style="margin-left:auto">Green</span>
+      </div>
+
+      <div class="wbt" style="margin-bottom:6px;font-size:9px;color:#888;text-transform:uppercase">Tier сонгох</div>
+
+      <div class="role-tier green">
+        <div style="font-size:14px">🟢</div>
+        <div style="flex:1"><div style="font-size:10px;font-weight:700">Green Zone</div><div style="font-size:8px;color:#888">Ерөнхий · Анхдагч</div></div>
+        <div style="width:14px;height:14px;border-radius:50%;background:#16a34a;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px">✓</div>
+      </div>
+      <div class="role-tier blue">
+        <div style="font-size:14px">🔵</div>
+        <div style="flex:1"><div style="font-size:10px;font-weight:700">Blue Zone</div><div style="font-size:8px;color:#888">Дипломат / Яам</div></div>
+        <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #d0d0d0;"></div>
+      </div>
+      <div class="role-tier vip">
+        <div style="font-size:14px">💎</div>
+        <div style="flex:1"><div style="font-size:10px;font-weight:700">VIP</div><div style="font-size:8px;color:#888">Lounge, Dinner, Concierge</div></div>
+        <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #d0d0d0;"></div>
+      </div>
+      <div class="role-tier" style="background:#fef3c7;border:1px solid #fde68a">
+        <div style="font-size:14px">🏢</div>
+        <div style="flex:1"><div style="font-size:10px;font-weight:700">Exhibitor</div><div style="font-size:8px;color:#888">B2B функц, Booth</div></div>
+        <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #d0d0d0;"></div>
+      </div>
+      <div class="role-tier" style="background:#f0f9ff;border:1px solid #bae6fd">
+        <div style="font-size:14px">📰</div>
+        <div style="flex:1"><div style="font-size:10px;font-weight:700">Press / Media</div><div style="font-size:8px;color:#888">Хэвлэл · Тусгай хандалт</div></div>
+        <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #d0d0d0;"></div>
+      </div>
+
+      <div class="wb" style="margin-top:7px">
+        <div class="wbt">Тэмдэглэл</div>
+        <div class="winput active" style="margin-top:5px;height:36px;align-items:flex-start;padding-top:5px">UN-ийн төлөөлөгч, verified...</div>
+      </div>
+      <div class="wbtn p">Хадгалах — Мэдэгдэл илгээх ✓</div>
+      <div class="wbtn" style="font-size:9px">Мэдэгдэлгүй хадгалах</div>
+    </div>
+  </div>
+
+  <!-- Tier Matrix -->
+  <div class="phone pm">
+    <div class="ph" style="font-size:10px">Tier Matrix <span class="ptag ptag-pm">V4</span></div>
+    <div class="pb">
+      <div class="wbt" style="margin-bottom:7px;font-size:9px;color:#888;text-transform:uppercase">Tier → Хандалт харьцуулалт</div>
+      <div style="font-size:9px;font-weight:700;color:#aaa;display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:3px;margin-bottom:4px;text-align:center">
+        <div></div><div>Хөтөлбөр</div><div>VIP</div><div>B2B</div>
+      </div>
+      <div style="font-size:9px;display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:3px;margin-bottom:3px;align-items:center">
+        <div><span class="badge ok" style="font-size:8px">Green</span></div>
+        <div style="text-align:center;color:#16a34a">✓</div><div style="text-align:center;color:#ccc">—</div><div style="text-align:center;color:#ccc">—</div>
+      </div>
+      <div style="font-size:9px;display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:3px;margin-bottom:3px;align-items:center">
+        <div><span class="badge info" style="font-size:8px">Blue</span></div>
+        <div style="text-align:center;color:#16a34a">✓</div><div style="text-align:center;color:#1a6ef5">Part</div><div style="text-align:center;color:#ccc">—</div>
+      </div>
+      <div style="font-size:9px;display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:3px;margin-bottom:3px;align-items:center">
+        <div><span class="badge vip" style="font-size:8px">VIP 💎</span></div>
+        <div style="text-align:center;color:#16a34a">✓</div><div style="text-align:center;color:#7c3aed">Full</div><div style="text-align:center;color:#ccc">—</div>
+      </div>
+      <div style="font-size:9px;display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:3px;margin-bottom:3px;align-items:center">
+        <div><span class="badge warn" style="font-size:8px">Exhibitor</span></div>
+        <div style="text-align:center;color:#16a34a">✓</div><div style="text-align:center;color:#ccc">—</div><div style="text-align:center;color:#b45309">Full</div>
+      </div>
+      <div style="font-size:9px;display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:3px;align-items:center">
+        <div><span class="badge gray" style="font-size:8px">Press</span></div>
+        <div style="text-align:center;color:#16a34a">✓</div><div style="text-align:center;color:#ccc">—</div><div style="text-align:center;color:#ccc">—</div>
+      </div>
+      <div class="wdiv"></div>
+      <div class="grid-2" style="gap:5px">
+        <div class="stat-card"><div class="sv" style="color:#16a34a">2,720</div><div class="sk">Green</div></div>
+        <div class="stat-card"><div class="sv" style="color:#7c3aed">34</div><div class="sk">VIP</div></div>
+        <div class="stat-card"><div class="sv" style="color:#1a6ef5">89</div><div class="sk">Blue Zone</div></div>
+        <div class="stat-card"><div class="sv" style="color:#b45309">4</div><div class="sk">Хязгаарлагдсан</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Upgrade -->
+  <div class="phone pm">
+    <div class="ph" style="font-size:10px">Bulk Tier Upgrade <span class="ptag ptag-pm">V4</span></div>
+    <div class="pb">
+      <p style="font-size:10px;color:#555;margin-bottom:9px">Олон хэрэглэгчийн tier-ийг нэгэн зэрэг өөрчлөх</p>
+      <div class="wb">
+        <div class="wbt">CSV / Excel upload</div>
+        <div style="border:1.5px dashed #d0d0d0;border-radius:7px;padding:12px;text-align:center;margin-top:5px">
+          <div style="font-size:16px;margin-bottom:3px">📂</div>
+          <div style="font-size:9px;color:#aaa">И-мэйл + tier жагсаалт файл</div>
+        </div>
+      </div>
+      <div class="wb hi-green">
+        <div class="wbt">Preview</div>
+        <div class="wrow" style="margin-top:4px"><div class="wdot g"></div><div class="wlabel">23 и-мэйл олдсон</div></div>
+        <div class="wrow"><div class="wdot p"></div><div class="wlabel">15 → VIP болно</div></div>
+        <div class="wrow"><div class="wdot b"></div><div class="wlabel">8 → Blue Zone болно</div></div>
+        <div class="wrow"><div class="wdot r"></div><div class="wlabel">0 олдоогүй и-мэйл</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+        <div style="font-size:9px;color:#555">Push мэдэгдэл илгээх</div>
+      </div>
+      <div class="wbtn p">23 хэрэглэгч шинэчлэх</div>
+    </div>
+  </div>
+
+  <!-- Tier change notification user receives -->
+  <div class="phone pm">
+    <div class="ph" style="font-size:10px">VIP Мэдэгдэл (хэрэглэгч авна) <span class="ptag ptag-pm">V4</span></div>
+    <div class="pb">
+      <div class="wb hi-purple">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:22px">💎</div>
+          <div>
+            <div class="wbt">Таны эрх шинэчлэгдлээ!</div>
+            <div class="wbs" style="margin-top:3px">Та VIP гишүүнээр нэмэгдлээ. Шинэ хандалтууд нэн даруй идэвхжлээ.</div>
+          </div>
+        </div>
+      </div>
+      <div class="wbt" style="margin-bottom:5px;margin-top:3px">Шинэ хандалтууд:</div>
+      <div class="wrow"><div class="wdot p"></div><div class="wlabel">💎 VIP Lounge · Hall 3, 2F</div></div>
+      <div class="wrow"><div class="wdot p"></div><div class="wlabel">🍽 VIP Dinner · Apr 15, 19:00</div></div>
+      <div class="wrow"><div class="wdot p"></div><div class="wlabel">📞 Concierge: +976 99001234</div></div>
+      <div class="wbtn p" style="margin-top:7px">Шинэ хандалт харах →</div>
+    </div>
+  </div>
+
+  <!-- Audit Log -->
+  <div class="phone new">
+    <div class="ph" style="font-size:9px">Хэрэглэгч + Audit Log <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="wb">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="wbt">C. Carter</div>
+            <div class="wbs">carter@un.org · #C17-0091</div>
+            <div style="margin-top:4px;display:flex;gap:3px;flex-wrap:wrap">
+              <span class="badge vip">💎 VIP</span>
+              <span class="badge info">Blue Zone</span>
+            </div>
+          </div>
+          <div class="wbtn pur" style="font-size:9px;padding:3px 8px;margin-bottom:0">Засах</div>
+        </div>
+      </div>
+      <div class="wbt" style="margin-bottom:5px;font-size:9px;color:#888;text-transform:uppercase">Tier өөрчлөлтийн лог</div>
+      <div class="wb hi-gray">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:9px;font-weight:700;color:#7c3aed">Green → VIP</span>
+          <span style="font-size:8px;color:#aaa">Apr 12 · 09:14</span>
+        </div>
+        <div style="font-size:8px;color:#888">Admin: Sarah K. · "UN delegate confirmed"</div>
+      </div>
+      <div class="wb hi-gray">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:9px;font-weight:700;color:#1a6ef5">+ Blue Zone</span>
+          <span style="font-size:8px;color:#aaa">Apr 12 · 09:15</span>
+        </div>
+        <div style="font-size:8px;color:#888">Admin: Sarah K. · Auto bundle</div>
+      </div>
+      <div class="wb hi-gray">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:9px;font-weight:700;color:#16a34a">Бүртгэл</span>
+          <span style="font-size:8px;color:#aaa">Apr 10 · 14:32</span>
+        </div>
+        <div style="font-size:8px;color:#888">И-мэйл OTP · Default: Green</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     ⑪ ADMIN DASHBOARD
+════════════════════════════════════════════════ -->
+<h2>⑪ Admin Dashboard — Real-time, Alert, Тайлан</h2>
+
+<div class="grid">
+
+  <!-- Real-time Dashboard -->
+  <div class="phone new">
+    <div class="ph">Real-time Dashboard <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="stat-row" style="margin-bottom:8px">
+        <span class="badge ok">● Онлайн</span>
+        <span style="font-size:9px;color:#aaa">30 сек тутам refresh</span>
+      </div>
+      <div class="grid-2" style="margin-bottom:9px">
+        <div class="stat-card"><div class="sv" style="color:#1a6ef5">1,247 👤</div><div class="sk">Одоо онлайн</div></div>
+        <div class="stat-card"><div class="sv" style="color:#16a34a">8 📅</div><div class="sk">Идэвхтэй session</div></div>
+        <div class="stat-card"><div class="sv" style="color:#7c3aed">34 💎</div><div class="sk">VIP нийт</div></div>
+        <div class="stat-card"><div class="sv" style="color:#b45309">12 ⏳</div><div class="sk">Tier хүсэлт</div></div>
+      </div>
+      <div class="wb">
+        <div class="wbt">Хамгийн их хүн</div>
+        <div style="margin-top:5px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:9px;color:#555">Opening Ceremony</span>
+            <span style="font-size:9px;font-weight:700">982</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="font-size:9px;color:#555">Land Panel · Hall A</span>
+            <span style="font-size:9px;font-weight:700">47</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert -->
+  <div class="phone new">
+    <div class="ph">Alert / Incident <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="wb hi-red">
+        <div class="stat-row"><span class="badge red">🔴 Яаралтай</span><span style="font-size:9px;color:#aaa">12:47</span></div>
+        <div class="wbt">Hall B — 95% дүүрсэн</div>
+        <div class="wbs">Шинэ хүн оруулахыг зогсоох</div>
+        <div class="wbtn-row" style="margin-top:6px">
+          <div class="wbtn ok" style="font-size:9px;margin-bottom:0">✓ Шийдвэрлэсэн</div>
+          <div class="wbtn" style="font-size:9px;margin-bottom:0">Мэдэгдэл</div>
+        </div>
+      </div>
+      <div class="wb" style="border-color:#b45309;background:#fffbeb">
+        <div class="stat-row"><span class="badge warn">🟡 Анхааруулга</span><span style="font-size:9px;color:#aaa">11:23</span></div>
+        <div class="wbt">OTP алдааны давтамж</div>
+        <div class="wbs">15 минутад 23 алдаа · IP блоклох</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier Upgrade Queue -->
+  <div class="phone pm">
+    <div class="ph" style="font-size:10px">Tier Хүсэлт дараалал <span class="ptag ptag-pm">V4</span></div>
+    <div class="pb">
+      <div class="wb hi-purple">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="wbt">М. Энхбаяр</div>
+            <div class="wbs">enkhbayar@mfa.gov.mn</div>
+            <div style="margin-top:3px"><span class="badge ok" style="font-size:8px">Green</span> <span style="font-size:9px;color:#aaa">→</span> <span class="badge info" style="font-size:8px">Blue Zone</span></div>
+          </div>
+          <span style="font-size:8px;color:#aaa">5 мин</span>
+        </div>
+        <div class="wbs" style="margin-top:4px">Гадаад харилцааны яамны credential</div>
+        <div class="wbtn-row" style="margin-top:6px">
+          <div class="wbtn ok" style="font-size:9px;margin-bottom:0">✓ Баталгаажуулах</div>
+          <div class="wbtn d" style="font-size:9px;margin-bottom:0">Татгалзах</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export/Report -->
+  <div class="phone new">
+    <div class="ph">Тайлан / Export <span class="ptag ptag-new">Шинэ</span></div>
+    <div class="pb">
+      <div class="wtabs">
+        <div class="wtab a">Ирц</div>
+        <div class="wtab">Хоол</div>
+        <div class="wtab">Wallet</div>
+        <div class="wtab">Lost&F</div>
+      </div>
+      <div class="wb">
+        <div class="wbt">Ирцийн тоо улсаар</div>
+        <div style="margin-top:6px">
+          <div class="wbar-wrap">
+            <div class="wbar-meta"><span>Монгол</span><span>1,850</span></div>
+            <div class="wbar-track"><div class="wbar-fill g" style="width:65%"></div></div>
+          </div>
+          <div class="wbar-wrap">
+            <div class="wbar-meta"><span>Хятад</span><span>510</span></div>
+            <div class="wbar-track"><div class="wbar-fill b" style="width:18%"></div></div>
+          </div>
+          <div class="wbar-wrap">
+            <div class="wbar-meta"><span>Герман</span><span>284</span></div>
+            <div class="wbar-track"><div class="wbar-fill w" style="width:10%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="wbtn-row">
+        <div class="wbtn bl" style="font-size:9px;margin-bottom:0">CSV</div>
+        <div class="wbtn" style="font-size:9px;margin-bottom:0">Excel</div>
+        <div class="wbtn d" style="font-size:9px;margin-bottom:0">PDF</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SUMMARY
+════════════════════════════════════════════════ -->
+<div style="margin-top:40px;padding:16px;background:#fff;border-radius:10px;border:1px solid #e0e0e0">
+  <div style="font-size:11px;font-weight:800;color:#111;margin-bottom:10px">📋 COP17 Wireframe V4 Final — Дэлгэрэнгүй тайлбар</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+    <div>
+      <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:5px">Хэрэглэгчийн дэлгэцүүд</div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">① Onboarding: Splash, Email OTP, Хэл, Зөвшөөрөл, Welcome (6)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">② Home: Green Zone, VIP, Sponsor Banner (3)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">③ Programme: Календарь, Session, Going QR, Waiting, Feedback, My Agenda (6)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">④ Information: FAQ, AI Chatbot, Нислэг (2)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">⑤ Services: Hub, Wallet, Цэнэглэх, Сагс, Тээвэр, E-SIM, L&F (7)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">⑥ Map: Дотоод зураг, Навигаци (2)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">⑦ Media + Help (2)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">⑧ Profile: Дижитал ID, Профайл, CO₂, Тохиргоо, Мэдэгдэл (5)</div></div>
+      <div class="wrow"><div class="wdot s"></div><div class="wlabel">⑨ B2B: Directory, Meeting хүсэлт, My Meetings (3)</div></div>
+    </div>
+    <div>
+      <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:5px">Admin дэлгэцүүд (V4 нэмэлт)</div>
+      <div class="wrow"><div class="wdot p"></div><div class="wlabel">⑩ User list, Tier edit, Matrix, Bulk upgrade, Tier notification, Audit log (6)</div></div>
+      <div class="wrow"><div class="wdot p"></div><div class="wlabel">⑪ Dashboard, Alert, Tier queue, Export (4)</div></div>
+      <div style="margin-top:8px;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:5px">System Requirements нийцэл</div>
+      <div class="wrow"><div class="wdot g"></div><div class="wlabel">AUTH-01~05: Email OTP, Biometric, QR+NFC, SSO, RBAC</div></div>
+      <div class="wrow"><div class="wdot g"></div><div class="wlabel">PROG-01~06: Calendar, Booking, Agenda, QR ирц, Feedback, Speaker</div></div>
+      <div class="wrow"><div class="wdot g"></div><div class="wlabel">SVC-01~08, PAY-01~05, MAP-01~05, NOTIF-01~06, AI-01~02</div></div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #f0f0f0;padding-top:8px;margin-top:4px">
+    <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:5px">V4 PM Гол өөрчлөлтүүд</div>
+    <div class="wrow"><div class="wdot p"></div><div class="wlabel"><strong>Home tab нэмсэн</strong> — Zone header, CO₂ widget, цаг агаар, өнөөдрийн хөтөлбөр, sponsor banner, quick links (COP16 Riyadh санаанаас авсан)</div></div>
+    <div class="wrow"><div class="wdot p"></div><div class="wlabel"><strong>Onboarding хялбарчлав</strong> — Email + OTP + Хэл = 3 алхам. "Дүр сонгох" устгасан → Default Green Zone</div></div>
+    <div class="wrow"><div class="wdot p"></div><div class="wlabel"><strong>Admin-driven classification</strong> — VIP, Blue Zone, Exhibitor, Press бүгд admin тохируулна. Tier matrix, audit log, bulk upgrade, tier change notification</div></div>
+  </div>
+</div>
+
+</body>
+</html>

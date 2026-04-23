@@ -58,4 +58,4 @@ Build: `flutter build ipa --flavor prod --dart-define-from-file=prod.json`.
 - T-10 days: submit prod for review
 - T-5 days: reviewer approved; stage rollout 10 % → 50 % → 100 %
 - T-1 day: final "ready for release" at 100 %
-- Apr 12, 2026 (T-0): public
+- Aug 17, 2026 (T-0): public

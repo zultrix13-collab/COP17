@@ -3,7 +3,7 @@
 ## Environments
 - **dev** — local docker-compose (Postgres, Redis, MinIO, Meilisearch)
 - **staging** — pre-event rehearsal cluster
-- **prod** — COP17 live (Apr 12–23, 2026)
+- **prod** — COP17 live (Aug 17–28, 2026)
 
 ## Deploy
 1. PR → CI (lint, typecheck, test) → review → merge to `main`.
@@ -11,7 +11,7 @@
 3. ArgoCD/kubectl apply to staging → smoke tests → promote to prod.
 
 ## On-call
-- Rotation: 24/7 during Apr 10–25, 2026. Primary + secondary.
+- Rotation: 24/7 during Aug 15–30, 2026. Primary + secondary.
 - Escalation: on-call → lead → CTO.
 
 ## Key SLOs

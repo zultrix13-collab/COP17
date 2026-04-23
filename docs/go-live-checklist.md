@@ -1,6 +1,6 @@
 # COP17 — Go-live checklist
 
-Run through this ~2 weeks before Apr 12, 2026. Every item must be ✓ before go/no-go.
+Run through this ~2 weeks before Aug 17, 2026. Every item must be ✓ before go/no-go.
 
 ## Infrastructure
 - [ ] Supabase prod project created, region = closest to UB (or self-hosted in UB datacenter)
@@ -26,7 +26,7 @@ Run through this ~2 weeks before Apr 12, 2026. Every item must be ✓ before go/
 ## Observability
 - [ ] Sentry project (API + mobile + admin-web), source maps uploaded
 - [ ] Grafana dashboard: API p95, error rate, Postgres connections, Redis memory, QPay webhook success
-- [ ] On-call PagerDuty rotation starts Apr 10 → Apr 25
+- [ ] On-call PagerDuty rotation starts Aug 15 → Aug 30
 - [ ] Alerts: p95>400ms (10m), err>1% (5m), DB conn>80%, disk>80%
 
 ## Data
@@ -38,7 +38,7 @@ Run through this ~2 weeks before Apr 12, 2026. Every item must be ✓ before go/
 ## Clients
 - [ ] iOS build uploaded to TestFlight, privacy manifest (`PrivacyInfo.xcprivacy`) present
 - [ ] Android build signed with Play upload key, uploaded to internal track
-- [ ] App review submitted ≥ 10 days before Apr 12
+- [ ] App review submitted ≥ 10 days before Aug 17 (i.e. submit by Aug 7)
 - [ ] App icons, screenshots (6.7" + 5.5"), descriptions (MN+EN) uploaded
 - [ ] Admin-web build deployed behind auth-protected URL
 - [ ] `VITE_SUPABASE_URL` + `VITE_API_BASE_URL` point to prod
@@ -57,4 +57,4 @@ Run through this ~2 weeks before Apr 12, 2026. Every item must be ✓ before go/
 - [ ] Offline-mode test: airplane mode → app still shows cached programme + digital ID
 
 ## Go/No-go meeting
-- [ ] Apr 5, 2026 — all sections signed by PM, Eng lead, Security lead, Ops lead
+- [ ] Aug 10, 2026 — all sections signed by PM, Eng lead, Security lead, Ops lead

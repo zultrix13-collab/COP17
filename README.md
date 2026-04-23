@@ -1,6 +1,11 @@
 # COP17 — UNCCD COP17 Ulaanbaatar 2026
 
-Mobile app (Flutter) + Admin back office (React) + Backend API (NestJS BFF) for the UNCCD COP17 event.
+Mobile app (Flutter) + Admin back office (React) + Backend API (NestJS BFF) for the
+17th UNCCD Conference of the Parties.
+
+**Event:** August 17–28, 2026 · Ulaanbaatar, Mongolia
+**Venues:** State Palace (Төрийн ордон) — plenary · Exhibition Center (Үзэсгэлэнгийн төв) — technical summits
+
 Backed by **Supabase** (Postgres + PostGIS + pgvector + Auth + Storage + Realtime).
 
 ## Repo layout

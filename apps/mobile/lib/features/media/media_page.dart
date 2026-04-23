@@ -18,7 +18,7 @@ class MediaPage extends StatelessWidget {
                 Text('▶ ШУУД ДАМЖУУЛАЛТ',
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
                 SizedBox(height: 4),
-                Text('Opening Ceremony · Hall Main',
+                Text('Opening Ceremony · State Palace (Төрийн ордон)',
                     style: TextStyle(color: Colors.white54, fontSize: 11)),
                 SizedBox(height: 6),
                 Chip(

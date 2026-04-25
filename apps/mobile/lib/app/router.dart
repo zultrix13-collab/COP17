@@ -32,6 +32,7 @@ import '../features/map/map_page.dart';
 import '../features/profile/profile_page.dart';
 import '../features/profile/digital_id_page.dart';
 import '../features/shell/main_shell.dart';
+import '../core/env.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final repo = ref.watch(authRepositoryProvider);
@@ -40,6 +41,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/splash',
     refreshListenable: _AuthChangeNotifier(repo),
     redirect: (ctx, state) {
+      if (demoMode) return null;
       final isAuthed = repo.currentSession != null;
       final loc = state.matchedLocation;
       final onboarding = loc.startsWith('/onboarding') || loc == '/splash';
@@ -53,46 +55,66 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/onboarding/otp',
         builder: (_, state) => OtpPage(email: (state.extra as String?) ?? ''),
       ),
-      GoRoute(path: '/onboarding/language', builder: (_, __) => const LanguagePage()),
-      GoRoute(path: '/onboarding/permission', builder: (_, __) => const PermissionPage()),
-      GoRoute(path: '/onboarding/welcome', builder: (_, __) => const WelcomePage()),
-      GoRoute(path: '/profile/digital-id', builder: (_, __) => const DigitalIdPage()),
-      GoRoute(path: '/programme/agenda', builder: (_, __) => const MyAgendaPage()),
+      GoRoute(
+          path: '/onboarding/language',
+          builder: (_, __) => const LanguagePage()),
+      GoRoute(
+          path: '/onboarding/permission',
+          builder: (_, __) => const PermissionPage()),
+      GoRoute(
+          path: '/onboarding/welcome', builder: (_, __) => const WelcomePage()),
+      GoRoute(
+          path: '/profile/digital-id',
+          builder: (_, __) => const DigitalIdPage()),
+      GoRoute(
+          path: '/programme/agenda', builder: (_, __) => const MyAgendaPage()),
       GoRoute(path: '/scanner', builder: (_, __) => const ScannerPage()),
-      GoRoute(path: '/information/chatbot', builder: (_, __) => const ChatbotPage()),
+      GoRoute(
+          path: '/information/chatbot',
+          builder: (_, __) => const ChatbotPage()),
       GoRoute(path: '/help', builder: (_, __) => const HelpPage()),
       GoRoute(path: '/media', builder: (_, __) => const MediaPage()),
       GoRoute(path: '/b2b', builder: (_, __) => const B2BPage()),
-      GoRoute(path: '/b2b/meetings', builder: (_, __) => const MyMeetingsPage()),
+      GoRoute(
+          path: '/b2b/meetings', builder: (_, __) => const MyMeetingsPage()),
       GoRoute(
         path: '/b2b/:id',
-        builder: (_, state) => MeetingRequestPage(exhibitorId: state.pathParameters['id']!),
+        builder: (_, state) =>
+            MeetingRequestPage(exhibitorId: state.pathParameters['id']!),
       ),
       GoRoute(path: '/services/wallet', builder: (_, __) => const WalletPage()),
       GoRoute(path: '/services/top-up', builder: (_, __) => const TopUpPage()),
-      GoRoute(path: '/services/lost-found', builder: (_, __) => const LostFoundPage()),
+      GoRoute(
+          path: '/services/lost-found',
+          builder: (_, __) => const LostFoundPage()),
       GoRoute(
         path: '/services/catalog/:kind',
         builder: (_, state) => CatalogPage(kind: state.pathParameters['kind']!),
       ),
       GoRoute(
         path: '/services/checkout/:kind',
-        builder: (_, state) => CheckoutPage(kind: state.pathParameters['kind']!),
+        builder: (_, state) =>
+            CheckoutPage(kind: state.pathParameters['kind']!),
       ),
       GoRoute(
         path: '/programme/:id',
-        builder: (_, state) => SessionDetailPage(sessionId: state.pathParameters['id']!),
+        builder: (_, state) =>
+            SessionDetailPage(sessionId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: '/programme/:id/feedback',
-        builder: (_, state) => FeedbackPage(sessionId: state.pathParameters['id']!),
+        builder: (_, state) =>
+            FeedbackPage(sessionId: state.pathParameters['id']!),
       ),
       ShellRoute(
         builder: (_, __, child) => MainShell(child: child),
         routes: [
           GoRoute(path: '/home', builder: (_, __) => const HomePage()),
-          GoRoute(path: '/programme', builder: (_, __) => const ProgrammePage()),
-          GoRoute(path: '/information', builder: (_, __) => const InformationPage()),
+          GoRoute(
+              path: '/programme', builder: (_, __) => const ProgrammePage()),
+          GoRoute(
+              path: '/information',
+              builder: (_, __) => const InformationPage()),
           GoRoute(path: '/services', builder: (_, __) => const ServicesPage()),
           GoRoute(path: '/map', builder: (_, __) => const MapPage()),
           GoRoute(path: '/profile', builder: (_, __) => const ProfilePage()),

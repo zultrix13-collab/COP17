@@ -63,6 +63,26 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     ),
                     const SizedBox(height: 28),
                     const Text(
+                      'UNCCD COP17',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 28,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Restoring Land, Restoring Hope',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFFE8F7FA),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
                       'Ulaanbaatar · Mongolia',
                       style: TextStyle(
                         color: Colors.white,
@@ -85,10 +105,11 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               ),
               Positioned(
                 bottom: 24,
-                left: 0, right: 0,
+                left: 0,
+                right: 0,
                 child: Center(
                   child: Text(
-                    'The Land of the Eternal Blue Sky',
+                    '197 Parties · International Year of Rangelands and Pastoralists',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.7),
                       fontSize: 11,
@@ -112,8 +133,10 @@ class _DunePainter extends CustomPainter {
     final paint = Paint()..color = Colors.white.withValues(alpha: 0.04);
     final path = Path()
       ..moveTo(0, size.height * 0.78)
-      ..quadraticBezierTo(size.width * 0.25, size.height * 0.72, size.width * 0.55, size.height * 0.82)
-      ..quadraticBezierTo(size.width * 0.8, size.height * 0.90, size.width, size.height * 0.80)
+      ..quadraticBezierTo(size.width * 0.25, size.height * 0.72,
+          size.width * 0.55, size.height * 0.82)
+      ..quadraticBezierTo(
+          size.width * 0.8, size.height * 0.90, size.width, size.height * 0.80)
       ..lineTo(size.width, size.height)
       ..lineTo(0, size.height)
       ..close();
@@ -122,8 +145,10 @@ class _DunePainter extends CustomPainter {
     final paint2 = Paint()..color = Colors.white.withValues(alpha: 0.06);
     final path2 = Path()
       ..moveTo(0, size.height * 0.90)
-      ..quadraticBezierTo(size.width * 0.4, size.height * 0.85, size.width * 0.7, size.height * 0.93)
-      ..quadraticBezierTo(size.width * 0.9, size.height * 0.98, size.width, size.height * 0.92)
+      ..quadraticBezierTo(size.width * 0.4, size.height * 0.85,
+          size.width * 0.7, size.height * 0.93)
+      ..quadraticBezierTo(
+          size.width * 0.9, size.height * 0.98, size.width, size.height * 0.92)
       ..lineTo(size.width, size.height)
       ..lineTo(0, size.height)
       ..close();

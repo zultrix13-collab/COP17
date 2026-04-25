@@ -57,11 +57,14 @@ class _B2BPageState extends ConsumerState<B2BPage> {
                   itemBuilder: (_, i) {
                     final e = items[i];
                     return ListTile(
-                      leading: CircleAvatar(child: Text(e.company.characters.first.toUpperCase())),
+                      leading: CircleAvatar(
+                          child:
+                              Text(e.company.characters.first.toUpperCase())),
                       title: Text(e.company,
                           style: const TextStyle(fontWeight: FontWeight.w700)),
                       subtitle: Text([e.sector, e.country, e.booth]
-                          .where((x) => x != null && x.isNotEmpty).join(' · ')),
+                          .where((x) => x != null && x.isNotEmpty)
+                          .join(' · ')),
                       trailing: FilledButton.tonal(
                         onPressed: () => context.push('/b2b/${e.userId}'),
                         child: const Text('Meeting →'),
@@ -96,8 +99,7 @@ class _MeetingRequestPageState extends ConsumerState<MeetingRequestPage> {
     final base = DateTime(now.year, now.month, now.day);
     return [
       for (var d = 1; d <= 3; d++)
-        for (final hour in [10, 14])
-          base.add(Duration(days: d, hours: hour)),
+        for (final hour in [10, 14]) base.add(Duration(days: d, hours: hour)),
     ];
   }
 
@@ -120,7 +122,8 @@ class _MeetingRequestPageState extends ConsumerState<MeetingRequestPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('$e')));
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -134,7 +137,8 @@ class _MeetingRequestPageState extends ConsumerState<MeetingRequestPage> {
       appBar: AppBar(title: const Text('Meeting хүсэлт')),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           const Text('Цаг сонгох'),
           const SizedBox(height: 8),
           Wrap(spacing: 8, runSpacing: 8, children: [
@@ -179,7 +183,9 @@ class MyMeetingsPage extends ConsumerWidget {
         error: (e, _) => Center(child: Text('$e')),
         data: (list) {
           if (list.isEmpty) {
-            return const Center(child: Text('Meeting алга', style: TextStyle(color: Color(0xFF888888))));
+            return const Center(
+                child: Text('Meeting алга',
+                    style: TextStyle(color: Color(0xFF888888))));
           }
           return ListView.separated(
             itemCount: list.length,
@@ -195,10 +201,12 @@ class MyMeetingsPage extends ConsumerWidget {
               return ListTile(
                 title: Text(m.purpose ?? 'Meeting',
                     style: const TextStyle(fontWeight: FontWeight.w700)),
-                subtitle: Text('${fmt.format(m.startsAt)} – ${DateFormat('HH:mm').format(m.endsAt)}'),
+                subtitle: Text(
+                    '${fmt.format(m.startsAt)} – ${DateFormat('HH:mm').format(m.endsAt)}'),
                 trailing: Chip(
-                  label: Text(m.status, style: TextStyle(color: color, fontSize: 11)),
-                  backgroundColor: color.withOpacity(0.1),
+                  label: Text(m.status,
+                      style: TextStyle(color: color, fontSize: 11)),
+                  backgroundColor: color.withValues(alpha: 0.1),
                 ),
               );
             },

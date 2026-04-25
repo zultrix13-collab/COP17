@@ -27,7 +27,10 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
 
   Future<void> _handle(String token) async {
     if (_sessionId == null || _busy) return;
-    setState(() { _busy = true; _lastMsg = null; });
+    setState(() {
+      _busy = true;
+      _lastMsg = null;
+    });
     try {
       final res = await ref.read(apiClientProvider).post(
         '/qr/check-in',
@@ -55,10 +58,11 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
             loading: () => const LinearProgressIndicator(),
             error: (e, _) => Text('$e'),
             data: (list) => DropdownButtonFormField<String>(
-              value: _sessionId,
+              initialValue: _sessionId,
               hint: const Text('Session сонгох'),
               items: list
-                  .map((s) => DropdownMenuItem(value: s.id, child: Text(s.titleMn)))
+                  .map((s) =>
+                      DropdownMenuItem(value: s.id, child: Text(s.titleMn)))
                   .toList(),
               onChanged: (v) => setState(() => _sessionId = v),
             ),
@@ -77,7 +81,8 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
               Container(
                 color: Colors.black54,
                 child: const Center(
-                  child: Text('Session сонгоно уу', style: TextStyle(color: Colors.white)),
+                  child: Text('Session сонгоно уу',
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
           ]),
@@ -85,7 +90,9 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
         if (_lastMsg != null)
           Container(
             padding: const EdgeInsets.all(12),
-            color: _lastMsg!.startsWith('✓') ? const Color(0xFFDCFCE7) : const Color(0xFFFEE2E2),
+            color: _lastMsg!.startsWith('✓')
+                ? const Color(0xFFDCFCE7)
+                : const Color(0xFFFEE2E2),
             width: double.infinity,
             child: Text(_lastMsg!, textAlign: TextAlign.center),
           ),

@@ -50,7 +50,9 @@ class ProgrammePage extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     child: Text(
                       dayHeader.format(DateTime.parse(entry.key)),
-                      style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF888888)),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF888888)),
                     ),
                   ),
                   for (final s in entry.value) _SessionTile(session: s),
@@ -83,12 +85,21 @@ class _SessionTile extends ConsumerWidget {
           color: Colors.white,
         ),
         child: Row(children: [
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('${fmt.format(session.startsAt)}–${fmt.format(session.endsAt)} · ${session.hall}',
-                style: const TextStyle(fontSize: 10, color: Color(0xFF888888), fontWeight: FontWeight.w700)),
-            const SizedBox(height: 2),
-            Text(session.titleMn, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-          ])),
+          Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                Text(
+                    '${fmt.format(session.startsAt)}–${fmt.format(session.endsAt)} · ${session.hall}',
+                    style: const TextStyle(
+                        fontSize: 10,
+                        color: Color(0xFF888888),
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 2),
+                Text(session.titleMn,
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.w700)),
+              ])),
           attendance.when(
             data: (s) => _StatusBadge(status: s, capacity: session.capacity),
             loading: () => const SizedBox.shrink(),
@@ -115,7 +126,8 @@ class _StatusBadge extends StatelessWidget {
     if (status == AttendanceStatus.attended) {
       return const _Pill(text: 'Attended', color: Color(0xFF0369A1));
     }
-    return _Pill(text: capacity > 0 ? '$capacity' : '—', color: const Color(0xFF888888));
+    return _Pill(
+        text: capacity > 0 ? '$capacity' : '—', color: const Color(0xFF888888));
   }
 }
 
@@ -128,10 +140,12 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Text(text, style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.w600)),
+      child: Text(text,
+          style: TextStyle(
+              fontSize: 10, color: color, fontWeight: FontWeight.w600)),
     );
   }
 }

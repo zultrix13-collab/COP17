@@ -2,41 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// COP17 brand tokens — derived from unccdcop17.org.
+/// COP17 brand tokens — aligned with unccdcop17.org.
 ///
-/// Narrative: "The Land of the Eternal Blue Sky" — deep teal of the UNCCD
-/// logo paired with a cyan sky accent; warm sand for accents drawn from
-/// the Gobi dunes / steppe. Manrope typography, soft rounded surfaces.
+/// Narrative: "Restoring Land, Restoring Hope" — eternal-blue-sky accents,
+/// living land greens, warm steppe neutrals, and restrained UN-style surfaces.
 class CopColors {
   // ─── Brand primaries ────────────────────────────────────────
-  /// Logo teal — headings, primary surfaces, tier "blue-zone" accents.
-  static const primary = Color(0xFF14464F);
+  /// Deep land teal — headings, primary surfaces, official emphasis.
+  static const primary = Color(0xFF123F3A);
 
-  /// "Eternal Blue Sky" cyan — highlight, active state, accent fills.
-  static const sky = Color(0xFF05B6C4);
+  /// "Eternal Blue Sky" blue — highlight, active state, directional UI.
+  static const sky = Color(0xFF00A6C8);
 
-  /// Warm dune accent — attention grabbing without losing UN gravitas.
-  static const sand = Color(0xFFF5D9A8);
+  /// Steppe gold — highlights, sponsor moments, countdown accents.
+  static const sun = Color(0xFFE7B14A);
+
+  /// Warm dune accent — background bands and low-emphasis official surfaces.
+  static const sand = Color(0xFFF3E4C7);
+
+  /// Living land green — restoration, going/success, ecological signals.
+  static const land = Color(0xFF2E7D55);
 
   // ─── Neutrals ───────────────────────────────────────────────
   static const ink = Color(0xFF1F2937);
   static const inkMuted = Color(0xFF6B7280);
   static const border = Color(0xFFE5E7EB);
-  static const bg = Color(0xFFF9FAFB);
+  static const bg = Color(0xFFFAF8F2);
   static const surface = Color(0xFFFFFFFF);
   static const surfaceAlt = Color(0xFFF3F4F6);
 
   // ─── Semantic ──────────────────────────────────────────────
-  static const success = Color(0xFF059669);
+  static const success = land;
   static const warning = Color(0xFFD97706);
   static const danger = Color(0xFFDC2626);
   static const info = sky;
 
   // ─── Tier accent palette ───────────────────────────────────
   // Each tier maps to a distinct, brand-consistent accent.
-  static const tierGreen = Color(0xFF059669); // Green Zone — access-all
-  static const tierBlue = Color(0xFF05B6C4);  // Blue Zone — delegate/press
-  static const tierVip = Color(0xFF8B5CF6);   // VIP
+  static const tierGreen = land; // Green Zone — access-all
+  static const tierBlue = sky; // Blue Zone — delegate/press
+  static const tierVip = Color(0xFF8B5CF6); // VIP
   static const tierExhibitor = Color(0xFFD97706); // Exhibitor
   static const tierPress = Color(0xFF0369A1); // Press
 }
@@ -87,15 +92,18 @@ ThemeData buildCop17Theme() {
     colorScheme: baseScheme,
     scaffoldBackgroundColor: CopColors.bg,
     textTheme: text.copyWith(
-      displayLarge: text.displayLarge?.copyWith(fontWeight: FontWeight.w800, letterSpacing: -0.5),
-      headlineLarge: text.headlineLarge?.copyWith(fontWeight: FontWeight.w800, letterSpacing: -0.4),
-      headlineMedium: text.headlineMedium?.copyWith(fontWeight: FontWeight.w700, letterSpacing: -0.3),
+      displayLarge: text.displayLarge
+          ?.copyWith(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+      headlineLarge: text.headlineLarge
+          ?.copyWith(fontWeight: FontWeight.w800, letterSpacing: -0.4),
+      headlineMedium: text.headlineMedium
+          ?.copyWith(fontWeight: FontWeight.w700, letterSpacing: -0.3),
       titleLarge: text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
       titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
       titleSmall: text.titleSmall?.copyWith(fontWeight: FontWeight.w600),
-      labelLarge: text.labelLarge?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
+      labelLarge: text.labelLarge
+          ?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
     ),
-
     appBarTheme: AppBarTheme(
       backgroundColor: CopColors.surface,
       foregroundColor: CopColors.ink,
@@ -110,7 +118,6 @@ ThemeData buildCop17Theme() {
         letterSpacing: -0.2,
       ),
     ),
-
     cardTheme: CardThemeData(
       color: CopColors.surface,
       elevation: 0,
@@ -120,14 +127,15 @@ ThemeData buildCop17Theme() {
         side: const BorderSide(color: CopColors.border),
       ),
     ),
-
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         backgroundColor: CopColors.primary,
         foregroundColor: Colors.white,
         minimumSize: const Size.fromHeight(48),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CopRadius.md)),
-        textStyle: GoogleFonts.manrope(fontWeight: FontWeight.w700, fontSize: 15),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(CopRadius.md)),
+        textStyle:
+            GoogleFonts.manrope(fontWeight: FontWeight.w700, fontSize: 15),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
@@ -135,17 +143,19 @@ ThemeData buildCop17Theme() {
         foregroundColor: CopColors.primary,
         side: const BorderSide(color: CopColors.border),
         minimumSize: const Size.fromHeight(44),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CopRadius.md)),
-        textStyle: GoogleFonts.manrope(fontWeight: FontWeight.w600, fontSize: 14),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(CopRadius.md)),
+        textStyle:
+            GoogleFonts.manrope(fontWeight: FontWeight.w600, fontSize: 14),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: CopColors.primary,
-        textStyle: GoogleFonts.manrope(fontWeight: FontWeight.w600, fontSize: 14),
+        textStyle:
+            GoogleFonts.manrope(fontWeight: FontWeight.w600, fontSize: 14),
       ),
     ),
-
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: CopColors.surfaceAlt,
@@ -165,24 +175,28 @@ ThemeData buildCop17Theme() {
         borderSide: const BorderSide(color: CopColors.sky, width: 1.5),
       ),
     ),
-
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: CopColors.surface,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       indicatorColor: CopColors.sky.withValues(alpha: 0.12),
       labelTextStyle: WidgetStatePropertyAll(GoogleFonts.manrope(
-        fontSize: 11, fontWeight: FontWeight.w600, color: CopColors.inkMuted,
+        fontSize: 11,
+        fontWeight: FontWeight.w600,
+        color: CopColors.inkMuted,
       )),
       iconTheme: WidgetStateProperty.resolveWith((s) => IconThemeData(
-        color: s.contains(WidgetState.selected) ? CopColors.primary : CopColors.inkMuted,
-      )),
+            color: s.contains(WidgetState.selected)
+                ? CopColors.primary
+                : CopColors.inkMuted,
+          )),
     ),
-
-    dividerTheme: const DividerThemeData(color: CopColors.border, space: 1, thickness: 1),
+    dividerTheme:
+        const DividerThemeData(color: CopColors.border, space: 1, thickness: 1),
     chipTheme: ChipThemeData(
       backgroundColor: CopColors.surfaceAlt,
-      labelStyle: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w600),
+      labelStyle:
+          GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w600),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(CopRadius.pill),
         side: BorderSide.none,
@@ -195,7 +209,13 @@ ThemeData buildCop17Theme() {
 const copBrandGradient = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
-  colors: [CopColors.primary, Color(0xFF0A7A8A), CopColors.sky],
+  colors: [CopColors.primary, Color(0xFF1E6B59), CopColors.sky],
+);
+
+const copLandGradient = LinearGradient(
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+  colors: [Color(0xFFFAF8F2), Color(0xFFEAF6EF), Color(0xFFE8F7FA)],
 );
 
 /// Map a tier string to its accent color.

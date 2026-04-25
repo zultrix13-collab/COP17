@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/env.dart';
 import '../../core/supabase_client.dart';
 
 class Profile {
@@ -29,10 +30,12 @@ class Profile {
       );
 }
 
-final profileRepositoryProvider = Provider<ProfileRepository>((_) => ProfileRepository());
+final profileRepositoryProvider =
+    Provider<ProfileRepository>((_) => ProfileRepository());
 
 class ProfileRepository {
   Future<Profile?> current() async {
+    if (demoMode) return _demoProfile;
     final user = supabase.auth.currentUser;
     if (user == null) return null;
     final row = await supabase
@@ -46,6 +49,7 @@ class ProfileRepository {
   /// Listen for RLS-filtered updates to the caller's own profile — tier changes
   /// pushed by admins surface instantly.
   Stream<Profile?> watchCurrent() {
+    if (demoMode) return Stream.value(_demoProfile);
     final user = supabase.auth.currentUser;
     if (user == null) return const Stream.empty();
     return supabase
@@ -55,6 +59,15 @@ class ProfileRepository {
         .map((rows) => rows.isEmpty ? null : Profile.fromMap(rows.first));
   }
 }
+
+final _demoProfile = Profile(
+  id: 'demo',
+  email: 'delegate@cop17.mn',
+  name: 'COP17 Delegate',
+  locale: 'en',
+  tier: 'green',
+  accreditationId: 'COP17-DEMO',
+);
 
 final currentProfileProvider = FutureProvider<Profile?>((ref) {
   return ref.watch(profileRepositoryProvider).current();

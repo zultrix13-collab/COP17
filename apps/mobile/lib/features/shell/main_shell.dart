@@ -5,13 +5,14 @@ class MainShell extends StatelessWidget {
   final Widget child;
   const MainShell({super.key, required this.child});
 
+  // (Path, Inactive Icon, Active Icon, Label)
   static const _tabs = [
-    ('/home', Icons.home_outlined, 'Home'),
-    ('/programme', Icons.calendar_month_outlined, 'Prog'),
-    ('/information', Icons.info_outline, 'Info'),
-    ('/services', Icons.shopping_bag_outlined, 'Serv'),
-    ('/map', Icons.map_outlined, 'Map'),
-    ('/profile', Icons.person_outline, 'Me'),
+    ('/home', Icons.home_outlined, Icons.home, 'Home'),
+    ('/programme', Icons.calendar_month_outlined, Icons.calendar_month, 'Agenda'),
+    ('/information', Icons.feed_outlined, Icons.feed, 'Info'),
+    ('/services', Icons.eco_outlined, Icons.eco, 'Services'),
+    ('/map', Icons.pin_drop_outlined, Icons.pin_drop, 'Map'),
+    ('/profile', Icons.person_outline, Icons.person, 'Profile'),
   ];
 
   int _currentIndex(String location) {
@@ -31,7 +32,12 @@ class MainShell extends StatelessWidget {
         selectedIndex: idx,
         onDestinationSelected: (i) => context.go(_tabs[i].$1),
         destinations: [
-          for (final t in _tabs) NavigationDestination(icon: Icon(t.$2), label: t.$3),
+          for (final t in _tabs)
+            NavigationDestination(
+              icon: Icon(t.$2), 
+              selectedIcon: Icon(t.$3), 
+              label: t.$4,
+            ),
         ],
       ),
     );

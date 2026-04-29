@@ -29,7 +29,7 @@ dependencies:
 
   # Auth + device
   local_auth: ^2.3.0
-  mobile_scanner: ^5.2.3
+  mobile_scanner: ^6.0.10
   flutter_nfc_kit: ^3.5.2
 
   # Maps + location

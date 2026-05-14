@@ -59,14 +59,14 @@ export function LoginPage() {
             <div className="text-xs text-gray-500">{email} руу код илгээлээ</div>
             <input
               className="w-full border rounded px-3 py-2 text-sm tracking-widest text-center"
-              placeholder="______"
-              maxLength={6}
+              placeholder="________"
+              maxLength={8}
               value={code}
               onChange={(e) => setCode(e.target.value)}
             />
             <button
               className="w-full bg-black text-white rounded py-2 text-sm disabled:opacity-50"
-              disabled={busy || code.length !== 6}
+              disabled={busy || code.length < 6}
               onClick={verify}
             >
               {busy ? '…' : 'Баталгаажуулах'}

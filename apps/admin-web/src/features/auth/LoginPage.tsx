@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+
+const BYPASS = import.meta.env.VITE_BYPASS_AUTH === 'true';
 
 type Step = 'email' | 'otp';
 
@@ -11,6 +13,10 @@ export function LoginPage() {
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (BYPASS) navigate('/dashboard', { replace: true });
+  }, [navigate]);
 
   const sendOtp = async () => {
     setBusy(true);

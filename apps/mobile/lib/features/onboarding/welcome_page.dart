@@ -29,7 +29,7 @@ class WelcomePage extends ConsumerWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                 ),
-                const Text('COP17 · Aug 17–28, 2026',
+                const Text('SIOP · Aug 17–28, 2026',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Color(0xFF888888))),
                 const SizedBox(height: 24),

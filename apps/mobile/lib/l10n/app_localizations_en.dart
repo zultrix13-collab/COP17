@@ -9,7 +9,7 @@ class AppL10nEn extends AppL10n {
   AppL10nEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'COP17';
+  String get appTitle => 'SIOP';
 
   @override
   String get navHome => 'Home';

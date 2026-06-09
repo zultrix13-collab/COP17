@@ -127,7 +127,7 @@ class _BrandHeader extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'UNCCD COP17',
+                          'UNCCD SIOP',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
@@ -215,7 +215,7 @@ class _BrandHeader extends StatelessWidget {
                           Text(
                             daysLeft > 0
                                 ? '$daysLeft days to opening day'
-                                : 'COP17 is in session',
+                                : 'SIOP is in session',
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.76),
                               fontSize: 12,
@@ -370,7 +370,7 @@ class _MissionCard extends StatelessWidget {
                         Icon(Icons.spa_outlined, size: 15, color: Colors.white),
                         SizedBox(width: 6),
                         Text(
-                          'Road to COP17',
+                          'Road to SIOP',
                           style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w900,

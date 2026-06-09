@@ -63,7 +63,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     ),
                     const SizedBox(height: 28),
                     const Text(
-                      'UNCCD COP17',
+                      'UNCCD SIOP',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,

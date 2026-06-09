@@ -2,6 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>SIOP uses the camera to scan QR codes for check-in and badge verification.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>SIOP uses your location to show nearby venues and enable emergency services.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>SIOP uses your location to show nearby venues and enable emergency services.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>SIOP uses your location to show nearby venues and enable emergency services.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>SIOP may save QR code images to your photo library.</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>SIOP sends session reminders and urgent conference announcements.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

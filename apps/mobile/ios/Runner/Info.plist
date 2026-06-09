@@ -2,18 +2,41 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Camera -->
 	<key>NSCameraUsageDescription</key>
 	<string>SIOP uses the camera to scan QR codes for check-in and badge verification.</string>
+	<!-- Location -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>SIOP uses your location to show nearby venues and enable emergency services.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>SIOP uses your location to show nearby venues and enable emergency services.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>SIOP uses your location to show nearby venues and enable emergency services.</string>
+	<!-- Photo Library -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>SIOP may save QR code images to your photo library.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>SIOP may save QR code images to your photo library.</string>
+	<!-- Notifications -->
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>SIOP sends session reminders and urgent conference announcements.</string>
+	<!-- NFC — flutter_nfc_kit -->
+	<key>NFCReaderUsageDescription</key>
+	<string>SIOP uses NFC to read digital badge chips for fast check-in.</string>
+	<!-- Face ID / Touch ID — local_auth -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>SIOP uses Face ID to securely unlock your account.</string>
+	<!-- Microphone — required by some camera/scanner SDKs even if unused -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>SIOP does not use the microphone. This is required by the camera framework.</string>
+	<!-- Bluetooth — required by some beacon/NFC SDKs -->
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>SIOP uses Bluetooth to detect nearby venue beacons for indoor navigation.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>SIOP uses Bluetooth to detect nearby venue beacons for indoor navigation.</string>
+	<!-- Motion — geolocator indirectly triggers this on some devices -->
+	<key>NSMotionUsageDescription</key>
+	<string>SIOP uses motion data to improve indoor navigation accuracy.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

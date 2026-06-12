@@ -1,7 +1,7 @@
 name: cop17
 description: "COP17 — UNCCD Ulaanbaatar 2026 mobile app"
 publish_to: "none"
-version: 0.1.0+26
+version: 0.1.0+33
 
 environment:
   sdk: ">=3.5.0 <4.0.0"

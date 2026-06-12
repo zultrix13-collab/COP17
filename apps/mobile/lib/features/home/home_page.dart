@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../app/theme.dart';
+import '../../core/widgets/error_view.dart';
 import '../../core/widgets/glass_container.dart';
 import '../profile/profile_repository.dart';
 import '../programme/programme_repository.dart';
@@ -52,7 +53,13 @@ class HomePage extends ConsumerWidget {
                   ),
                   error: (e, _) => _Card(
                     child: Padding(
-                        padding: const EdgeInsets.all(16), child: Text('$e')),
+                      padding: const EdgeInsets.all(16),
+                      child: ErrorView(
+                        error: e,
+                        compact: true,
+                        onRetry: () => ref.invalidate(sessionsProvider),
+                      ),
+                    ),
                   ),
                   data: (sessions) => _TodaySessions(sessions: sessions),
                 ),

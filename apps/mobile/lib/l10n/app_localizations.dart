@@ -100,7 +100,7 @@ abstract class AppL10n {
   /// No description provided for @appTitle.
   ///
   /// In mn, this message translates to:
-  /// **'COP17'**
+  /// **'SIOP'**
   String get appTitle;
 
   /// No description provided for @navHome.

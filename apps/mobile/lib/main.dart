@@ -19,7 +19,7 @@ class Cop17App extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
-      title: 'COP17',
+      title: 'SIOP',
       theme: buildCop17Theme(),
       routerConfig: router,
       localizationsDelegates: const [

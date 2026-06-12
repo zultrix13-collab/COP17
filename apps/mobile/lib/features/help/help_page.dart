@@ -77,7 +77,7 @@ class HelpPage extends ConsumerWidget {
           const SizedBox(height: 12),
           _Tile(
             title: '🤖 AI Chatbot',
-            subtitle: 'COP17 мэдээлэл, FAQ, хөтөлбөр',
+            subtitle: 'SIOP мэдээлэл, FAQ, хөтөлбөр',
             onTap: () => context.push('/information/chatbot'),
           ),
           _Tile(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'info_repository.dart';
 
 class _Msg {
@@ -19,7 +20,7 @@ class _ChatbotPageState extends ConsumerState<ChatbotPage> {
   final _input = TextEditingController();
   final _scroll = ScrollController();
   final List<_Msg> _msgs = [
-    _Msg('bot', 'Сайн байна уу! COP17 хөтөлбөр, байршил, FAQ асуултууд дээр туслая.'),
+    _Msg('bot', 'Сайн байна уу! SIOP хөтөлбөр, байршил, FAQ асуултууд дээр туслая.'),
   ];
   bool _busy = false;
 
@@ -36,7 +37,7 @@ class _ChatbotPageState extends ConsumerState<ChatbotPage> {
       final res = await ref.read(infoRepositoryProvider).chat(text, 'mn');
       setState(() => _msgs.add(_Msg('bot', res['answer'] as String)));
     } catch (e) {
-      setState(() => _msgs.add(_Msg('bot', 'Алдаа: $e')));
+      setState(() => _msgs.add(_Msg('bot', ErrorView.friendlyMessage(e))));
     } finally {
       if (mounted) setState(() => _busy = false);
       _scrollToBottom();

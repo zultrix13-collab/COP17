@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'b2b_repository.dart';
 
 class B2BPage extends ConsumerStatefulWidget {
@@ -44,7 +45,7 @@ class _B2BPageState extends ConsumerState<B2BPage> {
         Expanded(
           child: list.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('$e')),
+            error: (e, _) => Center(child: ErrorView(error: e)),
             data: (items) {
               if (items.isEmpty) {
                 return const Center(child: Text('Exhibitor алга'));
@@ -180,7 +181,7 @@ class MyMeetingsPage extends ConsumerWidget {
       appBar: AppBar(title: const Text('Миний Meetings')),
       body: meetings.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('$e')),
+        error: (e, _) => Center(child: ErrorView(error: e)),
         data: (list) {
           if (list.isEmpty) {
             return const Center(

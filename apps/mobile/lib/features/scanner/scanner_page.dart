@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../core/api_client.dart';
+import '../../core/widgets/error_view.dart';
 import '../programme/programme_repository.dart';
 
 /// Ops-staff screen: pick the session they're checking into, then scan
@@ -56,7 +57,7 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
           padding: const EdgeInsets.all(12),
           child: sessionsAsync.when(
             loading: () => const LinearProgressIndicator(),
-            error: (e, _) => Text('$e'),
+            error: (e, _) => ErrorView(error: e, compact: true),
             data: (list) => DropdownButtonFormField<String>(
               initialValue: _sessionId,
               hint: const Text('Session сонгох'),

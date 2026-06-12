@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'map_repository.dart';
 
 /// UB Misheel Expo Center coords (venue placeholder).
@@ -42,7 +43,7 @@ class _IndoorView extends ConsumerWidget {
     final pois = ref.watch(poisProvider);
     return pois.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('$e')),
+      error: (e, _) => Center(child: ErrorView(error: e)),
       data: (list) {
         final indoor = list.where((p) => p.floor != null).toList()
           ..sort((a, b) => a.floor!.compareTo(b.floor!));

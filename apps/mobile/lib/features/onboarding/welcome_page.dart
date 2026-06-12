@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/widgets/error_view.dart';
 import '../profile/profile_repository.dart';
 
 class WelcomePage extends ConsumerWidget {
@@ -17,7 +18,7 @@ class WelcomePage extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           child: profileAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('$e')),
+            error: (e, _) => Center(child: ErrorView(error: e)),
             data: (p) => Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'services_repository.dart';
 
 final _money = NumberFormat.currency(locale: 'mn_MN', symbol: '₮', decimalDigits: 0);
@@ -31,7 +32,7 @@ class ServicesPage extends ConsumerWidget {
                   data: (b) => Text(_money.format(b),
                       style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
                   loading: () => const Text('…', style: TextStyle(color: Colors.white70)),
-                  error: (e, _) => Text('$e', style: const TextStyle(color: Colors.redAccent, fontSize: 12)),
+                  error: (e, _) => ErrorView(error: e, compact: true),
                 ),
               ]),
             ),

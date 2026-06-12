@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'services_repository.dart';
 
 final _money = NumberFormat.currency(locale: 'mn_MN', symbol: '₮', decimalDigits: 0);
@@ -35,7 +36,7 @@ class WalletPage extends ConsumerWidget {
                   data: (b) => Text(_money.format(b),
                       style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w800)),
                   loading: () => const CircularProgressIndicator(color: Colors.white),
-                  error: (e, _) => Text('$e', style: const TextStyle(color: Colors.redAccent)),
+                  error: (e, _) => ErrorView(error: e, compact: true),
                 ),
               ]),
             ),
@@ -52,7 +53,7 @@ class WalletPage extends ConsumerWidget {
             const SizedBox(height: 6),
             txns.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Text('$e'),
+              error: (e, _) => ErrorView(error: e, compact: true),
               data: (list) {
                 if (list.isEmpty) {
                   return const Padding(

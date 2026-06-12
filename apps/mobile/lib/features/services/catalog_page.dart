@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'services_repository.dart';
 
 final _money = NumberFormat.currency(locale: 'mn_MN', symbol: '₮', decimalDigits: 0);
@@ -40,7 +41,7 @@ class CatalogPage extends ConsumerWidget {
       appBar: AppBar(title: Text(_kindTitle(kind))),
       body: catalog.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('$e')),
+        error: (e, _) => Center(child: ErrorView(error: e)),
         data: (list) {
           if (list.isEmpty) {
             return const Center(child: Text('Бүтээгдэхүүн алга'));

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'programme_repository.dart';
 
 class ProgrammePage extends ConsumerWidget {
@@ -29,7 +30,7 @@ class ProgrammePage extends ConsumerWidget {
       ),
       body: sessions.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('$e')),
+        error: (e, _) => Center(child: ErrorView(error: e)),
         data: (list) {
           if (list.isEmpty) {
             return const Center(child: Text('Session нэмээгүй байна'));

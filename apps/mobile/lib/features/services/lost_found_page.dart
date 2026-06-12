@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'services_repository.dart';
 
 final _lostFoundProvider = FutureProvider.family<List<Map<String, dynamic>>, String>((ref, kind) {
@@ -57,7 +58,7 @@ class _List extends ConsumerWidget {
     final fmt = DateFormat('MMM d · HH:mm');
     return items.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('$e')),
+      error: (e, _) => Center(child: ErrorView(error: e)),
       data: (list) {
         if (list.isEmpty) {
           return const Center(child: Text('Хоосон', style: TextStyle(color: Color(0xFF888888))));

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme.dart';
+import '../../core/widgets/error_view.dart';
 import 'digital_id_repository.dart';
 import 'profile_repository.dart';
 
@@ -35,13 +36,13 @@ class DigitalIdPage extends ConsumerWidget {
                 ],
               ),
               loading: () => const CircularProgressIndicator(),
-              error: (e, _) => Text('$e'),
+              error: (e, _) => ErrorView(error: e, compact: true),
             ),
             const SizedBox(height: 16),
             tokenAsync.when(
               data: (t) => _QrBox(token: t),
               loading: () => const SizedBox(height: 200, child: Center(child: CircularProgressIndicator())),
-              error: (e, _) => Text('QR error: $e'),
+              error: (e, _) => ErrorView(error: e, compact: true),
             ),
             const SizedBox(height: 12),
             const Text(

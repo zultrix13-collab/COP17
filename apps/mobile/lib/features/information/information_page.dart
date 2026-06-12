@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/widgets/error_view.dart';
 import 'info_repository.dart';
 
 class InformationPage extends ConsumerWidget {
@@ -68,7 +69,7 @@ class _AnnouncementsCard extends StatelessWidget {
     final fmt = DateFormat('MMM d · HH:mm');
     return anns.when(
       loading: () => const Center(child: Padding(padding: EdgeInsets.all(8), child: LinearProgressIndicator())),
-      error: (e, _) => Text('$e'),
+      error: (e, _) => ErrorView(error: e, compact: true),
       data: (list) {
         if (list.isEmpty) return const _Empty(text: 'Одоогоор мэдэгдэл алга');
         return Column(children: [
@@ -98,7 +99,7 @@ class _FlightsCard extends StatelessWidget {
     final fmt = DateFormat('MMM d · HH:mm');
     return flights.when(
       loading: () => const LinearProgressIndicator(),
-      error: (e, _) => Text('$e'),
+      error: (e, _) => ErrorView(error: e, compact: true),
       data: (list) {
         if (list.isEmpty) return const _Empty(text: 'Нислэгийн мэдээлэл алга');
         return Column(children: [
@@ -127,7 +128,7 @@ class _FaqCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return faq.when(
       loading: () => const LinearProgressIndicator(),
-      error: (e, _) => Text('$e'),
+      error: (e, _) => ErrorView(error: e, compact: true),
       data: (list) {
         if (list.isEmpty) return const _Empty(text: 'FAQ алга');
         return Column(children: [

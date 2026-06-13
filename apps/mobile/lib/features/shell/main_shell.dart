@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class MainShell extends StatelessWidget {
+import '../notifications/push_registration.dart';
+
+class MainShell extends ConsumerStatefulWidget {
   final Widget child;
   const MainShell({super.key, required this.child});
 
+  @override
+  ConsumerState<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends ConsumerState<MainShell> {
   // (Path, Inactive Icon, Active Icon, Label)
   static const _tabs = [
     ('/home', Icons.home_outlined, Icons.home, 'Home'),
@@ -14,6 +22,12 @@ class MainShell extends StatelessWidget {
     ('/map', Icons.pin_drop_outlined, Icons.pin_drop, 'Map'),
     ('/profile', Icons.person_outline, Icons.person, 'Profile'),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    registerPushToken(ref);
+  }
 
   int _currentIndex(String location) {
     for (var i = 0; i < _tabs.length; i++) {
@@ -27,15 +41,15 @@ class MainShell extends StatelessWidget {
     final location = GoRouterState.of(context).uri.toString();
     final idx = _currentIndex(location);
     return Scaffold(
-      body: child,
+      body: widget.child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: idx,
         onDestinationSelected: (i) => context.go(_tabs[i].$1),
         destinations: [
           for (final t in _tabs)
             NavigationDestination(
-              icon: Icon(t.$2), 
-              selectedIcon: Icon(t.$3), 
+              icon: Icon(t.$2),
+              selectedIcon: Icon(t.$3),
               label: t.$4,
             ),
         ],

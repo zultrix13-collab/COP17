@@ -16,14 +16,12 @@ TestFlight дээр 0.1.0 (31–35) бүх build "Complete" статустай (
 
 **Шийдэл:** App Store Connect → iOS App Version 1.0 → "Build" хэсэгт **"Add Build"** дараад build 35 (эсвэл доорх #5-д заасны дагуу шинэ build 36) сонгох. Энэ хийгдэхгүй бол "Add for Review" товч ажиллахгүй / submission бэлэн болохгүй.
 
-### 2. iPad screenshot 0/10 — гэхдээ app Universal (`TARGETED_DEVICE_FAMILY = "1,2"`)
+### 2. ✅ iPad screenshot 0/10 — гэхдээ app Universal (ЗАСАГДСАН)
 `apps/mobile/ios/Runner.xcodeproj/project.pbxproj` дээр `TARGETED_DEVICE_FAMILY = "1,2"` — өөрөөр хэлбэл app iPad дээр ажиллах боломжтой Universal app гэж тохируулагдсан. Гэвч ASC дээр "Previews and Screenshots" → iPad tab нь **"0 of 10 Screenshots"** — ямар ч iPad screenshot оруулаагүй (iPhone tab дээр 4/10 байна).
 
 Apple Review iPad screenshot шаардахгүй бол анхаарал татахгүй, гэхдээ App нь iPad-д зөвшөөрөгдсэн тул review үед iPad дээр шалгаж магадгүй бөгөөд screenshot байхгүй нь reject шалтгаан болж болзошгүй.
 
-**Шийдэл (2 сонголтын аль нэг):**
-- (а) `Runner.xcodeproj` дотор `TARGETED_DEVICE_FAMILY = "1"` болгож зөвхөн iPhone-д хязгаарлах (хэрэв app iPad layout-д тест хийгээгүй бол энэ нь илүү аюулгүй), эсвэл
-- (б) iPad screenshot (12.9" container, ихэвчлэн iPhone screenshot-ыг scale хийж upload хийж болно) нэмэх.
+**Шийдэл (2026-06-14):** `Runner.xcodeproj/project.pbxproj` дотор бүх 3 build config (Debug/Release/Profile)-ийн `TARGETED_DEVICE_FAMILY = "1,2"` → `"1"` болгож зөвхөн iPhone-д хязгаарласан (app-ийн UI iPad layout дээр тестлэгдээгүй байсан тул). Дараагийн `flutter build ipa` build-д энэ өөрчлөлт орно, ASC дээр iPad screenshot шаардлагагүй болно.
 
 ### 3. App Review Information → Contact Information хоосон
 "App Review Information" хэсэгт **First name, Last name, Phone number, Email** бүгд хоосон байна (зөвхөн Sign-In Information [#5, өмнөх аудитаар бэлдсэн delegate@siop.mn / SiopAsia2026!] бөглөгдсөн). Apple Review team-ийн асуулт гарвал холбоо барих мэдээлэл байхгүй тул submission амжилтгуй болох эсвэл review саатах эрсдэлтэй.
@@ -88,7 +86,7 @@ ASC дээрх Support URL: `https://zultrix13-collab.github.io/COP17/legal/supp
 | # | Зорилт | Priority | Status |
 |---|--------|----------|--------|
 | 1 | ASC Version 1.0-д Build холбох ("Add Build") | 🔴 Critical | ⬜ Хийгдэх шаардлагатай |
-| 2 | iPad screenshot 0/10 — Universal эсэхийг шийдэх (screenshot нэмэх эсвэл iPhone-only болгох) | 🔴 Critical | ⬜ Хийгдэх шаардлагатай |
+| 2 | iPad screenshot 0/10 — Universal эсэхийг шийдэх (screenshot нэмэх эсвэл iPhone-only болгох) | 🔴 Critical | ✅ Done (iPhone-only болгосон) |
 | 3 | App Review Information → Contact Information бөглөх | 🔴 Critical | ⬜ Хийгдэх шаардлагатай |
 | 4 | GoogleService-Info.plist bundle ID зөрчил + push notification ажиллахгүй асуудал | 🟠 High | ✅ Done |
 | 5 | Uncommitted SIOP rebrand commit хийх + pubspec version `0.1.0+36` bump | 🟠 High | ✅ Done (build upload үлдсэн) |

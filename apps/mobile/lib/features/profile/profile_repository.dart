@@ -62,11 +62,11 @@ class ProfileRepository {
 
 final _demoProfile = Profile(
   id: 'demo',
-  email: 'delegate@cop17.mn',
-  name: 'COP17 Delegate',
+  email: 'delegate@siop.mn',
+  name: 'SIOP Delegate',
   locale: 'en',
   tier: 'green',
-  accreditationId: 'COP17-DEMO',
+  accreditationId: 'SIOP-DEMO',
 );
 
 final currentProfileProvider = FutureProvider<Profile?>((ref) {

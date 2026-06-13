@@ -125,7 +125,7 @@ class _OutdoorView extends ConsumerWidget {
         TileLayer(
           urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
           subdomains: const ['a', 'b', 'c'],
-          userAgentPackageName: 'mn.cop17',
+          userAgentPackageName: 'mn.siop',
           // Swap for offline `FileTileProvider` + MBTiles to satisfy MAP-05.
         ),
         MarkerLayer(markers: markers),

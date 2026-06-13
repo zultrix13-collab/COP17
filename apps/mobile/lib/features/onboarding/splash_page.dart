@@ -56,14 +56,14 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                         ],
                       ),
                       child: Image.asset(
-                        'assets/brand/cop17-logo.png',
+                        'assets/brand/siop-logo.png',
                         width: 180,
                         fit: BoxFit.contain,
                       ),
                     ),
                     const SizedBox(height: 28),
                     const Text(
-                      'UNCCD SIOP',
+                      'SIOP',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
@@ -73,7 +73,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     ),
                     const SizedBox(height: 6),
                     const Text(
-                      'Restoring Land, Restoring Hope',
+                      'Together for Change: Science, Compassion,\nand Hope for Every Child',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFE8F7FA),
@@ -93,7 +93,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'August 17–28, 2026',
+                      'June 25–28, 2026',
                       style: TextStyle(
                         color: Color(0xFFE0F7FA),
                         fontWeight: FontWeight.w500,
@@ -109,7 +109,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                 right: 0,
                 child: Center(
                   child: Text(
-                    '197 Parties · International Year of Rangelands and Pastoralists',
+                    '18th SIOP Asia Congress · Corporate Convention Center Hotel',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.7),
                       fontSize: 11,

@@ -95,7 +95,7 @@ class _BrandHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final daysLeft = DateTime(2026, 8, 17).difference(DateTime.now()).inDays;
+    final daysLeft = DateTime(2026, 6, 25).difference(DateTime.now()).inDays;
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -125,7 +125,7 @@ class _BrandHeader extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Image.asset('assets/brand/cop17-logo.png',
+                  child: Image.asset('assets/brand/siop-logo.png',
                       fit: BoxFit.contain),
                 ),
                 const SizedBox(width: 12),
@@ -134,7 +134,7 @@ class _BrandHeader extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'UNCCD SIOP',
+                          'SIOP',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
@@ -158,7 +158,7 @@ class _BrandHeader extends StatelessWidget {
               ]),
               const SizedBox(height: 28),
               const Text(
-                'Restoring Land,\nRestoring Hope',
+                'Together for Change:\nScience, Compassion, Hope',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 34,
@@ -174,11 +174,11 @@ class _BrandHeader extends StatelessWidget {
                 children: [
                   _HeroChip(
                     icon: Icons.calendar_today_outlined,
-                    text: 'Aug 17-28, 2026',
+                    text: 'Jun 25-28, 2026',
                   ),
                   _HeroChip(
                     icon: Icons.public,
-                    text: '197 Parties',
+                    text: '18th SIOP Asia Congress',
                   ),
                   _HeroChip(
                     icon: _tierIcon(tier),

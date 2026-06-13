@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// COP17 brand tokens — aligned with unccdcop17.org.
+/// SIOP Mongolia brand tokens — aligned with siopasia-congress.org.
 ///
-/// Narrative: "Restoring Land, Restoring Hope" — eternal-blue-sky accents,
-/// living land greens, warm steppe neutrals, and restrained UN-style surfaces.
+/// Narrative: "Together for Change: Science, Compassion, and Hope for Every
+/// Child" — navy and gold accents on restrained, congress-style surfaces.
 class CopColors {
   // ─── Brand primaries ────────────────────────────────────────
   /// Deep land teal — headings, primary surfaces, official emphasis.

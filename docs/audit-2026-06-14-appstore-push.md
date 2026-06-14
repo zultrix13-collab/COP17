@@ -9,12 +9,12 @@
 
 ## 🔴 CRITICAL — "Add for Review" дарахаас өмнө заавал засах
 
-### 1. ASC Version 1.0 дээр ямар ч Build холбогдоогоогүй
-`https://appstoreconnect.apple.com/apps/6764760687/distribution/ios/version/inflight` дээрх "Build" хэсэгт зөвхөн **"Add Build"** товч харагдаж байна — version 1.0-тэй холбогдсон build алга.
+### 1. ✅ ASC Version 1.0 дээр Build холбогдсон, submit хийгдсэн (ЗАСАГДСАН)
+`https://appstoreconnect.apple.com/apps/6764760687/distribution/ios/version/inflight` дээрх "Build" хэсэгт зөвхөн **"Add Build"** товч харагдаж байсан — version 1.0-тэй холбогдсон build байгаагүй.
 
-TestFlight дээр 0.1.0 (31–35) бүх build "Complete" статустай (35 нь хамгийн сүүлд, 2026.06.12 18:44, SIOP icon-той), гэхдээ эдгээр нь зөвхөн TestFlight-д л байгаа — App Store version-д **хараахан сонгогдоогоогуй**.
+TestFlight дээр 0.1.0 (31–35) бүх build "Complete" статустай (35 нь хамгийн сүүлд, 2026.06.12 18:44, SIOP icon-той), гэхдээ эдгээр нь зөвхөн TestFlight-д л байсан — App Store version-д сонгогдоогүй байсан.
 
-**Шийдэл:** App Store Connect → iOS App Version 1.0 → "Build" хэсэгт **"Add Build"** дараад build 35 (эсвэл доорх #5-д заасны дагуу шинэ build 36) сонгох. Энэ хийгдэхгүй бол "Add for Review" товч ажиллахгүй / submission бэлэн болохгүй.
+**Шийдэл (2026-06-14):** `flutter build ipa` ажиллуулж build 36-ыг архивлаж, `ExportOptions.plist`-ийн `destination=upload` тохиргоогоор шууд App Store Connect-рүү upload хийсэн. TestFlight дээр Processing дууссаны дараа build 36-ыг ASC Version 1.0-д "Add Build"-аар холбосон. Одоо status **"1.0 Waiting for Review"** — submission Apple-д илгээгдсэн.
 
 ### 2. ✅ iPad screenshot 0/10 — гэхдээ app Universal (ЗАСАГДСАН)
 `apps/mobile/ios/Runner.xcodeproj/project.pbxproj` дээр `TARGETED_DEVICE_FAMILY = "1,2"` — өөрөөр хэлбэл app iPad дээр ажиллах боломжтой Universal app гэж тохируулагдсан. Гэвч ASC дээр "Previews and Screenshots" → iPad tab нь **"0 of 10 Screenshots"** — ямар ч iPad screenshot оруулаагүй (iPhone tab дээр 4/10 байна).
@@ -85,7 +85,7 @@ ASC дээрх Support URL: `https://zultrix13-collab.github.io/COP17/legal/supp
 
 | # | Зорилт | Priority | Status |
 |---|--------|----------|--------|
-| 1 | ASC Version 1.0-д Build холбох ("Add Build") | 🔴 Critical | ⬜ Хийгдэх шаардлагатай |
+| 1 | ASC Version 1.0-д Build холбох ("Add Build") | 🔴 Critical | ✅ Done (build 36 холбогдсон, submit хийгдсэн) |
 | 2 | iPad screenshot 0/10 — Universal эсэхийг шийдэх (screenshot нэмэх эсвэл iPhone-only болгох) | 🔴 Critical | ✅ Done (iPhone-only болгосон) |
 | 3 | App Review Information → Contact Information бөглөх | 🔴 Critical | ⬜ Хийгдэх шаардлагатай |
 | 4 | GoogleService-Info.plist bundle ID зөрчил + push notification ажиллахгүй асуудал | 🟠 High | ✅ Done |
@@ -95,4 +95,4 @@ ASC дээрх Support URL: `https://zultrix13-collab.github.io/COP17/legal/supp
 
 ---
 
-*Энэ баримт нь 2026.06.14-ний өдрийн ASC submission state + codebase snapshot дээр үндэслэсэн. #1, #3, #5-ийг шийдсэний дараа "Add for Review" товчийг дарж болно гэж дүгнэж байна (#2-ыг тусад нь шийдвэрлэх шаардлагатай — Apple iPad screenshot-ыг заавал шаардах эсэхийг submission үед харах боломжтой).*
+*Энэ баримт нь 2026.06.14-ний өдрийн ASC submission state + codebase snapshot дээр үндэслэсэн. #1, #2, #4, #5 шийдэгдсэн, build 36 submit хийгдсэн ("Waiting for Review"). Үлдсэн: #3 (Contact Information) — submission Apple-д явж байгаа үед ч бөглөж болно.*

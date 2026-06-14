@@ -22,11 +22,11 @@ TestFlight дээр 0.1.0 (31–35) бүх build "Complete" статустай (
 Apple Review iPad screenshot шаардахгүй бол анхаарал татахгүй, гэхдээ App нь iPad-д зөвшөөрөгдсэн тул review үед iPad дээр шалгаж магадгүй бөгөөд screenshot байхгүй нь reject шалтгаан болж болзошгүй.
 
 **Шийдэл (2026-06-14):** `Runner.xcodeproj/project.pbxproj` дотор бүх 3 build config (Debug/Release/Profile)-ийн `TARGETED_DEVICE_FAMILY = "1,2"` → `"1"` болгож зөвхөн iPhone-д хязгаарласан (app-ийн UI iPad layout дээр тестлэгдээгүй байсан тул). Дараагийн `flutter build ipa` build-д энэ өөрчлөлт орно, ASC дээр iPad screenshot шаардлагагүй болно.
+### 3. ✅ App Review Information → Contact Information бөглөгдсөн (ЗАСАГДСАН)
+"App Review Information" хэсэгт **First name, Last name, Phone number, Email** бүгд хоосон байсан (зөвхөн Sign-In Information [#5, өмнөх аудитаар бэлдсэн delegate@siop.mn / SiopAsia2026!] бөглөгдсөн байсан).
 
-### 3. App Review Information → Contact Information хоосон
-"App Review Information" хэсэгт **First name, Last name, Phone number, Email** бүгд хоосон байна (зөвхөн Sign-In Information [#5, өмнөх аудитаар бэлдсэн delegate@siop.mn / SiopAsia2026!] бөглөгдсөн). Apple Review team-ийн асуулт гарвал холбоо барих мэдээлэл байхгүй тул submission амжилтгуй болох эсвэл review саатах эрсдэлтэй.
+**Шийдэл (2026-06-14):** Contact Information-д Sunber Khatanbaatar (+97699791144, sunber1289@gmail.com) бөглөгдсөн.
 
-**Шийдэл:** Contact Information-д хариуцагч хүний нэр, утас, имэйл бөглөх (жишээ нь zultrix13@gmail.com эсвэл local organizing committee-ийн харилцагч).
 
 ---
 
@@ -87,7 +87,7 @@ ASC дээрх Support URL: `https://zultrix13-collab.github.io/COP17/legal/supp
 |---|--------|----------|--------|
 | 1 | ASC Version 1.0-д Build холбох ("Add Build") | 🔴 Critical | ✅ Done (build 36 холбогдсон, submit хийгдсэн) |
 | 2 | iPad screenshot 0/10 — Universal эсэхийг шийдэх (screenshot нэмэх эсвэл iPhone-only болгох) | 🔴 Critical | ✅ Done (iPhone-only болгосон) |
-| 3 | App Review Information → Contact Information бөглөх | 🔴 Critical | ⬜ Хийгдэх шаардлагатай |
+| 3 | App Review Information → Contact Information бөглөх | 🔴 Critical | ✅ Done |
 | 4 | GoogleService-Info.plist bundle ID зөрчил + push notification ажиллахгүй асуудал | 🟠 High | ✅ Done |
 | 5 | Uncommitted SIOP rebrand commit хийх + pubspec version `0.1.0+36` bump | 🟠 High | ✅ Done (build upload үлдсэн) |
 | 6 | admin-web "COP17 Admin" residual branding | 🟢 Low | Дараа |
@@ -95,4 +95,4 @@ ASC дээрх Support URL: `https://zultrix13-collab.github.io/COP17/legal/supp
 
 ---
 
-*Энэ баримт нь 2026.06.14-ний өдрийн ASC submission state + codebase snapshot дээр үндэслэсэн. #1, #2, #4, #5 шийдэгдсэн, build 36 submit хийгдсэн ("Waiting for Review"). Үлдсэн: #3 (Contact Information) — submission Apple-д явж байгаа үед ч бөглөж болно.*
+*Энэ баримт нь 2026.06.14-ний өдрийн ASC submission state + codebase snapshot дээр үндэслэсэн. #1–#5 (бүх 🔴 Critical, 🟠 High) шийдэгдсэн, build 36 submit хийгдсэн ("Waiting for Review"). Үлдсэн ганц #6/#7 (🟢 Low, cosmetic) — submission-д нөлөөгүй, дараа хийнэ.*

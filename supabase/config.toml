@@ -35,6 +35,8 @@ enable_signup = false
 enable_signup = false
 double_confirm_changes = true
 enable_confirmations = true
+# 6-digit OTP — must match mobile (otp_page.dart maxLength=6) and admin-web LoginPage
+otp_length = 6
 # OTP code (not magic link) — "{{ .Token }}" style template
 template = { subject = "COP17 — Таны нэвтрэх код", content_path = "./supabase/templates/otp.html" }
 

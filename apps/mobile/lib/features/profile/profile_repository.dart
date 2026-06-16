@@ -35,7 +35,7 @@ final profileRepositoryProvider =
 
 class ProfileRepository {
   Future<Profile?> current() async {
-    if (demoMode) return _demoProfile;
+    if (demoMode || reviewSession) return _demoProfile;
     final user = supabase.auth.currentUser;
     if (user == null) return null;
     final row = await supabase
@@ -49,7 +49,7 @@ class ProfileRepository {
   /// Listen for RLS-filtered updates to the caller's own profile — tier changes
   /// pushed by admins surface instantly.
   Stream<Profile?> watchCurrent() {
-    if (demoMode) return Stream.value(_demoProfile);
+    if (demoMode || reviewSession) return Stream.value(_demoProfile);
     final user = supabase.auth.currentUser;
     if (user == null) return const Stream.empty();
     return supabase

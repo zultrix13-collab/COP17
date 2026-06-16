@@ -63,7 +63,7 @@ final programmeRepositoryProvider =
 
 class ProgrammeRepository {
   Future<List<SessionItem>> list({DateTime? day}) async {
-    if (demoMode) return _demoSessions(day: day);
+    if (demoMode || reviewSession) return _demoSessions(day: day);
     final q = supabase
         .from('sessions')
         .select(

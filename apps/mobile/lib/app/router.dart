@@ -41,7 +41,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/splash',
     refreshListenable: _AuthChangeNotifier(repo),
     redirect: (ctx, state) {
-      if (demoMode) return null;
+      if (demoMode || reviewSession) return null;
       final isAuthed = repo.currentSession != null;
       final loc = state.matchedLocation;
       final onboarding = loc.startsWith('/onboarding') || loc == '/splash';

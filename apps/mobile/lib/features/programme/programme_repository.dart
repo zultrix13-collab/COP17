@@ -86,6 +86,9 @@ class ProgrammeRepository {
   }
 
   Future<SessionItem?> byId(String id) async {
+    if (demoMode || reviewSession) {
+      return _demoSessions().where((s) => s.id == id).firstOrNull;
+    }
     final row =
         await supabase.from('sessions').select('*').eq('id', id).maybeSingle();
     return row == null ? null : SessionItem.fromMap(row);
@@ -94,6 +97,7 @@ class ProgrammeRepository {
   /// Mark Going. If the session is full we insert as waitlist.
   /// Returns the final status.
   Future<AttendanceStatus> markGoing(String sessionId) async {
+    if (demoMode || reviewSession) return AttendanceStatus.going;
     final userId = supabase.auth.currentUser!.id;
     final count = await supabase
         .from('attendance')
@@ -117,6 +121,7 @@ class ProgrammeRepository {
   }
 
   Future<void> cancelAttendance(String sessionId) async {
+    if (demoMode || reviewSession) return;
     final userId = supabase.auth.currentUser!.id;
     await supabase
         .from('attendance')
@@ -126,6 +131,7 @@ class ProgrammeRepository {
   }
 
   Future<AttendanceStatus?> myAttendance(String sessionId) async {
+    if (demoMode || reviewSession) return null;
     final userId = supabase.auth.currentUser!.id;
     final row = await supabase
         .from('attendance')
@@ -137,6 +143,7 @@ class ProgrammeRepository {
   }
 
   Future<List<SessionItem>> myAgenda() async {
+    if (demoMode || reviewSession) return _demoSessions();
     final userId = supabase.auth.currentUser!.id;
     final rows = await supabase
         .from('attendance')
@@ -153,6 +160,7 @@ class ProgrammeRepository {
     required int rating,
     String? comment,
   }) async {
+    if (demoMode || reviewSession) return;
     final userId = supabase.auth.currentUser!.id;
     await supabase.from('session_feedback').upsert({
       'user_id': userId,

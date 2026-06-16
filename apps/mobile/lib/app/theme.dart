@@ -46,7 +46,7 @@ class CopColors {
   static const tierPress = Color(0xFF0369A1); // Press
 }
 
-class CopRadius {
+class SiopRadius {
   static const sm = 8.0;
   static const md = 12.0;
   static const lg = 16.0;
@@ -69,7 +69,7 @@ const kTierBlue = CopColors.tierBlue;
 const kTierVip = CopColors.tierVip;
 const kTierExhibitor = CopColors.tierExhibitor;
 
-ThemeData buildCop17Theme() {
+ThemeData buildSiopTheme() {
   final baseScheme = ColorScheme.fromSeed(
     seedColor: CopColors.primary,
     primary: CopColors.primary,
@@ -123,7 +123,7 @@ ThemeData buildCop17Theme() {
       elevation: 0,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(CopRadius.lg),
+        borderRadius: BorderRadius.circular(SiopRadius.lg),
         side: const BorderSide(color: CopColors.border),
       ),
     ),
@@ -133,7 +133,7 @@ ThemeData buildCop17Theme() {
         foregroundColor: Colors.white,
         minimumSize: const Size.fromHeight(48),
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(CopRadius.md)),
+            borderRadius: BorderRadius.circular(SiopRadius.md)),
         textStyle:
             GoogleFonts.manrope(fontWeight: FontWeight.w700, fontSize: 15),
       ),
@@ -144,7 +144,7 @@ ThemeData buildCop17Theme() {
         side: const BorderSide(color: CopColors.border),
         minimumSize: const Size.fromHeight(44),
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(CopRadius.md)),
+            borderRadius: BorderRadius.circular(SiopRadius.md)),
         textStyle:
             GoogleFonts.manrope(fontWeight: FontWeight.w600, fontSize: 14),
       ),
@@ -163,15 +163,15 @@ ThemeData buildCop17Theme() {
       labelStyle: GoogleFonts.manrope(color: CopColors.inkMuted),
       hintStyle: GoogleFonts.manrope(color: CopColors.inkMuted),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(CopRadius.md),
+        borderRadius: BorderRadius.circular(SiopRadius.md),
         borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(CopRadius.md),
+        borderRadius: BorderRadius.circular(SiopRadius.md),
         borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(CopRadius.md),
+        borderRadius: BorderRadius.circular(SiopRadius.md),
         borderSide: const BorderSide(color: CopColors.sky, width: 1.5),
       ),
     ),
@@ -198,7 +198,7 @@ ThemeData buildCop17Theme() {
       labelStyle:
           GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w600),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(CopRadius.pill),
+        borderRadius: BorderRadius.circular(SiopRadius.pill),
         side: BorderSide.none,
       ),
     ),
@@ -206,7 +206,7 @@ ThemeData buildCop17Theme() {
 }
 
 /// Convenience gradient — used on splash + zone headers.
-const copBrandGradient = LinearGradient(
+const siopBrandGradient = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
   colors: [CopColors.primary, Color(0xFF1E6B59), CopColors.sky],

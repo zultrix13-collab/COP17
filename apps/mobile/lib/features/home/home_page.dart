@@ -99,7 +99,7 @@ class _BrandHeader extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        gradient: copBrandGradient,
+        gradient: siopBrandGradient,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
@@ -290,7 +290,7 @@ class _HeroChip extends StatelessWidget {
         blur: 10,
         opacity: 0.1,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-        borderRadius: BorderRadius.circular(CopRadius.pill),
+        borderRadius: BorderRadius.circular(SiopRadius.pill),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           Icon(icon, color: Colors.white, size: 14),
           const SizedBox(width: 6),
@@ -370,7 +370,7 @@ class _MissionCard extends StatelessWidget {
                           horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(CopRadius.pill),
+                        borderRadius: BorderRadius.circular(SiopRadius.pill),
                       ),
                       child:
                           const Row(mainAxisSize: MainAxisSize.min, children: [
@@ -893,7 +893,7 @@ class _SectionHeader extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
           decoration: BoxDecoration(
             color: CopColors.primary.withValues(alpha: 0.07),
-            borderRadius: BorderRadius.circular(CopRadius.pill),
+            borderRadius: BorderRadius.circular(SiopRadius.pill),
           ),
           child: Text(
             action,
@@ -970,7 +970,7 @@ class _Card extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
           color: CopColors.surface,
-          borderRadius: BorderRadius.circular(CopRadius.lg),
+          borderRadius: BorderRadius.circular(SiopRadius.lg),
           border: Border.all(color: CopColors.border),
         ),
         child: child,

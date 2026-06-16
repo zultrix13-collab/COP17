@@ -95,7 +95,7 @@ class _TierBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(CopRadius.pill),
+        borderRadius: BorderRadius.circular(SiopRadius.pill),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(

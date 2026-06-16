@@ -11,18 +11,18 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await initSupabase();
-  runApp(const ProviderScope(child: Cop17App()));
+  runApp(const ProviderScope(child: SiopApp()));
 }
 
-class Cop17App extends ConsumerWidget {
-  const Cop17App({super.key});
+class SiopApp extends ConsumerWidget {
+  const SiopApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'SIOP',
-      theme: buildCop17Theme(),
+      theme: buildSiopTheme(),
       routerConfig: router,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/theme.dart';
+import '../../core/env.dart';
 import '../../core/supabase_client.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -21,6 +22,10 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   void _decide() {
     if (!mounted) return;
+    if (demoMode) {
+      context.go('/home');
+      return;
+    }
     final session = supabase.auth.currentSession;
     context.go(session == null ? '/onboarding/email' : '/home');
   }
@@ -29,7 +34,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: copBrandGradient),
+        decoration: const BoxDecoration(gradient: siopBrandGradient),
         width: double.infinity,
         child: SafeArea(
           child: Stack(
@@ -46,7 +51,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(CopRadius.xl),
+                        borderRadius: BorderRadius.circular(SiopRadius.xl),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.15),

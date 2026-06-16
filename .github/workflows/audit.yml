@@ -14,7 +14,19 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - run: pnpm audit --audit-level=high
+      # Ignore advisories not applicable to this project:
+      #  GHSA-gv7w-rqvm-qjhr: esbuild Deno binary integrity (Node.js project, not Deno)
+      #  GHSA-96hv-2xvq-fx4p: ws server-side DoS (we are a WS client, not server)
+      - name: Audit dependencies
+        run: |
+          IGNORE="GHSA-gv7w-rqvm-qjhr GHSA-96hv-2xvq-fx4p"
+          OUTPUT=$(pnpm audit --audit-level=high --json 2>/dev/null || true)
+          ADVISORIES=$(echo "$OUTPUT" | node -e "
+            const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            const ignore=process.env.IGNORE.split(' ');
+            const real=Object.values(d.advisories||{}).filter(a=>!ignore.includes(a.github_advisory_id)&&['high','critical'].includes(a.severity));
+            if(real.length){console.error('Unfixed vulnerabilities:');real.forEach(a=>console.error(a.severity,a.module_name,a.github_advisory_id));process.exit(1);}
+          " IGNORE="$IGNORE" 2>&1) || { echo "$ADVISORIES"; exit 1; }
   flutter:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: apps/mobile } }

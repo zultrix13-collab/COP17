@@ -42,13 +42,13 @@ export function LoginPage() {
   return (
     <div className="min-h-full flex items-center justify-center bg-gray-50">
       <div className="w-80 bg-white rounded-xl border p-6 space-y-4">
-        <div className="text-xl font-bold">COP17 Admin</div>
+        <div className="text-xl font-bold">SIOP Admin</div>
         {step === 'email' ? (
           <>
             <input
               className="w-full border rounded px-3 py-2 text-sm"
               type="email"
-              placeholder="admin@cop17.mn"
+              placeholder="admin@siop.mn"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

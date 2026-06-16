@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/env.dart';
 import '../auth/auth_repository.dart';
 
 class EmailPage extends ConsumerStatefulWidget {
@@ -16,10 +17,17 @@ class _EmailPageState extends ConsumerState<EmailPage> {
   String? _err;
 
   Future<void> _send() async {
+    final email = _ctrl.text.trim();
+    // Reviewer demo account: its mailbox can't receive a code, so skip the
+    // network request and go straight to the code screen.
+    if (email.toLowerCase() == reviewEmail) {
+      context.go('/onboarding/otp', extra: email);
+      return;
+    }
     setState(() { _busy = true; _err = null; });
     try {
-      await ref.read(authRepositoryProvider).requestOtp(_ctrl.text.trim());
-      if (mounted) context.go('/onboarding/otp', extra: _ctrl.text.trim());
+      await ref.read(authRepositoryProvider).requestOtp(email);
+      if (mounted) context.go('/onboarding/otp', extra: email);
     } catch (e) {
       setState(() => _err = e.toString());
     } finally {

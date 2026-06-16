@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/env.dart';
 import '../auth/auth_repository.dart';
 
 class OtpPage extends ConsumerStatefulWidget {
@@ -18,11 +19,18 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   String? _err;
 
   Future<void> _verify() async {
+    final code = _ctrl.text.trim();
+    // Reviewer demo bypass: exact email + code unlocks a local demo session.
+    if (widget.email.toLowerCase() == reviewEmail && code == reviewCode) {
+      reviewSession = true;
+      context.go('/home');
+      return;
+    }
     setState(() { _busy = true; _err = null; });
     try {
       await ref.read(authRepositoryProvider).verifyOtp(
             email: widget.email,
-            token: _ctrl.text.trim(),
+            token: code,
           );
       if (mounted) context.go('/onboarding/language');
     } catch (e) {

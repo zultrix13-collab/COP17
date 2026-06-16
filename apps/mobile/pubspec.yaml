@@ -1,7 +1,7 @@
 name: cop17
 description: "SIOP Mongolia — SIOP Asia 2026 Congress mobile app"
 publish_to: "none"
-version: 0.1.0+36
+version: 0.1.0+37
 
 environment:
   sdk: ">=3.5.0 <4.0.0"
@@ -62,7 +62,9 @@ flutter:
     - assets/icon/
 
 flutter_launcher_icons:
-  android: false
+  android: true
   ios: true
   image_path: "assets/icon/icon.png"
   remove_alpha_ios: true
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon/icon.png"

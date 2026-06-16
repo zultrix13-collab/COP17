@@ -1,9 +1,9 @@
-# COP17 — Operations runbook
+# SIOP Asia 2026 — Operations runbook
 
 ## Environments
 - **dev** — local docker-compose (Postgres, Redis, MinIO, Meilisearch)
 - **staging** — pre-event rehearsal cluster
-- **prod** — COP17 live (Aug 17–28, 2026)
+- **prod** — SIOP Asia 2026 live (Jun 25–28, 2026)
 
 ## Deploy
 1. PR → CI (lint, typecheck, test) → review → merge to `main`.
@@ -11,7 +11,7 @@
 3. ArgoCD/kubectl apply to staging → smoke tests → promote to prod.
 
 ## On-call
-- Rotation: 24/7 during Aug 15–30, 2026. Primary + secondary.
+- Rotation: 24/7 during Jun 23–30, 2026. Primary + secondary.
 - Escalation: on-call → lead → CTO.
 
 ## Key SLOs
@@ -21,7 +21,7 @@
 - QR verification p95 < 200ms (on-site)
 
 ## Incident response
-1. Ack in #cop17-ops Slack within 5 min.
+1. Ack in #siop2026-ops Slack within 5 min.
 2. Open alert incident in admin dashboard (`/admin/alerts`).
 3. Investigate → mitigate → postmortem within 48h.
 
@@ -48,7 +48,7 @@
 - Read cache: mobile keeps a 24h Drift snapshot of programme + digital ID.
 - Writes (Going, feedback, lost&found report) queue locally; sync on reconnect.
 - Admin-web: show banner, disable mutations, reads continue via TanStack Query cache.
-- If outage > 15 min: post to #cop17-ops + venue info desk announces "app degraded mode."
+- If outage > 15 min: post to #siop2026-ops + venue info desk announces "app degraded mode."
 
 ### QPay webhook not firing
 - Confirm via `GET /payments/qpay/:id/status` — our poll fallback should eventually credit.

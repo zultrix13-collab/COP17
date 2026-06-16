@@ -40,9 +40,15 @@ Mirror the above in Play Console → Data safety.
 | Biometric | Fast re-login; refresh token stored in OS keychain |
 
 ## Demo account for reviewers
-- Email: `reviewer@cop17.mn`
-- OTP: fixed `000000` in review build flag `REVIEW_MODE=1`
-- Tier: VIP (to show full feature set)
+- Email: `delegate@siop.mn`
+- OTP code: `250628` (fixed reviewer bypass, baked into the production build)
+- How it works: this exact email + code unlocks a local, demo-data-only session
+  (no Supabase session, no real delegate data). Implemented in `lib/core/env.dart`
+  (`reviewEmail`/`reviewCode`/`reviewSession`) and honoured by the email/OTP pages,
+  router, and the programme/profile repositories.
+- Why: `delegate@siop.mn` has no real mailbox (the `siop.mn` domain has no MX
+  record), so a real OTP can never be delivered to a reviewer. The earlier plan
+  (`reviewer@cop17.mn` + `000000` + `REVIEW_MODE=1`) was never implemented.
 
 ## Build flavors
 | Flavor | Base URL | Supabase | Debug |

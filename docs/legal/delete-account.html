@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Deletion / Бүртгэл устгах — SIOP Mongolia</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 680px; margin: 0 auto; padding: 24px 20px 80px; }
+  h1 { font-size: 26px; margin-top: 0; color: #16357A; }
+  h2 { font-size: 19px; margin-top: 32px; border-bottom: 2px solid #16357A; padding-bottom: 6px; color: #16357A; }
+  .updated { color: #888; font-size: 13px; margin-bottom: 24px; }
+  .lang-toggle { position: sticky; top: 0; background: #fff; padding: 12px 0; border-bottom: 1px solid #eee; margin-bottom: 20px; z-index: 10; }
+  .lang-toggle button { font-size: 14px; padding: 6px 14px; margin-right: 8px; border: 1px solid #16357A; background: #fff; color: #16357A; border-radius: 20px; cursor: pointer; }
+  .lang-toggle button.active { background: #16357A; color: #fff; }
+  .lang-block { display: none; }
+  .lang-block.active { display: block; }
+  .info-box { background: #f0f4ff; border-left: 4px solid #16357A; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 15px; }
+  .warn-box { background: #fff8e6; border-left: 4px solid #e6a817; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 14px; }
+  .step { display: flex; gap: 14px; align-items: flex-start; margin: 14px 0; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: #16357A; color: #fff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .btn { display: inline-block; margin-top: 20px; padding: 12px 28px; background: #16357A; color: #fff; text-decoration: none; border-radius: 8px; font-size: 15px; font-weight: 500; }
+  .btn:hover { background: #0f2456; }
+  ul { padding-left: 20px; }
+  li { margin: 6px 0; }
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #eee; font-size: 13px; color: #888; }
+</style>
+</head>
+<body>
+
+<div class="lang-toggle">
+  <button class="active" onclick="setLang('mn')">Монгол</button>
+  <button onclick="setLang('en')">English</button>
+</div>
+
+<!-- MONGOLIAN -->
+<div class="lang-block active" id="lang-mn">
+  <h1>Бүртгэл устгах хүсэлт</h1>
+  <p class="updated">SIOP Mongolia апп — 2026 оны 6-р сар</p>
+
+  <div class="info-box">
+    Та SIOP Mongolia аппын бүртгэлээ устгахыг хүсвэл доорх зааврыг дагана уу.
+  </div>
+
+  <h2>Аппаас устгах (хэрэв боломжтой бол)</h2>
+  <div class="step"><div class="step-num">1</div><div>Апп нээнэ</div></div>
+  <div class="step"><div class="step-num">2</div><div>Profile → Settings → Delete account руу орно</div></div>
+  <div class="step"><div class="step-num">3</div><div>Баталгаажуулах товч дарна</div></div>
+
+  <h2>Имэйлээр хүсэлт илгээх</h2>
+  <p>Аппаас устгах боломжгүй тохиолдолд дараах имэйл хаяг руу хүсэлт илгээнэ үү:</p>
+
+  <a href="mailto:admin@siop.mn?subject=Account Deletion Request&body=Hello,%0A%0AI would like to request deletion of my SIOP Mongolia account.%0A%0AEmail address: [your email]%0AName: [your name]%0A%0APlease delete all my personal data.%0A%0AThank you." class="btn">
+    admin@siop.mn руу имэйл илгээх
+  </a>
+
+  <h2>Имэйлд дараах мэдээллийг оруулна уу</h2>
+  <ul>
+    <li>Бүртгэлтэй имэйл хаяг</li>
+    <li>Бүтэн нэр</li>
+    <li>Устгах шалтгаан (заавал биш)</li>
+  </ul>
+
+  <div class="warn-box">
+    <strong>Анхааруулга:</strong> Бүртгэл устгагдсанаар дараах өгөгдлүүд бүрмөсөн устна:
+    <ul style="margin-top:8px">
+      <li>Хувийн профайл мэдээлэл (нэр, имэйл)</li>
+      <li>Хуралд бүртгэлийн түүх</li>
+      <li>Цахим үнэмлэх</li>
+      <li>Wallet үлдэгдэл</li>
+    </ul>
+    Устгасны дараа сэргээх боломжгүй.
+  </div>
+
+  <h2>Хариу хүлээх хугацаа</h2>
+  <p>Хүсэлт хүлээн авснаас хойш <strong>7 хоногийн</strong> дотор бүртгэлийг устгаж, имэйлээр баталгаажуулна.</p>
+</div>
+
+<!-- ENGLISH -->
+<div class="lang-block" id="lang-en">
+  <h1>Account Deletion Request</h1>
+  <p class="updated">SIOP Mongolia App — June 2026</p>
+
+  <div class="info-box">
+    To delete your SIOP Mongolia account and all associated data, follow the instructions below.
+  </div>
+
+  <h2>Delete from the app (if available)</h2>
+  <div class="step"><div class="step-num">1</div><div>Open the SIOP Mongolia app</div></div>
+  <div class="step"><div class="step-num">2</div><div>Go to Profile → Settings → Delete account</div></div>
+  <div class="step"><div class="step-num">3</div><div>Confirm deletion</div></div>
+
+  <h2>Request deletion by email</h2>
+  <p>If in-app deletion is unavailable, send a request to:</p>
+
+  <a href="mailto:admin@siop.mn?subject=Account Deletion Request&body=Hello,%0A%0AI would like to request deletion of my SIOP Mongolia account.%0A%0AEmail address: [your email]%0AName: [your name]%0A%0APlease delete all my personal data.%0A%0AThank you." class="btn">
+    Email admin@siop.mn
+  </a>
+
+  <h2>Please include in your email</h2>
+  <ul>
+    <li>Your registered email address</li>
+    <li>Your full name</li>
+    <li>Reason for deletion (optional)</li>
+  </ul>
+
+  <div class="warn-box">
+    <strong>Warning:</strong> Deleting your account will permanently remove:
+    <ul style="margin-top:8px">
+      <li>Profile information (name, email)</li>
+      <li>Session attendance history</li>
+      <li>Digital delegate ID</li>
+      <li>Wallet balance</li>
+    </ul>
+    This action cannot be undone.
+  </div>
+
+  <h2>Response time</h2>
+  <p>We will process your request and confirm deletion within <strong>7 business days</strong>.</p>
+</div>
+
+<footer>
+  &copy; 2026 SIOP Asia Congress — Ulaanbaatar, Mongolia |
+  <a href="privacy-policy.html">Privacy Policy</a> |
+  <a href="mailto:admin@siop.mn">admin@siop.mn</a>
+</footer>
+
+<script>
+function setLang(lang) {
+  document.querySelectorAll('.lang-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+  document.getElementById('lang-' + lang).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

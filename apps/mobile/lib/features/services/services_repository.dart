@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api_client.dart';
+import '../../core/env.dart';
 import '../../core/supabase_client.dart';
 
 class WalletTxn {
@@ -62,6 +63,7 @@ class ServicesRepository {
   ServicesRepository(this.ref);
 
   Future<int> balance() async {
+    if (demoMode || reviewSession) return 0;
     final dio = ref.read(apiClientProvider);
     final res = await dio.get('/wallet/balance');
     return (res.data['balance'] as num).toInt();
@@ -78,6 +80,7 @@ class ServicesRepository {
   }
 
   Future<List<WalletTxn>> recentTxns({int limit = 20}) async {
+    if (demoMode || reviewSession) return [];
     final user = supabase.auth.currentUser!;
     final data = await supabase
         .from('wallet_txns')
@@ -136,6 +139,7 @@ class ServicesRepository {
     required String title,
     String? description,
   }) async {
+    if (demoMode || reviewSession) return;
     final user = supabase.auth.currentUser!;
     await supabase.from('lost_found').insert({
       'kind': kind,

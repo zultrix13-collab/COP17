@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/env.dart';
 import '../../core/supabase_client.dart';
 
 class Exhibitor {
@@ -80,6 +81,7 @@ class B2BRepository {
     required DateTime end,
     String? purpose,
   }) async {
+    if (demoMode || reviewSession) return;
     final userId = supabase.auth.currentUser!.id;
     await supabase.from('b2b_meetings').insert({
       'requester_id': userId,
@@ -91,6 +93,7 @@ class B2BRepository {
   }
 
   Future<List<Meeting>> myMeetings() async {
+    if (demoMode || reviewSession) return [];
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
         .from('b2b_meetings')

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api_client.dart';
+import '../../core/env.dart';
 import '../../core/supabase_client.dart';
 
 class DigitalIdToken {
@@ -20,6 +21,12 @@ class DigitalIdRepository {
   DigitalIdRepository(this.ref);
 
   Future<DigitalIdToken> issue() async {
+    if (demoMode || reviewSession) {
+      return DigitalIdToken(
+        token: 'DEMO-SIOP-2026',
+        expiresAt: DateTime.now().add(const Duration(minutes: 15)).millisecondsSinceEpoch ~/ 1000,
+      );
+    }
     final userId = supabase.auth.currentUser!.id;
     final dio = ref.read(apiClientProvider);
     final res = await dio.get('/qr/issue', queryParameters: {'userId': userId});

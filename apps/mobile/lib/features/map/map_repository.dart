@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../core/env.dart';
 import '../../core/supabase_client.dart';
 
 class Poi {
@@ -54,6 +55,14 @@ final mapRepositoryProvider = Provider<MapRepository>((_) => MapRepository());
 
 class MapRepository {
   Future<List<Poi>> list({String? kind, int? floor}) async {
+    if (demoMode || reviewSession) {
+      return [
+        Poi(id: 'd1', nameMn: 'Үндсэн танхим', nameEn: 'Main Hall', kind: 'hall', floor: 1),
+        Poi(id: 'd2', nameMn: 'Хоол үйлчилгээ', nameEn: 'Dining Area', kind: 'food', floor: 1),
+        Poi(id: 'd3', nameMn: 'Эмнэлгийн өрөө', nameEn: 'Medical Room', kind: 'medical', floor: 1),
+        Poi(id: 'd4', nameMn: 'Үүдний хаалга', nameEn: 'Main Entrance', kind: 'entrance', floor: 0),
+      ];
+    }
     var q = supabase
         .from('pois')
         .select('id, name_mn, name_en, kind, floor, geom');

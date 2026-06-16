@@ -44,6 +44,11 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Local build config with secrets — copy from dart_defines.json.example
+dart_defines.json
+android/app/upload-keystore.jks
+android/key.properties
+
 # iOS/Xcode
 **/ios/**/*.mode1v3
 **/ios/**/*.mode2v3

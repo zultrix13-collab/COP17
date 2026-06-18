@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import '../profile/profile_repository.dart';
 
 class WelcomePage extends ConsumerWidget {
@@ -10,6 +11,7 @@ class WelcomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     final profileAsync = ref.watch(currentProfileProvider);
 
     return Scaffold(
@@ -18,7 +20,12 @@ class WelcomePage extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           child: profileAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: ErrorView(error: e)),
+            error: (e, _) => Center(
+              child: ErrorView(
+                error: e,
+                onRetry: () => ref.invalidate(currentProfileProvider),
+              ),
+            ),
             data: (p) => Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -26,13 +33,14 @@ class WelcomePage extends ConsumerWidget {
                 const Text('🌿', textAlign: TextAlign.center, style: TextStyle(fontSize: 40)),
                 const SizedBox(height: 8),
                 Text(
-                  'Тавтай морил, ${p?.name.isNotEmpty == true ? p!.name : p?.email ?? ''}!',
+                  l10n.welcomeGreeting(
+                      p?.name.isNotEmpty == true ? p!.name : p?.email ?? ''),
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                 ),
-                const Text('SIOP Mongolia · Jun 25–28, 2026',
+                Text(l10n.siopLocationDate,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFF888888))),
+                    style: const TextStyle(color: Color(0xFF888888))),
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -44,18 +52,18 @@ class WelcomePage extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('ТАНЫ ХАНДАЛТЫН ЭРХ',
-                          style: TextStyle(fontSize: 11, color: Color(0xFF888888))),
+                      Text(l10n.accessTierLabel,
+                          style: const TextStyle(fontSize: 11, color: Color(0xFF888888))),
                       const SizedBox(height: 4),
                       Row(children: [
                         const Text('🟢 ', style: TextStyle(fontSize: 18)),
-                        Text(_tierLabel(p?.tier ?? 'green'),
+                        Text(_tierLabel(p?.tier ?? 'green', l10n),
                             style: const TextStyle(fontWeight: FontWeight.w700)),
                       ]),
                       const SizedBox(height: 4),
-                      const Text(
-                        'Admin тохируулсан · Дүр өөрчлөгдвөл мэдэгдэнэ',
-                        style: TextStyle(fontSize: 12, color: Color(0xFF16A34A)),
+                      Text(
+                        l10n.accessTierNote,
+                        style: const TextStyle(fontSize: 12, color: Color(0xFF16A34A)),
                       ),
                     ],
                   ),
@@ -63,7 +71,7 @@ class WelcomePage extends ConsumerWidget {
                 const Spacer(),
                 FilledButton(
                   onPressed: () => context.go('/home'),
-                  child: const Text('Эхэлцгээе →'),
+                  child: Text(l10n.getStarted),
                 ),
               ],
             ),
@@ -73,11 +81,11 @@ class WelcomePage extends ConsumerWidget {
     );
   }
 
-  String _tierLabel(String t) => switch (t) {
-        'blue' => 'Blue Zone',
-        'vip' => 'VIP',
-        'exhibitor' => 'Exhibitor',
-        'press' => 'Press',
-        _ => 'Green Zone',
+  String _tierLabel(String t, AppL10n l10n) => switch (t) {
+        'blue' => l10n.tierBlue,
+        'vip' => l10n.tierVip,
+        'exhibitor' => l10n.tierExhibitor,
+        'press' => l10n.tierPress,
+        _ => l10n.tierGreen,
       };
 }

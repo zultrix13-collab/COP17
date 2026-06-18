@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'services_repository.dart';
 
 final _lostFoundProvider = FutureProvider.family<List<Map<String, dynamic>>, String>((ref, kind) {
@@ -20,12 +21,13 @@ class _LostFoundPageState extends ConsumerState<LostFoundPage> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lost & Found'),
         bottom: TabBar(
           controller: _tabs,
-          tabs: const [Tab(text: 'Гээсэн'), Tab(text: 'Олдсон')],
+          tabs: [Tab(text: l10n.tabLost), Tab(text: l10n.tabFound)],
         ),
       ),
       body: TabBarView(
@@ -37,7 +39,7 @@ class _LostFoundPageState extends ConsumerState<LostFoundPage> with SingleTicker
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
-        label: const Text('Мэдэгдэл'),
+        label: Text(l10n.report),
         onPressed: () => showModalBottomSheet(
           context: context,
           isScrollControlled: true,
@@ -61,7 +63,7 @@ class _List extends ConsumerWidget {
       error: (e, _) => Center(child: ErrorView(error: e)),
       data: (list) {
         if (list.isEmpty) {
-          return const Center(child: Text('Хоосон', style: TextStyle(color: Color(0xFF888888))));
+          return Center(child: Text(AppL10n.of(context)!.empty, style: const TextStyle(color: Color(0xFF888888))));
         }
         return RefreshIndicator(
           onRefresh: () async => ref.invalidate(_lostFoundProvider(kind)),
@@ -119,6 +121,7 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -126,9 +129,9 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         SegmentedButton<String>(
-          segments: const [
-            ButtonSegment(value: 'lost', label: Text('Гээсэн')),
-            ButtonSegment(value: 'found', label: Text('Олдсон')),
+          segments: [
+            ButtonSegment(value: 'lost', label: Text(l10n.tabLost)),
+            ButtonSegment(value: 'found', label: Text(l10n.tabFound)),
           ],
           selected: {_kind},
           onSelectionChanged: (s) => setState(() => _kind = s.first),
@@ -136,24 +139,24 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
         const SizedBox(height: 12),
         TextField(
           controller: _title,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Юу гээсэн/олдсон?',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: l10n.whatLostFound,
           ),
         ),
         const SizedBox(height: 8),
         TextField(
           controller: _desc,
           minLines: 2, maxLines: 4,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Нэмэлт тайлбар',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: l10n.extraDescription,
           ),
         ),
         const SizedBox(height: 12),
         FilledButton(
           onPressed: _busy ? null : _submit,
-          child: Text(_busy ? '…' : 'Илгээх'),
+          child: Text(_busy ? '…' : l10n.send),
         ),
         const SizedBox(height: 12),
       ]),

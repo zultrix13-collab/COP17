@@ -36,16 +36,19 @@ import '../core/env.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final repo = ref.watch(authRepositoryProvider);
+  final notifier = _AuthChangeNotifier(repo);
+  ref.onDispose(notifier.dispose);
 
   return GoRouter(
     initialLocation: '/splash',
-    refreshListenable: _AuthChangeNotifier(repo),
+    refreshListenable: notifier,
     redirect: (ctx, state) {
       if (demoMode || reviewSession) return null;
       final isAuthed = repo.currentSession != null;
       final loc = state.matchedLocation;
       final onboarding = loc.startsWith('/onboarding') || loc == '/splash';
       if (!isAuthed && !onboarding) return '/onboarding/email';
+      if (isAuthed && onboarding && loc != '/splash') return '/home';
       return null;
     },
     routes: [
@@ -56,9 +59,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) => OtpPage(email: (state.extra as String?) ?? ''),
       ),
       GoRoute(
-          path: '/onboarding/language',
-          builder: (_, __) => const LanguagePage()),
-      GoRoute(
           path: '/onboarding/permission',
           builder: (_, __) => const PermissionPage()),
       GoRoute(
@@ -66,6 +66,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
           path: '/profile/digital-id',
           builder: (_, __) => const DigitalIdPage()),
+      GoRoute(
+          path: '/profile/language',
+          builder: (_, __) => const LanguagePage()),
       GoRoute(
           path: '/programme/agenda', builder: (_, __) => const MyAgendaPage()),
       GoRoute(path: '/scanner', builder: (_, __) => const ScannerPage()),

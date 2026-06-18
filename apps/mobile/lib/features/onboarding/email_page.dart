@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/env.dart';
+import '../../l10n/app_localizations.dart';
 import '../auth/auth_repository.dart';
 
 class EmailPage extends ConsumerStatefulWidget {
@@ -16,11 +17,21 @@ class _EmailPageState extends ConsumerState<EmailPage> {
   bool _busy = false;
   String? _err;
 
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
   Future<void> _send() async {
     final email = _ctrl.text.trim();
+    if (email.isEmpty || !email.contains('@')) {
+      setState(() => _err = AppL10n.of(context)!.errEmailNotRegistered);
+      return;
+    }
     // Reviewer demo account: its mailbox can't receive a code, so skip the
     // network request and go straight to the code screen.
-    if (email.toLowerCase() == reviewEmail) {
+    if (reviewEmail.isNotEmpty && email.toLowerCase() == reviewEmail) {
       context.go('/onboarding/otp', extra: email);
       return;
     }
@@ -37,14 +48,15 @@ class _EmailPageState extends ConsumerState<EmailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('И-мэйл оруулах')),
+      appBar: AppBar(title: Text(l10n.emailTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('Бүртгэлтэй и-мэйл хаягаа оруулна уу.'),
+            Text(l10n.emailPrompt),
             const SizedBox(height: 12),
             TextField(
               controller: _ctrl,
@@ -58,7 +70,7 @@ class _EmailPageState extends ConsumerState<EmailPage> {
             const SizedBox(height: 16),
             FilledButton(
               onPressed: _busy ? null : _send,
-              child: Text(_busy ? '…' : 'Код илгээх'),
+              child: Text(_busy ? '…' : l10n.sendCode),
             ),
             if (_err != null) ...[
               const SizedBox(height: 8),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api_client.dart';
@@ -27,7 +29,9 @@ class DigitalIdRepository {
         expiresAt: DateTime.now().add(const Duration(minutes: 15)).millisecondsSinceEpoch ~/ 1000,
       );
     }
-    final userId = supabase.auth.currentUser!.id;
+    final user = supabase.auth.currentUser;
+    if (user == null) throw StateError('Not authenticated');
+    final userId = user.id;
     final dio = ref.read(apiClientProvider);
     final res = await dio.get('/qr/issue', queryParameters: {'userId': userId});
     return DigitalIdToken(
@@ -37,9 +41,10 @@ class DigitalIdRepository {
   }
 }
 
-/// Refreshed every 5 min so the wallet stays well within the 15-min TTL.
+/// Cached for 5 minutes (well within the 15-min token TTL), then re-fetched.
 final digitalIdProvider = FutureProvider.autoDispose<DigitalIdToken>((ref) async {
   final link = ref.keepAlive();
-  ref.onDispose(link.close);
+  final timer = Timer(const Duration(minutes: 5), link.close);
+  ref.onDispose(timer.cancel);
   return ref.watch(digitalIdRepositoryProvider).issue();
 });

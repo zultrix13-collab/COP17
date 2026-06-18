@@ -1,6 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../l10n/app_localizations.dart';
 
 class PermissionPage extends StatefulWidget {
   const PermissionPage({super.key});
@@ -19,46 +22,49 @@ class _PermissionPageState extends State<PermissionPage> {
   }
 
   Future<void> _reqNotif() async {
-    // Real impl: firebase_messaging.requestPermission() — stubbed for now.
-    setState(() => _notifGranted = true);
+    final settings = await FirebaseMessaging.instance.requestPermission();
+    setState(() => _notifGranted =
+        settings.authorizationStatus == AuthorizationStatus.authorized ||
+        settings.authorizationStatus == AuthorizationStatus.provisional);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Зөвшөөрөл')),
+      appBar: AppBar(title: Text(l10n.permissionTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('Апп илүү сайн ажиллахад зөвшөөрлүүд хэрэгтэй.'),
+            Text(l10n.permissionIntro),
             const SizedBox(height: 12),
             _PermissionTile(
               icon: '📍',
-              title: 'Байршил',
-              subtitle: 'Яаралтай тусламж + алхалт тоолох',
+              title: l10n.permLocation,
+              subtitle: l10n.permLocationDesc,
               granted: _locationGranted,
               onGrant: _reqLocation,
             ),
             const SizedBox(height: 8),
             _PermissionTile(
               icon: '🔔',
-              title: 'Мэдэгдэл',
-              subtitle: 'Хуваарь, зарлал, яаралтай',
+              title: l10n.permNotification,
+              subtitle: l10n.permNotificationDesc,
               granted: _notifGranted,
               onGrant: _reqNotif,
             ),
             const Spacer(),
             FilledButton(
               onPressed: () => context.go('/onboarding/welcome'),
-              child: const Text('Үргэлжлүүлэх →'),
+              child: Text(l10n.continueBtn),
             ),
             const SizedBox(height: 6),
-            const Text(
-              'Settings-ээс өөрчлөх боломжтой',
+            Text(
+              l10n.permSettingsNote,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
+              style: const TextStyle(fontSize: 12, color: Color(0xFF888888)),
             ),
           ],
         ),
@@ -104,7 +110,9 @@ class _PermissionTile extends StatelessWidget {
           ),
           granted
               ? const Icon(Icons.check_circle, color: Color(0xFF16A34A))
-              : OutlinedButton(onPressed: onGrant, child: const Text('Зөвшөөрөх')),
+              : OutlinedButton(
+                  onPressed: onGrant,
+                  child: Text(AppL10n.of(context)!.grant)),
         ],
       ),
     );

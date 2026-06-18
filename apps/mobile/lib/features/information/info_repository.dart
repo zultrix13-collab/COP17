@@ -18,6 +18,7 @@ class InfoRepository {
           'title_mn': 'SIOP Mongolia 2026-д тавтай морилно уу',
           'title_en': 'Welcome to SIOP Mongolia 2026',
           'body_mn': 'Уулзалт, арга хэмжээний хуваарийг Programme хэсгээс харна уу.',
+          'body_en': 'See the schedule of sessions and events in the Programme tab.',
           'published_at': DateTime.now().toIso8601String(),
         }
       ];
@@ -33,9 +34,9 @@ class InfoRepository {
   Future<List<Map<String, dynamic>>> faq() async {
     if (demoMode || reviewSession) {
       return [
-        {'id': 'f1', 'ordering': 1, 'question_mn': 'Регистрийн бүртгэл хаана байдаг вэ?', 'answer_mn': 'Үүдний A танхимд.'},
-        {'id': 'f2', 'ordering': 2, 'question_mn': 'Wi-Fi нэвтрэх үгийг хаанаас авах вэ?', 'answer_mn': 'SIOP2026 / нууц үг: mongolia2026'},
-        {'id': 'f3', 'ordering': 3, 'question_mn': 'Эмнэлгийн тусламж хэрэгтэй бол?', 'answer_mn': 'SOS товч дарна уу эсвэл 103 утасна уу.'},
+        {'id': 'f1', 'ordering': 1, 'question_mn': 'Регистрийн бүртгэл хаана байдаг вэ?', 'question_en': 'Where is registration?', 'answer_mn': 'Үүдний A танхимд.', 'answer_en': 'At Hall A by the entrance.'},
+        {'id': 'f2', 'ordering': 2, 'question_mn': 'Wi-Fi нэвтрэх үгийг хаанаас авах вэ?', 'question_en': 'How do I get the Wi-Fi password?', 'answer_mn': 'Мэдээллийн ширээнд Wi-Fi карт авна уу.', 'answer_en': 'Pick up a Wi-Fi card from the information desk.'},
+        {'id': 'f3', 'ordering': 3, 'question_mn': 'Эмнэлгийн тусламж хэрэгтэй бол?', 'question_en': 'What if I need medical help?', 'answer_mn': 'SOS товч дарна уу эсвэл 103 утасна уу.', 'answer_en': 'Tap the SOS button or call 103.'},
       ];
     }
     final data = await supabase.from('faq').select('*').order('ordering');

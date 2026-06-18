@@ -4,17 +4,19 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'services_repository.dart';
 
 final _money = NumberFormat.currency(locale: 'mn_MN', symbol: '₮', decimalDigits: 0);
 
 /// Mutable cart keyed by product id → quantity, scoped to a kind.
+/// autoDispose so the cart resets naturally when the user leaves the catalog.
 final cartProvider =
-    StateProvider.family<Map<String, int>, String>((_, __) => {});
+    StateProvider.autoDispose.family<Map<String, int>, String>((_, __) => {});
 
-String _kindTitle(String kind) => switch (kind) {
-      'shop' => 'Дэлгүүр',
-      'food' => 'Хоол',
+String _kindTitle(String kind, AppL10n l10n) => switch (kind) {
+      'shop' => l10n.shop,
+      'food' => l10n.food,
       'esim' => 'E-SIM',
       _ => kind,
     };
@@ -25,6 +27,8 @@ class CatalogPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
     final catalog = ref.watch(catalogProvider(kind));
     final cart = ref.watch(cartProvider(kind));
     final total = catalog.valueOrNull == null
@@ -38,13 +42,13 @@ class CatalogPage extends ConsumerWidget {
           });
 
     return Scaffold(
-      appBar: AppBar(title: Text(_kindTitle(kind))),
+      appBar: AppBar(title: Text(_kindTitle(kind, l10n))),
       body: catalog.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: ErrorView(error: e)),
         data: (list) {
           if (list.isEmpty) {
-            return const Center(child: Text('Бүтээгдэхүүн алга'));
+            return Center(child: Text(l10n.noProducts));
           }
           return ListView.separated(
             padding: const EdgeInsets.all(12),
@@ -61,7 +65,7 @@ class CatalogPage extends ConsumerWidget {
                 ),
                 child: Row(children: [
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(p.nameMn, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    Text(p.name(locale), style: const TextStyle(fontWeight: FontWeight.w700)),
                     if (p.vendor != null)
                       Text(p.vendor!, style: const TextStyle(fontSize: 11, color: Color(0xFF888888))),
                     const SizedBox(height: 4),
@@ -92,7 +96,7 @@ class CatalogPage extends ConsumerWidget {
                 padding: const EdgeInsets.all(12),
                 child: FilledButton(
                   onPressed: () => context.push('/services/checkout/$kind'),
-                  child: Text('Сагс — ${_money.format(total)}'),
+                  child: Text(l10n.cartTotal(_money.format(total))),
                 ),
               ),
             ),
@@ -107,7 +111,9 @@ class _QtyStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (qty == 0) {
-      return OutlinedButton(onPressed: () => onChange(1), child: const Text('+ Сагс'));
+      return OutlinedButton(
+          onPressed: () => onChange(1),
+          child: Text(AppL10n.of(context)!.addToCart));
     }
     return Row(mainAxisSize: MainAxisSize.min, children: [
       IconButton(icon: const Icon(Icons.remove), onPressed: () => onChange(qty - 1)),
@@ -136,8 +142,9 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       if (!mounted) return;
       ref.read(cartProvider(widget.kind).notifier).state = {};
       ref.invalidate(walletTxnsProvider);
+      ref.invalidate(balanceStreamProvider);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Төлөгдсөн: #${(res['orderId'] as String).substring(0, 8)}')),
+        SnackBar(content: Text(AppL10n.of(context)!.paidOrder(() { final id = res['orderId'] as String; return id.substring(0, id.length.clamp(0, 8)); }()))),
       );
       context.go('/services');
     } catch (e) {
@@ -151,9 +158,18 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
     final cart = ref.watch(cartProvider(widget.kind));
     final catalog = ref.watch(catalogProvider(widget.kind));
     final balance = ref.watch(balanceStreamProvider);
+
+    if (cart.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.pop();
+      });
+      return const SizedBox.shrink();
+    }
     final items = catalog.valueOrNull
             ?.where((p) => cart.containsKey(p.id))
             .map((p) => (product: p, quantity: cart[p.id]!))
@@ -164,35 +180,35 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
     final enough = bal >= total;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Төлбөр')),
+      appBar: AppBar(title: Text(l10n.checkoutTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           for (final e in items)
             ListTile(
               dense: true,
-              title: Text(e.product.nameMn),
+              title: Text(e.product.name(locale)),
               subtitle: Text('${e.quantity} × ${_money.format(e.product.price)}'),
               trailing: Text(_money.format(e.product.price * e.quantity),
                   style: const TextStyle(fontWeight: FontWeight.w700)),
             ),
           const Divider(),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const Text('Нийт', style: TextStyle(fontWeight: FontWeight.w700)),
+            Text(l10n.total, style: const TextStyle(fontWeight: FontWeight.w700)),
             Text(_money.format(total),
                 style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
           ]),
           const SizedBox(height: 8),
           Text(
             enough
-                ? '✓ Wallet: ${_money.format(bal)} — хангалттай'
-                : '⚠ Үлдэгдэл ${_money.format(bal)} — дутуу байна',
+                ? l10n.walletEnough(_money.format(bal))
+                : l10n.walletShort(_money.format(bal)),
             style: TextStyle(color: enough ? const Color(0xFF16A34A) : const Color(0xFFDC2626)),
           ),
           const Spacer(),
           FilledButton(
             onPressed: !enough || _busy ? null : _pay,
-            child: Text(_busy ? '…' : 'Wallet-ээр төлөх'),
+            child: Text(_busy ? '…' : l10n.payWithWallet),
           ),
         ]),
       ),

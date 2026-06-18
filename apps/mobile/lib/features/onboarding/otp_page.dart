@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/env.dart';
+import '../../l10n/app_localizations.dart';
 import '../auth/auth_repository.dart';
 
 class OtpPage extends ConsumerStatefulWidget {
@@ -18,10 +19,17 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   bool _busy = false;
   String? _err;
 
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
   Future<void> _verify() async {
     final code = _ctrl.text.trim();
-    // Reviewer demo bypass: exact email + code unlocks a local demo session.
-    if (widget.email.toLowerCase() == reviewEmail && code == reviewCode) {
+    // Reviewer demo bypass: only active when REVIEW_EMAIL/CODE were injected at build time.
+    if (reviewEmail.isNotEmpty && reviewCode.isNotEmpty &&
+        widget.email.toLowerCase() == reviewEmail && code == reviewCode) {
       reviewSession = true;
       context.go('/home');
       return;
@@ -32,7 +40,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
             email: widget.email,
             token: code,
           );
-      if (mounted) context.go('/onboarding/language');
+      if (mounted) context.go('/onboarding/permission');
     } catch (e) {
       setState(() => _err = e.toString());
     } finally {
@@ -42,14 +50,15 @@ class _OtpPageState extends ConsumerState<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('OTP баталгаа')),
+      appBar: AppBar(title: Text(l10n.otpTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('${widget.email} руу код илгээлээ'),
+            Text(l10n.otpSentTo(widget.email)),
             const SizedBox(height: 12),
             TextField(
               controller: _ctrl,
@@ -59,7 +68,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
             ),
             FilledButton(
               onPressed: _busy ? null : _verify,
-              child: Text(_busy ? '…' : 'Баталгаажуулах'),
+              child: Text(_busy ? '…' : l10n.verify),
             ),
             if (_err != null) ...[
               const SizedBox(height: 8),

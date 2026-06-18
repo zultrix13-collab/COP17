@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'map_repository.dart';
 
 /// UB Misheel Expo Center coords (venue placeholder).
@@ -20,12 +21,13 @@ class _MapPageState extends ConsumerState<MapPage> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Газрын зураг'),
+        title: Text(l10n.navMap),
         bottom: TabBar(
           controller: _tabs,
-          tabs: const [Tab(text: 'Дотоод'), Tab(text: 'Гадаад')],
+          tabs: [Tab(text: l10n.tabIndoor), Tab(text: l10n.tabOutdoor)],
         ),
       ),
       body: TabBarView(
@@ -40,6 +42,8 @@ class _IndoorView extends ConsumerWidget {
   const _IndoorView();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
     final pois = ref.watch(poisProvider);
     return pois.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -47,7 +51,7 @@ class _IndoorView extends ConsumerWidget {
       data: (list) {
         final indoor = list.where((p) => p.floor != null).toList()
           ..sort((a, b) => a.floor!.compareTo(b.floor!));
-        if (indoor.isEmpty) return const Center(child: Text('POI алга'));
+        if (indoor.isEmpty) return Center(child: Text(l10n.noPoi));
         final byFloor = <int, List<Poi>>{};
         for (final p in indoor) {
           byFloor.putIfAbsent(p.floor!, () => []).add(p);
@@ -58,13 +62,13 @@ class _IndoorView extends ConsumerWidget {
             for (final entry in byFloor.entries) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text('${entry.key} давхар',
+                child: Text(l10n.floorLabel(entry.key),
                     style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF888888))),
               ),
               for (final p in entry.value)
                 ListTile(
                   leading: Text(p.emoji, style: const TextStyle(fontSize: 20)),
-                  title: Text(p.nameMn),
+                  title: Text(p.name(locale)),
                   subtitle: Text(p.kind),
                   trailing: const Icon(Icons.directions),
                   onTap: () => _showDirections(context, p),
@@ -77,22 +81,24 @@ class _IndoorView extends ConsumerWidget {
   }
 
   void _showDirections(BuildContext context, Poi p) {
+    final l10n = AppL10n.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
     showModalBottomSheet(
       context: context,
       builder: (_) => Padding(
         padding: const EdgeInsets.all(16),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Text('${p.emoji} ${p.nameMn}',
+          Text('${p.emoji} ${p.name(locale)}',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
-          Text('${p.floor} давхар · ${p.kind}',
+          Text(l10n.floorKind(p.floor ?? '', p.kind),
               style: const TextStyle(color: Color(0xFF888888))),
           const SizedBox(height: 20),
           const Icon(Icons.turn_right, size: 48, color: Color(0xFF1A6EF5)),
-          const Text(
-            'Turn-by-turn: QR checkpoint эсвэл BLE beacon-оор\nхолын зайг урьдчилан тооцно (MAP-04).',
+          Text(
+            l10n.mapNavNote,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
+            style: const TextStyle(fontSize: 12, color: Color(0xFF888888)),
           ),
         ]),
       ),
@@ -100,10 +106,18 @@ class _IndoorView extends ConsumerWidget {
   }
 }
 
-class _OutdoorView extends ConsumerWidget {
+class _OutdoorView extends ConsumerStatefulWidget {
   const _OutdoorView();
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_OutdoorView> createState() => _OutdoorViewState();
+}
+
+class _OutdoorViewState extends ConsumerState<_OutdoorView> {
+  bool _tileError = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
     final pois = ref.watch(poisProvider);
     final markers = pois.maybeWhen(
       data: (list) => list
@@ -112,23 +126,45 @@ class _OutdoorView extends ConsumerWidget {
                 point: p.point!,
                 width: 30, height: 30,
                 child: Tooltip(
-                  message: p.nameMn,
+                  message: p.name(locale),
                   child: Text(p.emoji, style: const TextStyle(fontSize: 20)),
                 ),
               ))
           .toList(),
       orElse: () => <Marker>[],
     );
-    return FlutterMap(
-      options: const MapOptions(initialCenter: _defaultCenter, initialZoom: 14),
+    return Stack(
       children: [
-        TileLayer(
-          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c'],
-          userAgentPackageName: 'mn.siop',
-          // Swap for offline `FileTileProvider` + MBTiles to satisfy MAP-05.
+        FlutterMap(
+          options: const MapOptions(initialCenter: _defaultCenter, initialZoom: 14),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+              subdomains: const ['a', 'b', 'c'],
+              userAgentPackageName: 'mn.siop',
+              errorTileCallback: (_, __, ___) {
+                if (!_tileError && mounted) setState(() => _tileError = true);
+              },
+              // Swap for offline `FileTileProvider` + MBTiles to satisfy MAP-05.
+            ),
+            MarkerLayer(markers: markers),
+          ],
         ),
-        MarkerLayer(markers: markers),
+        if (_tileError)
+          Positioned(
+            bottom: 8, left: 8, right: 8,
+            child: Card(
+              color: const Color(0xFFFFF3CD),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Text(
+                  '⚠ Map tiles unavailable — check your internet connection',
+                  style: TextStyle(fontSize: 11),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

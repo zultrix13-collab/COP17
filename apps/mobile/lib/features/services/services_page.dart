@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'services_repository.dart';
 
 final _money = NumberFormat.currency(locale: 'mn_MN', symbol: '₮', decimalDigits: 0);
@@ -13,9 +14,10 @@ class ServicesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     final balance = ref.watch(balanceStreamProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Үйлчилгээ')),
+      appBar: AppBar(title: Text(l10n.navServices)),
       body: ListView(
         padding: const EdgeInsets.all(14),
         children: [
@@ -25,8 +27,8 @@ class ServicesPage extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('Wallet үлдэгдэл',
-                    style: TextStyle(color: Colors.white54, fontSize: 11)),
+                Text(l10n.walletBalance,
+                    style: const TextStyle(color: Colors.white54, fontSize: 11)),
                 const SizedBox(height: 4),
                 balance.when(
                   data: (b) => Text(_money.format(b),
@@ -46,12 +48,16 @@ class ServicesPage extends ConsumerWidget {
             physics: const NeverScrollableScrollPhysics(),
             childAspectRatio: 1.1,
             children: [
-              _Tile(icon: '🛍', label: 'Дэлгүүр', onTap: () => context.push('/services/catalog/shop')),
-              _Tile(icon: '🍽', label: 'Хоол', onTap: () => context.push('/services/catalog/food')),
+              _Tile(icon: '🛍', label: l10n.shop, onTap: () => context.push('/services/catalog/shop')),
+              _Tile(icon: '🍽', label: l10n.food, onTap: () => context.push('/services/catalog/food')),
               _Tile(icon: '📱', label: 'E-SIM', onTap: () => context.push('/services/catalog/esim')),
-              _Tile(icon: '🚕', label: 'Тээвэр', onTap: () => context.push('/services/transport')),
+              _Tile(icon: '🚕', label: l10n.transport, onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(l10n.comingSoon)),
+                );
+              }),
               _Tile(icon: '🔍', label: 'Lost & F', onTap: () => context.push('/services/lost-found')),
-              _Tile(icon: '➕', label: 'Цэнэглэх', onTap: () => context.push('/services/top-up')),
+              _Tile(icon: '➕', label: l10n.topUp, onTap: () => context.push('/services/top-up')),
             ],
           ),
         ],

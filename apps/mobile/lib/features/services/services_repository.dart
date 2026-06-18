@@ -46,6 +46,9 @@ class Product {
         imageUrl: m['image_url'] as String?,
         vendor: m['vendor'] as String?,
       );
+  String name(String locale) => locale == 'en'
+      ? (nameEn.isNotEmpty ? nameEn : nameMn)
+      : (nameMn.isNotEmpty ? nameMn : nameEn);
 }
 
 class QPayInvoice {
@@ -70,6 +73,7 @@ class ServicesRepository {
   }
 
   Stream<int> watchBalance() {
+    if (demoMode || reviewSession) return Stream.value(20000);
     final user = supabase.auth.currentUser;
     if (user == null) return const Stream.empty();
     return supabase
@@ -80,7 +84,12 @@ class ServicesRepository {
   }
 
   Future<List<WalletTxn>> recentTxns({int limit = 20}) async {
-    if (demoMode || reviewSession) return [];
+    if (demoMode || reviewSession) {
+      return [
+        WalletTxn(1, 'top_up', 20000, 'QPay', DateTime(2026, 6, 24, 10, 0)),
+        WalletTxn(2, 'purchase', -3500, 'Congress Shop', DateTime(2026, 6, 24, 14, 30)),
+      ];
+    }
     final user = supabase.auth.currentUser!;
     final data = await supabase
         .from('wallet_txns')
@@ -125,9 +134,10 @@ class ServicesRepository {
 
   // Lost & Found ──────────────────────────────────────────────
   Future<List<Map<String, dynamic>>> lostFound(String kind) async {
+    if (demoMode || reviewSession) return [];
     final data = await supabase
         .from('lost_found')
-        .select('*')
+        .select('id, kind, title, description, created_at, status')
         .eq('kind', kind)
         .order('created_at', ascending: false)
         .limit(50);
@@ -158,6 +168,6 @@ final walletTxnsProvider = FutureProvider<List<WalletTxn>>((ref) {
   return ref.watch(servicesRepositoryProvider).recentTxns();
 });
 
-final catalogProvider = FutureProvider.family<List<Product>, String>((ref, kind) {
+final catalogProvider = FutureProvider.autoDispose.family<List<Product>, String>((ref, kind) {
   return ref.watch(servicesRepositoryProvider).catalog(kind);
 });

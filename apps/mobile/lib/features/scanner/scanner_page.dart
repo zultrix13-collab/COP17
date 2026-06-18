@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../core/api_client.dart';
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import '../programme/programme_repository.dart';
 
 /// Ops-staff screen: pick the session they're checking into, then scan
@@ -48,10 +49,12 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
     final sessionsAsync = ref.watch(sessionsProvider(null));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Check-in scanner')),
+      appBar: AppBar(title: Text(l10n.scannerTitle)),
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.all(12),
@@ -60,10 +63,12 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
             error: (e, _) => ErrorView(error: e, compact: true),
             data: (list) => DropdownButtonFormField<String>(
               initialValue: _sessionId,
-              hint: const Text('Session сонгох'),
+              hint: Text(l10n.chooseSession),
               items: list
-                  .map((s) =>
-                      DropdownMenuItem(value: s.id, child: Text(s.titleMn)))
+                  .map((s) => DropdownMenuItem(
+                      value: s.id,
+                      child: Text(s.title(locale),
+                          overflow: TextOverflow.ellipsis, maxLines: 1)))
                   .toList(),
               onChanged: (v) => setState(() => _sessionId = v),
             ),
@@ -81,9 +86,9 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
             if (_sessionId == null)
               Container(
                 color: Colors.black54,
-                child: const Center(
-                  child: Text('Session сонгоно уу',
-                      style: TextStyle(color: Colors.white)),
+                child: Center(
+                  child: Text(l10n.pleaseChooseSession,
+                      style: const TextStyle(color: Colors.white)),
                 ),
               ),
           ]),

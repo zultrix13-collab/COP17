@@ -1,14 +1,14 @@
 const demoMode = bool.fromEnvironment('DEMO_MODE');
 
-/// App-review access for store reviewers (Google Play / App Store).
-///
-/// The app signs in via Supabase email OTP, but the reviewer account
-/// `delegate@siop.mn` lives on a domain with no mailbox, so a real code can
-/// never be delivered. Entering this exact email + code unlocks a local,
-/// demo-data-only session — no Supabase session and no access to real delegate
-/// data. It is treated like [demoMode] for routing and data sources.
-const reviewEmail = 'delegate@siop.mn';
-const reviewCode = '250628';
+/// App-review credentials injected at build time via --dart-define.
+/// Both are empty strings in production builds (no --dart-define supplied),
+/// which means the bypass is completely disabled unless explicitly enabled.
+const reviewEmail = String.fromEnvironment('REVIEW_EMAIL');
+const reviewCode = String.fromEnvironment('REVIEW_CODE');
 
 /// Set to true once a reviewer signs in with [reviewEmail] + [reviewCode].
 bool reviewSession = false;
+
+/// Congress dates — single source of truth for countdowns, date guards, etc.
+final kCongressStart = DateTime(2026, 6, 25);
+final kCongressEnd = DateTime(2026, 6, 28);

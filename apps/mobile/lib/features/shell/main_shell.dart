@@ -29,6 +29,12 @@ class _MainShellState extends ConsumerState<MainShell> {
     registerPushToken(ref);
   }
 
+  @override
+  void dispose() {
+    cancelPushRegistration();
+    super.dispose();
+  }
+
   int _currentIndex(String location) {
     for (var i = 0; i < _tabs.length; i++) {
       if (location.startsWith(_tabs[i].$1)) return i;

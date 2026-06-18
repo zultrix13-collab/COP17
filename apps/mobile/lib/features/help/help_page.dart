@@ -2,23 +2,76 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/env.dart';
 import '../../core/supabase_client.dart';
+import '../../l10n/app_localizations.dart';
+
+Future<void> _dial(String number) async {
+  final uri = Uri.parse('tel:$number');
+  if (await canLaunchUrl(uri)) await launchUrl(uri);
+}
 
 class HelpPage extends ConsumerWidget {
   const HelpPage({super.key});
 
+  Future<void> _requestAccountDeletion(BuildContext context) async {
+    final l10n = AppL10n.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.deleteAccountDialogTitle),
+        content: Text(l10n.deleteAccountDialogBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l10n.deleteAccountCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(backgroundColor: const Color(0xFFDC2626)),
+            child: Text(l10n.deleteAccountConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    final user = supabase.auth.currentUser;
+    final email = user?.email ?? '';
+    final uri = Uri(
+      scheme: 'mailto',
+      path: 'support@siop.mn',
+      queryParameters: {
+        'subject': 'Account deletion request',
+        'body': 'Please delete my account and all associated data.\n\nEmail: $email\n\nI understand this action is irreversible.',
+      },
+    );
+    if (await canLaunchUrl(uri)) await launchUrl(uri);
+  }
+
   Future<void> _sendLocationSos(BuildContext context) async {
+    if (demoMode || reviewSession) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppL10n.of(context)!.locationSent)),
+        );
+      }
+      return;
+    }
+    final user = supabase.auth.currentUser;
+    if (user == null) return;
     try {
       final pos = await Geolocator.getCurrentPosition();
       await supabase.from('alerts_incidents').insert({
+        'user_id': user.id,
         'severity': 'critical',
         'title': 'SOS from user',
         'body': 'location=${pos.latitude},${pos.longitude}',
       });
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Байршил илгээгдлээ · Ops team мэдэгдэнэ')),
+          SnackBar(content: Text(AppL10n.of(context)!.locationSent)),
         );
       }
     } catch (e) {
@@ -30,8 +83,9 @@ class HelpPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Тусламж')),
+      appBar: AppBar(title: Text(l10n.helpTitle)),
       body: ListView(
         padding: const EdgeInsets.all(14),
         children: [
@@ -43,25 +97,25 @@ class HelpPage extends ConsumerWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              const Text('🚨 Яаралтай тусламж',
-                  style: TextStyle(color: Color(0xFFDC2626), fontWeight: FontWeight.w700)),
+              Text(l10n.emergencyHelp,
+                  style: const TextStyle(color: Color(0xFFDC2626), fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),
               Row(children: [
                 Expanded(
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFDC2626)),
-                    onPressed: () {}, // dial 103 via url_launcher
+                    onPressed: () => _dial('103'),
                     icon: const Icon(Icons.local_hospital_outlined),
-                    label: const Text('103 Эмнэлэг'),
+                    label: Text(l10n.callMedical),
                   ),
                 ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFDC2626)),
-                    onPressed: () {},
+                    onPressed: () => _dial('102'),
                     icon: const Icon(Icons.local_police_outlined),
-                    label: const Text('102 Цагдаа'),
+                    label: Text(l10n.callPolice),
                   ),
                 ),
               ]),
@@ -70,25 +124,35 @@ class HelpPage extends ConsumerWidget {
                 style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFB45309)),
                 onPressed: () => _sendLocationSos(context),
                 icon: const Icon(Icons.share_location),
-                label: const Text('Миний байршил явуулах'),
+                label: Text(l10n.sendMyLocation),
               ),
             ]),
           ),
           const SizedBox(height: 12),
           _Tile(
             title: '🤖 AI Chatbot',
-            subtitle: 'SIOP мэдээлэл, FAQ, хөтөлбөр',
+            subtitle: l10n.helpSiopInfo,
             onTap: () => context.push('/information/chatbot'),
           ),
           _Tile(
-            title: '📞 Оператортой холбогдох',
-            subtitle: 'Хүн хариулах · 08:00–22:00',
-            onTap: () {},
+            title: l10n.contactOperator,
+            subtitle: l10n.operatorHours,
+            onTap: () => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(l10n.comingSoon))),
           ),
           _Tile(
-            title: '📋 Яаралтай журам',
-            subtitle: 'Гал, газар хөдлөлт, эрүүл мэнд',
-            onTap: () {},
+            title: l10n.emergencyProcedures,
+            subtitle: l10n.emergencyProceduresDesc,
+            onTap: () => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(l10n.comingSoon))),
+          ),
+          const SizedBox(height: 8),
+          const Divider(),
+          _Tile(
+            title: l10n.deleteAccountTitle,
+            subtitle: l10n.deleteAccountSubtitle,
+            onTap: () => _requestAccountDeletion(context),
+            destructive: true,
           ),
         ],
       ),
@@ -100,15 +164,17 @@ class _Tile extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
-  const _Tile({required this.title, required this.subtitle, required this.onTap});
+  final bool destructive;
+  const _Tile({required this.title, required this.subtitle, required this.onTap, this.destructive = false});
   @override
   Widget build(BuildContext context) {
+    final color = destructive ? const Color(0xFFDC2626) : null;
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.w700, color: color)),
         subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: Icon(Icons.chevron_right, color: color),
         onTap: onTap,
       ),
     );

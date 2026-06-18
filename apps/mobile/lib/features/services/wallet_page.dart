@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'services_repository.dart';
 
 final _money = NumberFormat.currency(locale: 'mn_MN', symbol: '₮', decimalDigits: 0);
@@ -14,11 +15,12 @@ class WalletPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     final balance = ref.watch(balanceStreamProvider);
     final txns = ref.watch(walletTxnsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Wallet')),
+      appBar: AppBar(title: Text(l10n.walletTitle)),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(walletTxnsProvider);
@@ -30,7 +32,7 @@ class WalletPage extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(12)),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('Үлдэгдэл', style: TextStyle(color: Colors.white54, fontSize: 11)),
+                Text(l10n.balance, style: const TextStyle(color: Colors.white54, fontSize: 11)),
                 const SizedBox(height: 4),
                 balance.when(
                   data: (b) => Text(_money.format(b),
@@ -44,21 +46,30 @@ class WalletPage extends ConsumerWidget {
             Row(children: [
               Expanded(child: FilledButton.icon(
                 onPressed: () => context.push('/services/top-up'),
-                icon: const Icon(Icons.add), label: const Text('Цэнэглэх'),
+                icon: const Icon(Icons.add), label: Text(l10n.topUp),
               )),
             ]),
             const SizedBox(height: 16),
-            const Text('Сүүлийн гүйлгээ',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+            Text(l10n.recentTransactions,
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
             const SizedBox(height: 6),
             txns.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => ErrorView(error: e, compact: true),
               data: (list) {
                 if (list.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Center(child: Text('Гүйлгээ алга', style: TextStyle(color: Color(0xFF888888)))),
+                  return Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(children: [
+                      Text(l10n.noTransactions,
+                          style: const TextStyle(color: Color(0xFF888888))),
+                      const SizedBox(height: 12),
+                      OutlinedButton.icon(
+                        onPressed: () => context.push('/services/top-up'),
+                        icon: const Icon(Icons.add),
+                        label: Text(l10n.topUpNow),
+                      ),
+                    ]),
                   );
                 }
                 return Column(children: [

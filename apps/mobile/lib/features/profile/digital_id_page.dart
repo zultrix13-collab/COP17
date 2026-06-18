@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:qr_flutter/qr_flutter.dart';
+
 import '../../app/theme.dart';
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'digital_id_repository.dart';
 import 'profile_repository.dart';
 
@@ -11,11 +14,12 @@ class DigitalIdPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     final profileAsync = ref.watch(profileStreamProvider);
     final tokenAsync = ref.watch(digitalIdProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Дижитал үнэмлэх')),
+      appBar: AppBar(title: Text(l10n.digitalIdTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -45,9 +49,9 @@ class DigitalIdPage extends ConsumerWidget {
               error: (e, _) => ErrorView(error: e, compact: true),
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Offline горимд ажиллана · 15 мин бүр refresh · HMAC signature',
-              style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
+            Text(
+              l10n.digitalIdNote,
+              style: const TextStyle(fontSize: 12, color: Color(0xFF888888)),
               textAlign: TextAlign.center,
             ),
           ],
@@ -69,17 +73,19 @@ class _QrBox extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE0E0E0)),
         borderRadius: BorderRadius.circular(12),
       ),
-      // Real impl: use the `qr_flutter` package to render `token.token`.
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.qr_code_2, size: 120),
-            const SizedBox(height: 4),
-            Text('expires in ${token.timeLeft.inMinutes} min',
-                style: const TextStyle(fontSize: 11, color: Color(0xFF888888))),
-          ],
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          QrImageView(
+            data: token.token,
+            version: QrVersions.auto,
+            size: 160,
+            eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: Colors.black),
+            dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: Colors.black),
+          ),
+          Text('expires in ${token.timeLeft.inMinutes} min',
+              style: const TextStyle(fontSize: 11, color: Color(0xFF888888))),
+        ],
       ),
     );
   }

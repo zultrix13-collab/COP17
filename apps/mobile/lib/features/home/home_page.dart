@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../app/theme.dart';
+import '../../core/env.dart';
 import '../../core/widgets/error_view.dart';
 import '../../core/widgets/glass_container.dart';
+import '../../l10n/app_localizations.dart';
 import '../profile/profile_repository.dart';
 import '../programme/programme_repository.dart';
 
@@ -34,7 +36,7 @@ class HomePage extends ConsumerWidget {
               children: [
                 profileAsync.when(
                   loading: () => const SizedBox(height: 140),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (e, _) => ErrorView(error: e, compact: true, onRetry: () => ref.invalidate(profileStreamProvider)),
                   data: (p) => _BrandHeader(
                     name:
                         p?.name.isNotEmpty == true ? p!.name : (p?.email ?? ''),
@@ -95,7 +97,7 @@ class _BrandHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final daysLeft = DateTime(2026, 6, 25).difference(DateTime.now()).inDays;
+    final daysLeft = kCongressStart.difference(DateTime.now()).inDays;
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -174,11 +176,11 @@ class _BrandHeader extends StatelessWidget {
                 children: [
                   _HeroChip(
                     icon: Icons.calendar_today_outlined,
-                    text: 'Jun 25-28, 2026',
+                    text: AppL10n.of(context)!.siopLocationDate.split('·').last.trim(),
                   ),
                   _HeroChip(
                     icon: Icons.public,
-                    text: '18th SIOP Asia Congress',
+                    text: AppL10n.of(context)!.siopCongressLabel,
                   ),
                   _HeroChip(
                     icon: _tierIcon(tier),
@@ -605,8 +607,8 @@ class _TodaySessions extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            const Expanded(
-                child: _SectionHeader(title: 'Today agenda', action: 'Live')),
+            Expanded(
+                child: _SectionHeader(title: AppL10n.of(context)!.todayAgenda, action: 'Live')),
             IconButton(
               onPressed: () => GoRouter.of(context).go('/programme'),
               icon: const Icon(Icons.arrow_forward),
@@ -691,9 +693,9 @@ class _SessionPreviewTile extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 6),
-                  const Text(
-                    'Next up',
-                    style: TextStyle(
+                  Text(
+                    AppL10n.of(context)!.nextUp,
+                    style: const TextStyle(
                       color: CopColors.land,
                       fontSize: 10,
                       fontWeight: FontWeight.w900,
@@ -703,7 +705,7 @@ class _SessionPreviewTile extends StatelessWidget {
               ]),
               if (active) const SizedBox(height: 3),
               Text(
-                session.titleMn,
+                session.title(Localizations.localeOf(context).languageCode),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -750,21 +752,17 @@ class _QuickLinks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     final items = <(IconData, String, Color, VoidCallback)>[
-      (Icons.map_outlined, 'Map', CopColors.sky, onMap),
-      (
-        Icons.account_balance_wallet_outlined,
-        'Wallet',
-        CopColors.primary,
-        onServices
-      ),
-      (Icons.auto_awesome, 'AI Guide', CopColors.tierVip, onAi),
+      (Icons.map_outlined, l10n.navMap, CopColors.sky, onMap),
+      (Icons.account_balance_wallet_outlined, l10n.walletTitle, CopColors.primary, onServices),
+      (Icons.auto_awesome, l10n.aiAssistant, CopColors.tierVip, onAi),
       (Icons.sos_outlined, 'SOS', CopColors.danger, onHelp),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionHeader(title: 'Quick access', action: 'Tools'),
+        _SectionHeader(title: l10n.sectionQuickAccess, action: 'Tools'),
         const SizedBox(height: 10),
         LayoutBuilder(
           builder: (context, constraints) {
@@ -851,18 +849,18 @@ class _SponsorCard extends StatelessWidget {
         Expanded(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-              Text('PLATINUM SPONSOR',
+                children: [
+              const Text('PLATINUM SPONSOR',
                   style: TextStyle(
                       fontSize: 10,
                       color: CopColors.warning,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.2)),
-              SizedBox(height: 2),
-              Text('GreenTech Mongolia',
+              const SizedBox(height: 2),
+              const Text('GreenTech Mongolia',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-              Text('Нарны эрчим хүч · Booth G-14',
-                  style: TextStyle(fontSize: 11, color: CopColors.inkMuted)),
+              Text(AppL10n.of(context)!.sponsorSolar,
+                  style: const TextStyle(fontSize: 11, color: CopColors.inkMuted)),
             ])),
         const Icon(Icons.arrow_forward_ios,
             size: 14, color: CopColors.inkMuted),

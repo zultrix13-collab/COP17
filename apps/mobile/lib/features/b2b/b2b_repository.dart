@@ -12,6 +12,7 @@ class Exhibitor {
   final String? website;
   final String? logoUrl;
   final String? descriptionMn;
+  final String? descriptionEn;
   Exhibitor({
     required this.userId,
     required this.company,
@@ -21,6 +22,7 @@ class Exhibitor {
     this.website,
     this.logoUrl,
     this.descriptionMn,
+    this.descriptionEn,
   });
   factory Exhibitor.fromMap(Map<String, dynamic> m) => Exhibitor(
         userId: m['user_id'] as String,
@@ -31,7 +33,11 @@ class Exhibitor {
         website: m['website'] as String?,
         logoUrl: m['logo_url'] as String?,
         descriptionMn: m['description_mn'] as String?,
+        descriptionEn: m['description_en'] as String?,
       );
+  String? description(String locale) => locale == 'en'
+      ? (descriptionEn ?? descriptionMn)
+      : (descriptionMn ?? descriptionEn);
 }
 
 class Meeting {
@@ -71,7 +77,7 @@ class B2BRepository {
     if (search != null && search.trim().isNotEmpty) {
       q = q.ilike('company', '%${search.trim()}%');
     }
-    final data = await q.order('company');
+    final data = await q.order('company').limit(100);
     return (data as List).map((r) => Exhibitor.fromMap(r as Map<String, dynamic>)).toList();
   }
 
@@ -82,7 +88,9 @@ class B2BRepository {
     String? purpose,
   }) async {
     if (demoMode || reviewSession) return;
-    final userId = supabase.auth.currentUser!.id;
+    final user = supabase.auth.currentUser;
+    if (user == null) throw StateError('Not authenticated');
+    final userId = user.id;
     await supabase.from('b2b_meetings').insert({
       'requester_id': userId,
       'exhibitor_id': exhibitorId,
@@ -94,7 +102,9 @@ class B2BRepository {
 
   Future<List<Meeting>> myMeetings() async {
     if (demoMode || reviewSession) return [];
-    final userId = supabase.auth.currentUser!.id;
+    final user = supabase.auth.currentUser;
+    if (user == null) throw StateError('Not authenticated');
+    final userId = user.id;
     final data = await supabase
         .from('b2b_meetings')
         .select('*')
@@ -104,11 +114,18 @@ class B2BRepository {
   }
 
   Future<void> cancelMeeting(String id) async {
-    await supabase.from('b2b_meetings').update({'status': 'cancelled'}).eq('id', id);
+    if (demoMode || reviewSession) return;
+    final user = supabase.auth.currentUser;
+    if (user == null) return;
+    await supabase
+        .from('b2b_meetings')
+        .update({'status': 'cancelled'})
+        .eq('id', id)
+        .or('requester_id.eq.${user.id},exhibitor_id.eq.${user.id}');
   }
 }
 
-final exhibitorsProvider = FutureProvider.family<List<Exhibitor>, String>((ref, search) {
+final exhibitorsProvider = FutureProvider.autoDispose.family<List<Exhibitor>, String>((ref, search) {
   return ref.watch(b2bRepositoryProvider).list(search: search.isEmpty ? null : search);
 });
 

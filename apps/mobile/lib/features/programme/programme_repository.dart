@@ -15,6 +15,7 @@ class SessionItem {
   final String? descriptionMn;
   final String? descriptionEn;
   final int goingCount;
+  final List<String>? speakers;
 
   SessionItem({
     required this.id,
@@ -28,6 +29,7 @@ class SessionItem {
     required this.goingCount,
     this.descriptionMn,
     this.descriptionEn,
+    this.speakers,
   });
 
   factory SessionItem.fromMap(Map<String, dynamic> m) => SessionItem(
@@ -42,10 +44,16 @@ class SessionItem {
         descriptionMn: m['description_mn'] as String?,
         descriptionEn: m['description_en'] as String?,
         goingCount: 0, // enriched separately if needed
+        speakers: (m['speakers'] as List?)?.cast<String>(),
       );
 
   bool get isFull => capacity > 0 && goingCount >= capacity;
-  String title(String locale) => locale == 'en' ? titleEn : titleMn;
+  String title(String locale) => locale == 'en'
+      ? (titleEn.isNotEmpty ? titleEn : titleMn)
+      : (titleMn.isNotEmpty ? titleMn : titleEn);
+  String? description(String locale) => locale == 'en'
+      ? (descriptionEn ?? descriptionMn)
+      : (descriptionMn ?? descriptionEn);
 }
 
 enum AttendanceStatus { going, waitlist, attended, cancelled }
@@ -62,12 +70,18 @@ final programmeRepositoryProvider =
     Provider<ProgrammeRepository>((_) => ProgrammeRepository());
 
 class ProgrammeRepository {
+  String _requireUserId() {
+    final user = supabase.auth.currentUser;
+    if (user == null) throw StateError('Not authenticated');
+    return user.id;
+  }
+
   Future<List<SessionItem>> list({DateTime? day}) async {
     if (demoMode || reviewSession) return _demoSessions(day: day);
     final q = supabase
         .from('sessions')
         .select(
-            'id, title_mn, title_en, hall, starts_at, ends_at, capacity, access_tiers, description_mn, description_en')
+            'id, title_mn, title_en, hall, starts_at, ends_at, capacity, access_tiers, description_mn, description_en, speakers')
         .order('starts_at');
     final data = await q;
     final items = (data as List)
@@ -98,7 +112,7 @@ class ProgrammeRepository {
   /// Returns the final status.
   Future<AttendanceStatus> markGoing(String sessionId) async {
     if (demoMode || reviewSession) return AttendanceStatus.going;
-    final userId = supabase.auth.currentUser!.id;
+    final userId = _requireUserId();
     final count = await supabase
         .from('attendance')
         .select('id')
@@ -122,7 +136,7 @@ class ProgrammeRepository {
 
   Future<void> cancelAttendance(String sessionId) async {
     if (demoMode || reviewSession) return;
-    final userId = supabase.auth.currentUser!.id;
+    final userId = _requireUserId();
     await supabase
         .from('attendance')
         .delete()
@@ -132,7 +146,7 @@ class ProgrammeRepository {
 
   Future<AttendanceStatus?> myAttendance(String sessionId) async {
     if (demoMode || reviewSession) return null;
-    final userId = supabase.auth.currentUser!.id;
+    final userId = _requireUserId();
     final row = await supabase
         .from('attendance')
         .select('status')
@@ -144,11 +158,12 @@ class ProgrammeRepository {
 
   Future<List<SessionItem>> myAgenda() async {
     if (demoMode || reviewSession) return _demoSessions();
-    final userId = supabase.auth.currentUser!.id;
+    final userId = _requireUserId();
     final rows = await supabase
         .from('attendance')
         .select('session:sessions(*)')
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .inFilter('status', ['going', 'attended']);
     return (rows as List)
         .map((r) => SessionItem.fromMap(r['session'] as Map<String, dynamic>))
         .toList()
@@ -161,7 +176,7 @@ class ProgrammeRepository {
     String? comment,
   }) async {
     if (demoMode || reviewSession) return;
-    final userId = supabase.auth.currentUser!.id;
+    final userId = _requireUserId();
     await supabase.from('session_feedback').upsert({
       'user_id': userId,
       'session_id': sessionId,
@@ -185,6 +200,7 @@ List<SessionItem> _demoSessions({DateTime? day}) {
       goingCount: 0,
       descriptionMn: '18th SIOP Asia Congress-ийн нээлтийн ёслол, Улаанбаатар хотод.',
       descriptionEn: 'Opening ceremony of the 18th SIOP Asia Congress in Ulaanbaatar.',
+      speakers: const ['Dr. Enkhtuya Purevsuren', 'Prof. Yoshihiro Fukuda'],
     ),
     SessionItem(
       id: 'demo-oncology-care',
@@ -200,6 +216,7 @@ List<SessionItem> _demoSessions({DateTime? day}) {
           'Хүүхдийн хавдрын оношлогоо, эмчилгээний шинэ боломжуудын талаарх ярилцлага.',
       descriptionEn:
           'Dialogue on emerging approaches in pediatric oncology diagnosis and treatment.',
+      speakers: const ['Dr. Aiko Sato', 'Dr. Priya Nair'],
     ),
     SessionItem(
       id: 'demo-survivorship',
@@ -215,6 +232,7 @@ List<SessionItem> _demoSessions({DateTime? day}) {
           'Хорт хавдраас сэргэсэн хүүхдүүдийн дараагийн амьдрал, асаргаа сувилгааны асуудал.',
       descriptionEn:
           'Roundtable on long-term survivorship and compassionate care for childhood cancer patients.',
+      speakers: const ['Prof. Li Wei', 'Dr. Sara Khalil'],
     ),
   ];
   if (day == null) return items;
@@ -227,18 +245,18 @@ List<SessionItem> _demoSessions({DateTime? day}) {
 }
 
 final sessionsProvider =
-    FutureProvider.family<List<SessionItem>, DateTime?>((ref, day) {
-  return ref.read(programmeRepositoryProvider).list(day: day);
+    FutureProvider.autoDispose.family<List<SessionItem>, DateTime?>((ref, day) {
+  return ref.watch(programmeRepositoryProvider).list(day: day);
 });
 
 final sessionDetailProvider =
-    FutureProvider.family<SessionItem?, String>((ref, id) {
-  return ref.read(programmeRepositoryProvider).byId(id);
+    FutureProvider.autoDispose.family<SessionItem?, String>((ref, id) {
+  return ref.watch(programmeRepositoryProvider).byId(id);
 });
 
 final myAttendanceProvider =
-    FutureProvider.family<AttendanceStatus?, String>((ref, sessionId) {
-  return ref.read(programmeRepositoryProvider).myAttendance(sessionId);
+    FutureProvider.autoDispose.family<AttendanceStatus?, String>((ref, sessionId) {
+  return ref.watch(programmeRepositoryProvider).myAttendance(sessionId);
 });
 
 final myAgendaProvider = FutureProvider<List<SessionItem>>((ref) {

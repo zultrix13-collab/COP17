@@ -5,7 +5,7 @@ import 'supabase_client.dart';
 
 const _defaultBaseUrl = String.fromEnvironment(
   'API_BASE_URL',
-  defaultValue: 'http://localhost:3000/v1',
+  defaultValue: 'https://api.siop.mn/v1',
 );
 
 /// Dio with a Supabase-access-token bearer injector.

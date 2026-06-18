@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'b2b_repository.dart';
+
 
 class B2BPage extends ConsumerStatefulWidget {
   const B2BPage({super.key});
@@ -17,14 +19,15 @@ class _B2BPageState extends ConsumerState<B2BPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     final list = ref.watch(exhibitorsProvider(_search));
     return Scaffold(
       appBar: AppBar(
-        title: const Text('B2B Exhibitors'),
+        title: Text(l10n.b2bTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.event_note_outlined),
-            tooltip: 'Миний Meetings',
+            tooltip: l10n.myMeetings,
             onPressed: () => context.push('/b2b/meetings'),
           ),
         ],
@@ -33,10 +36,10 @@ class _B2BPageState extends ConsumerState<B2BPage> {
         Padding(
           padding: const EdgeInsets.all(12),
           child: TextField(
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              hintText: 'Компани хайх',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: l10n.searchCompany,
+              border: const OutlineInputBorder(),
               isDense: true,
             ),
             onChanged: (v) => setState(() => _search = v),
@@ -48,7 +51,7 @@ class _B2BPageState extends ConsumerState<B2BPage> {
             error: (e, _) => Center(child: ErrorView(error: e)),
             data: (items) {
               if (items.isEmpty) {
-                return const Center(child: Text('Exhibitor алга'));
+                return Center(child: Text(l10n.noExhibitors));
               }
               return RefreshIndicator(
                 onRefresh: () async => ref.invalidate(exhibitorsProvider),
@@ -59,8 +62,9 @@ class _B2BPageState extends ConsumerState<B2BPage> {
                     final e = items[i];
                     return ListTile(
                       leading: CircleAvatar(
-                          child:
-                              Text(e.company.characters.first.toUpperCase())),
+                          child: Text(e.company.isNotEmpty
+                              ? e.company.characters.first.toUpperCase()
+                              : '?')),
                       title: Text(e.company,
                           style: const TextStyle(fontWeight: FontWeight.w700)),
                       subtitle: Text([e.sector, e.country, e.booth]
@@ -68,7 +72,7 @@ class _B2BPageState extends ConsumerState<B2BPage> {
                           .join(' · ')),
                       trailing: FilledButton.tonal(
                         onPressed: () => context.push('/b2b/${e.userId}'),
-                        child: const Text('Meeting →'),
+                        child: Text('${l10n.meetingBtn} →'),
                       ),
                     );
                   },
@@ -94,6 +98,12 @@ class _MeetingRequestPageState extends ConsumerState<MeetingRequestPage> {
   DateTime? _slot;
   bool _busy = false;
 
+  @override
+  void dispose() {
+    _purpose.dispose();
+    super.dispose();
+  }
+
   List<DateTime> _slots() {
     // Next 3 days, 10:00 & 14:00 slots each.
     final now = DateTime.now();
@@ -117,14 +127,15 @@ class _MeetingRequestPageState extends ConsumerState<MeetingRequestPage> {
       ref.invalidate(myMeetingsProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Хүсэлт илгээгдлээ — admin батална')),
+          SnackBar(content: Text(AppL10n.of(context)!.requestSent)),
         );
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('$e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(ErrorView.friendlyMessage(AppL10n.of(context)!, e))),
+        );
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -133,14 +144,14 @@ class _MeetingRequestPageState extends ConsumerState<MeetingRequestPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     final fmt = DateFormat('MMM d · HH:mm');
     return Scaffold(
-      appBar: AppBar(title: const Text('Meeting хүсэлт')),
-      body: Padding(
+      appBar: AppBar(title: Text(l10n.meetingRequestTitle)),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          const Text('Цаг сонгох'),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Text(l10n.chooseTime),
           const SizedBox(height: 8),
           Wrap(spacing: 8, runSpacing: 8, children: [
             for (final s in _slots())
@@ -154,15 +165,16 @@ class _MeetingRequestPageState extends ConsumerState<MeetingRequestPage> {
           TextField(
             controller: _purpose,
             maxLines: 3,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Зорилго',
+            maxLength: 500,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: l10n.purpose,
             ),
           ),
-          const Spacer(),
+          const SizedBox(height: 16),
           FilledButton(
             onPressed: _busy || _slot == null ? null : _submit,
-            child: Text(_busy ? '…' : 'Хүсэлт илгээх'),
+            child: Text(_busy ? '…' : l10n.sendRequest),
           ),
         ]),
       ),
@@ -175,18 +187,19 @@ class MyMeetingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     final meetings = ref.watch(myMeetingsProvider);
     final fmt = DateFormat('MMM d · HH:mm');
     return Scaffold(
-      appBar: AppBar(title: const Text('Миний Meetings')),
+      appBar: AppBar(title: Text(l10n.myMeetings)),
       body: meetings.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: ErrorView(error: e)),
         data: (list) {
           if (list.isEmpty) {
-            return const Center(
-                child: Text('Meeting алга',
-                    style: TextStyle(color: Color(0xFF888888))));
+            return Center(
+                child: Text(l10n.noMeetings,
+                    style: const TextStyle(color: Color(0xFF888888))));
           }
           return ListView.separated(
             itemCount: list.length,

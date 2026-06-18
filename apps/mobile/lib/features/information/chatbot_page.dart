@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'info_repository.dart';
 
 class _Msg {
@@ -19,10 +20,31 @@ class ChatbotPage extends ConsumerStatefulWidget {
 class _ChatbotPageState extends ConsumerState<ChatbotPage> {
   final _input = TextEditingController();
   final _scroll = ScrollController();
-  final List<_Msg> _msgs = [
-    _Msg('bot', 'Сайн байна уу! SIOP хөтөлбөр, байршил, FAQ асуултууд дээр туслая.'),
-  ];
+  final List<_Msg> _msgs = [];
   bool _busy = false;
+  bool _seeded = false;
+  String? _greetingLocale;
+
+  @override
+  void dispose() {
+    _input.dispose();
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context).languageCode;
+    if (!_seeded) {
+      _seeded = true;
+      _greetingLocale = locale;
+      _msgs.add(_Msg('bot', AppL10n.of(context)!.chatbotGreeting));
+    } else if (_greetingLocale != locale && _msgs.isNotEmpty && _msgs.first.who == 'bot') {
+      _greetingLocale = locale;
+      setState(() => _msgs[0] = _Msg('bot', AppL10n.of(context)!.chatbotGreeting));
+    }
+  }
 
   Future<void> _send() async {
     final text = _input.text.trim();
@@ -33,11 +55,16 @@ class _ChatbotPageState extends ConsumerState<ChatbotPage> {
       _input.clear();
     });
     _scrollToBottom();
+    final locale = Localizations.localeOf(context).languageCode;
     try {
-      final res = await ref.read(infoRepositoryProvider).chat(text, 'mn');
+      final res = await ref
+          .read(infoRepositoryProvider)
+          .chat(text, locale);
+      if (!mounted) return;
       setState(() => _msgs.add(_Msg('bot', res['answer'] as String)));
     } catch (e) {
-      setState(() => _msgs.add(_Msg('bot', ErrorView.friendlyMessage(e))));
+      if (!mounted) return;
+      setState(() => _msgs.add(_Msg('bot', ErrorView.friendlyMessage(AppL10n.of(context)!, e))));
     } finally {
       if (mounted) setState(() => _busy = false);
       _scrollToBottom();
@@ -55,8 +82,9 @@ class _ChatbotPageState extends ConsumerState<ChatbotPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('AI туслах')),
+      appBar: AppBar(title: Text(l10n.aiAssistant)),
       body: Column(children: [
         Expanded(
           child: ListView.builder(
@@ -74,10 +102,12 @@ class _ChatbotPageState extends ConsumerState<ChatbotPage> {
               Expanded(
                 child: TextField(
                   controller: _input,
-                  decoration: const InputDecoration(
-                    hintText: 'Асуулт бичих…',
-                    border: OutlineInputBorder(),
+                  maxLength: 500,
+                  decoration: InputDecoration(
+                    hintText: l10n.askQuestion,
+                    border: const OutlineInputBorder(),
                     isDense: true,
+                    counterText: '',
                   ),
                   onSubmitted: (_) => _send(),
                 ),

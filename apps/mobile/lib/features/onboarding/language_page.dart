@@ -1,50 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
+import '../../core/locale.dart';
 import '../../core/supabase_client.dart';
+import '../../l10n/app_localizations.dart';
 
-final selectedLocaleProvider = StateProvider<String>((_) => 'mn');
-
+/// Language settings, reachable from Profile. English is the default; the user
+/// can switch to Mongolian here and the choice persists across restarts.
 class LanguagePage extends ConsumerWidget {
   const LanguagePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selected = ref.watch(selectedLocaleProvider);
+    final l10n = AppL10n.of(context)!;
+    final current = ref.watch(localeProvider).languageCode;
 
-    Future<void> save() async {
+    Future<void> choose(String code) async {
+      await ref.read(localeProvider.notifier).set(code);
       final user = supabase.auth.currentUser;
       if (user != null) {
-        await supabase.from('profiles').update({'locale': selected}).eq('id', user.id);
+        await supabase.from('profiles').update({'locale': code}).eq('id', user.id);
       }
-      if (context.mounted) context.go('/onboarding/permission');
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Хэл сонгох')),
+      appBar: AppBar(title: Text(l10n.languageTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _LangTile(
-              code: 'mn',
-              title: '🇲🇳 Монгол',
-              subtitle: 'Анхдагч',
-              selected: selected == 'mn',
-              onTap: () => ref.read(selectedLocaleProvider.notifier).state = 'mn',
+              title: '🇬🇧 ${l10n.languageEn}',
+              subtitle: l10n.defaultLabel,
+              selected: current == 'en',
+              onTap: () => choose('en'),
             ),
             const SizedBox(height: 8),
             _LangTile(
-              code: 'en',
-              title: '🇬🇧 English',
-              subtitle: 'Available',
-              selected: selected == 'en',
-              onTap: () => ref.read(selectedLocaleProvider.notifier).state = 'en',
+              title: '🇲🇳 ${l10n.languageMn}',
+              subtitle: '',
+              selected: current == 'mn',
+              onTap: () => choose('mn'),
             ),
-            const Spacer(),
-            FilledButton(onPressed: save, child: const Text('Эхлэх →')),
           ],
         ),
       ),
@@ -53,13 +51,11 @@ class LanguagePage extends ConsumerWidget {
 }
 
 class _LangTile extends StatelessWidget {
-  final String code;
   final String title;
   final String subtitle;
   final bool selected;
   final VoidCallback onTap;
   const _LangTile({
-    required this.code,
     required this.title,
     required this.subtitle,
     required this.selected,
@@ -85,7 +81,8 @@ class _LangTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-                  Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF888888))),
+                  if (subtitle.isNotEmpty)
+                    Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF888888))),
                 ],
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'info_repository.dart';
 
 class InformationPage extends ConsumerWidget {
@@ -11,16 +12,17 @@ class InformationPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     final anns = ref.watch(announcementsProvider);
     final faq = ref.watch(faqProvider);
     final flights = ref.watch(flightsProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Мэдээлэл'),
+        title: Text(l10n.infoTitle),
         actions: [
           IconButton(
-            tooltip: 'AI туслах',
+            tooltip: l10n.aiAssistant,
             icon: const Icon(Icons.smart_toy_outlined),
             onPressed: () => context.push('/information/chatbot'),
           ),
@@ -35,9 +37,9 @@ class InformationPage extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.all(14),
           children: [
-            _Section(title: '📢 Мэдэгдлүүд', child: _AnnouncementsCard(anns)),
+            _Section(title: l10n.sectionAnnouncements, child: _AnnouncementsCard(anns)),
             const SizedBox(height: 12),
-            _Section(title: '✈ Нислэгийн мэдээлэл', child: _FlightsCard(flights)),
+            _Section(title: l10n.sectionFlights, child: _FlightsCard(flights)),
             const SizedBox(height: 12),
             _Section(title: '❓ FAQ', child: _FaqCard(faq)),
           ],
@@ -67,11 +69,12 @@ class _AnnouncementsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fmt = DateFormat('MMM d · HH:mm');
+    final loc = Localizations.localeOf(context).languageCode;
     return anns.when(
       loading: () => const Center(child: Padding(padding: EdgeInsets.all(8), child: LinearProgressIndicator())),
       error: (e, _) => ErrorView(error: e, compact: true),
       data: (list) {
-        if (list.isEmpty) return const _Empty(text: 'Одоогоор мэдэгдэл алга');
+        if (list.isEmpty) return _Empty(text: AppL10n.of(context)!.noAnnouncements);
         return Column(children: [
           for (final a in list.take(5))
             _Row(
@@ -80,10 +83,13 @@ class _AnnouncementsCard extends StatelessWidget {
                 'warn' => const Color(0xFFB45309),
                 _ => const Color(0xFF0EA5E9),
               },
-              title: a['title_mn'] as String,
-              subtitle: a['published_at'] == null
-                  ? (a['body_mn'] as String?) ?? ''
-                  : '${fmt.format(DateTime.parse(a['published_at']))} · ${a['body_mn'] ?? ''}',
+              title: (a['title_$loc'] ?? a['title_en'] ?? a['title_mn'] ?? '') as String,
+              subtitle: () {
+                final body = a['body_$loc'] ?? a['body_en'] ?? a['body_mn'] ?? '';
+                return a['published_at'] == null
+                    ? '$body'
+                    : '${fmt.format(DateTime.parse(a['published_at']))} · $body';
+              }(),
             ),
         ]);
       },
@@ -101,7 +107,7 @@ class _FlightsCard extends StatelessWidget {
       loading: () => const LinearProgressIndicator(),
       error: (e, _) => ErrorView(error: e, compact: true),
       data: (list) {
-        if (list.isEmpty) return const _Empty(text: 'Нислэгийн мэдээлэл алга');
+        if (list.isEmpty) return _Empty(text: AppL10n.of(context)!.noFlights);
         return Column(children: [
           for (final f in list.take(8))
             _Row(
@@ -126,21 +132,22 @@ class _FaqCard extends StatelessWidget {
   const _FaqCard(this.faq);
   @override
   Widget build(BuildContext context) {
+    final loc = Localizations.localeOf(context).languageCode;
     return faq.when(
       loading: () => const LinearProgressIndicator(),
       error: (e, _) => ErrorView(error: e, compact: true),
       data: (list) {
-        if (list.isEmpty) return const _Empty(text: 'FAQ алга');
+        if (list.isEmpty) return _Empty(text: AppL10n.of(context)!.noFaq);
         return Column(children: [
           for (final f in list.take(8))
             ExpansionTile(
               tilePadding: EdgeInsets.zero,
-              title: Text(f['question_mn'] as String,
+              title: Text((f['question_$loc'] ?? f['question_en'] ?? f['question_mn'] ?? '') as String,
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 8, 12),
-                  child: Text(f['answer_mn'] as String,
+                  child: Text((f['answer_$loc'] ?? f['answer_en'] ?? f['answer_mn'] ?? '') as String,
                       style: const TextStyle(fontSize: 12, color: Color(0xFF555555))),
                 ),
               ],

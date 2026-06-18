@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'programme_repository.dart';
 
 class SessionDetailPage extends ConsumerWidget {
@@ -12,32 +13,49 @@ class SessionDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
     final sessionAsync = ref.watch(sessionDetailProvider(sessionId));
     final attendance = ref.watch(myAttendanceProvider(sessionId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Session дэлгэрэнгүй')),
+      appBar: AppBar(title: Text(l10n.sessionDetailTitle)),
       body: sessionAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: ErrorView(error: e)),
         data: (s) {
-          if (s == null) return const Center(child: Text('Олдсонгүй'));
+          if (s == null) return Center(child: Text(l10n.notFound));
           final fmt = DateFormat('MMM d · HH:mm');
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text(s.titleMn, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+              Text(s.title(locale), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
               const SizedBox(height: 4),
               Text('${fmt.format(s.startsAt)} – ${DateFormat('HH:mm').format(s.endsAt)}',
                   style: const TextStyle(color: Color(0xFF888888))),
-              Text('Hall: ${s.hall}', style: const TextStyle(color: Color(0xFF888888))),
+              Text(l10n.hallLabel(s.hall), style: const TextStyle(color: Color(0xFF888888))),
               const SizedBox(height: 12),
               Wrap(spacing: 6, children: [
                 for (final t in s.accessTiers)
                   Chip(label: Text(t), labelStyle: const TextStyle(fontSize: 10)),
               ]),
               const SizedBox(height: 12),
-              if (s.descriptionMn != null) Text(s.descriptionMn!),
+              if (s.description(locale) != null) Text(s.description(locale)!),
+              if (s.speakers != null && s.speakers!.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                Text(l10n.speakers,
+                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                const SizedBox(height: 6),
+                for (final speaker in s.speakers!)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: Row(children: [
+                      const Icon(Icons.person_outline, size: 16, color: Color(0xFF888888)),
+                      const SizedBox(width: 8),
+                      Text(speaker, style: const TextStyle(fontSize: 13)),
+                    ]),
+                  ),
+              ],
               const SizedBox(height: 20),
               attendance.when(
                 data: (status) => _ActionButton(
@@ -88,8 +106,8 @@ class _ActionButtonState extends ConsumerState<_ActionButton> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(result == AttendanceStatus.waitlist
-              ? 'Суудал дүүрсэн — хүлээлтэд нэмэгдлээ'
-              : 'Going ✓'),
+              ? AppL10n.of(context)!.waitlisted
+              : AppL10n.of(context)!.statusGoing),
         ));
       } else {
         await repo.cancelAttendance(widget.sessionId);
@@ -105,15 +123,16 @@ class _ActionButtonState extends ConsumerState<_ActionButton> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     if (widget.currentStatus == AttendanceStatus.attended) {
       return Column(children: [
         const Icon(Icons.check_circle, color: Color(0xFF16A34A), size: 40),
-        const Text('Та ирсэн'),
+        Text(l10n.youAttended),
         const SizedBox(height: 8),
         OutlinedButton.icon(
           onPressed: widget.onGoFeedback,
           icon: const Icon(Icons.star_outline),
-          label: const Text('Үнэлгээ өгөх'),
+          label: Text(l10n.giveFeedback),
         ),
       ]);
     }
@@ -127,8 +146,8 @@ class _ActionButtonState extends ConsumerState<_ActionButton> {
         child: Text(_busy
             ? '…'
             : isGoing
-                ? 'Цуцлах'
-                : 'Going — бүртгүүлэх ✓'),
+                ? l10n.cancel
+                : l10n.goingRegister),
       ),
     ]);
   }

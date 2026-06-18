@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/widgets/error_view.dart';
+import '../../l10n/app_localizations.dart';
 import 'programme_repository.dart';
 
 class ProgrammePage extends ConsumerWidget {
@@ -11,20 +12,21 @@ class ProgrammePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppL10n.of(context)!;
     final sessions = ref.watch(sessionsProvider(null));
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Хөтөлбөр'),
+        title: Text(l10n.navProgramme),
         actions: [
           IconButton(
             icon: const Icon(Icons.calendar_month_outlined),
             onPressed: () => context.push('/programme/agenda'),
-            tooltip: 'My Agenda',
+            tooltip: l10n.myAgendaTitle,
           ),
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
             onPressed: () => context.push('/scanner'),
-            tooltip: 'Check-in scanner',
+            tooltip: l10n.scannerTitle,
           ),
         ],
       ),
@@ -33,7 +35,7 @@ class ProgrammePage extends ConsumerWidget {
         error: (e, _) => Center(child: ErrorView(error: e)),
         data: (list) {
           if (list.isEmpty) {
-            return const Center(child: Text('Session нэмээгүй байна'));
+            return Center(child: Text(l10n.noSessions));
           }
           final byDay = <String, List<SessionItem>>{};
           final dateKey = DateFormat('yyyy-MM-dd');
@@ -75,6 +77,7 @@ class _SessionTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final attendance = ref.watch(myAttendanceProvider(session.id));
     final fmt = DateFormat('HH:mm');
+    final locale = Localizations.localeOf(context).languageCode;
     return InkWell(
       onTap: () => context.push('/programme/${session.id}'),
       child: Container(
@@ -97,7 +100,7 @@ class _SessionTile extends ConsumerWidget {
                         color: Color(0xFF888888),
                         fontWeight: FontWeight.w700)),
                 const SizedBox(height: 2),
-                Text(session.titleMn,
+                Text(session.title(locale),
                     style: const TextStyle(
                         fontSize: 13, fontWeight: FontWeight.w700)),
               ])),
@@ -118,14 +121,15 @@ class _StatusBadge extends StatelessWidget {
   const _StatusBadge({required this.status, required this.capacity});
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     if (status == AttendanceStatus.going) {
-      return const _Pill(text: 'Going ✓', color: Color(0xFF16A34A));
+      return _Pill(text: l10n.statusGoing, color: const Color(0xFF16A34A));
     }
     if (status == AttendanceStatus.waitlist) {
-      return const _Pill(text: 'Waitlist', color: Color(0xFFB45309));
+      return _Pill(text: l10n.statusWaitlist, color: const Color(0xFFB45309));
     }
     if (status == AttendanceStatus.attended) {
-      return const _Pill(text: 'Attended', color: Color(0xFF0369A1));
+      return _Pill(text: l10n.statusAttended, color: const Color(0xFF0369A1));
     }
     return _Pill(
         text: capacity > 0 ? '$capacity' : '—', color: const Color(0xFF888888));

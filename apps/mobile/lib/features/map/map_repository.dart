@@ -40,6 +40,10 @@ class Poi {
         point: _parseGeom(m['geom']),
       );
 
+  String name(String locale) => locale == 'en'
+      ? (nameEn.isNotEmpty ? nameEn : nameMn)
+      : (nameMn.isNotEmpty ? nameMn : nameEn);
+
   String get emoji => switch (kind) {
         'hall' => '🏛',
         'food' => '🍽',

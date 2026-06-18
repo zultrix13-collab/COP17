@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../l10n/app_localizations.dart';
 import 'services_repository.dart';
 
 const _presets = [10000, 20000, 50000, 100000];
@@ -19,6 +21,8 @@ class _TopUpPageState extends ConsumerState<TopUpPage> {
   int _amount = 20000;
   QPayInvoice? _invoice;
   Timer? _poll;
+  int _pollCount = 0;
+  static const _maxPolls = 40;
   String _status = 'pending';
   bool _busy = false;
 
@@ -32,7 +36,7 @@ class _TopUpPageState extends ConsumerState<TopUpPage> {
     setState(() => _busy = true);
     try {
       final inv = await ref.read(servicesRepositoryProvider).topUp(_amount);
-      setState(() => _invoice = inv);
+      setState(() { _invoice = inv; _pollCount = 0; });
       _poll = Timer.periodic(const Duration(seconds: 3), (_) => _checkStatus(inv.id));
     } catch (e) {
       if (mounted) {
@@ -44,6 +48,13 @@ class _TopUpPageState extends ConsumerState<TopUpPage> {
   }
 
   Future<void> _checkStatus(String id) async {
+    if (!mounted) return;
+    _pollCount++;
+    if (_pollCount >= _maxPolls) {
+      _poll?.cancel();
+      setState(() => _status = 'expired');
+      return;
+    }
     final s = await ref.read(servicesRepositoryProvider).invoiceStatus(id);
     if (!mounted) return;
     setState(() => _status = s);
@@ -51,7 +62,7 @@ class _TopUpPageState extends ConsumerState<TopUpPage> {
       _poll?.cancel();
       ref.invalidate(walletTxnsProvider);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Цэнэглэлт амжилттай')),
+        SnackBar(content: Text(AppL10n.of(context)!.topUpSuccess)),
       );
       context.pop();
     } else if (s == 'expired' || s == 'failed') {
@@ -61,18 +72,19 @@ class _TopUpPageState extends ConsumerState<TopUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Цэнэглэх')),
+      appBar: AppBar(title: Text(l10n.topUp)),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: _invoice == null ? _amountStep() : _invoiceStep(),
+        child: _invoice == null ? _amountStep(l10n) : _invoiceStep(l10n),
       ),
     );
   }
 
-  Widget _amountStep() {
+  Widget _amountStep(AppL10n l10n) {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      const Text('Цэнэглэх дүн'),
+      Text(l10n.topUpAmount),
       const SizedBox(height: 12),
       Container(
         padding: const EdgeInsets.all(16),
@@ -98,14 +110,14 @@ class _TopUpPageState extends ConsumerState<TopUpPage> {
       const SizedBox(height: 20),
       FilledButton(
         onPressed: _busy ? null : _start,
-        child: Text(_busy ? '…' : 'QPay-аар төлөх'),
+        child: Text(_busy ? '…' : l10n.payWithQpay),
       ),
     ]);
   }
 
-  Widget _invoiceStep() {
+  Widget _invoiceStep(AppL10n l10n) {
     return Column(children: [
-      const Text('Utility апп-аараа QR кодыг уншуулна уу', textAlign: TextAlign.center),
+      Text(l10n.scanQrUtility, textAlign: TextAlign.center),
       const SizedBox(height: 16),
       Container(
         width: 220, height: 220,
@@ -113,15 +125,21 @@ class _TopUpPageState extends ConsumerState<TopUpPage> {
           border: Border.all(color: const Color(0xFFE0E0E0)),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Center(child: Icon(Icons.qr_code_2, size: 140)),
+        child: QrImageView(
+          data: _invoice!.qrText,
+          version: QrVersions.auto,
+          size: 200,
+          eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: Colors.black),
+          dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: Colors.black),
+        ),
       ),
       const SizedBox(height: 8),
-      Text('Дүн: ${_money.format(_invoice!.amount)}', style: const TextStyle(fontWeight: FontWeight.w700)),
+      Text(l10n.amountLabel(_money.format(_invoice!.amount)), style: const TextStyle(fontWeight: FontWeight.w700)),
       const SizedBox(height: 8),
-      Text('Статус: $_status', style: const TextStyle(color: Color(0xFF888888))),
+      Text(l10n.statusLabel(_status), style: const TextStyle(color: Color(0xFF888888))),
       const SizedBox(height: 20),
-      OutlinedButton(onPressed: () => _checkStatus(_invoice!.id), child: const Text('Шалгах')),
-      TextButton(onPressed: () { _poll?.cancel(); context.pop(); }, child: const Text('Цуцлах')),
+      OutlinedButton(onPressed: () => _checkStatus(_invoice!.id), child: Text(l10n.check)),
+      TextButton(onPressed: () { _poll?.cancel(); context.pop(); }, child: Text(l10n.cancel)),
     ]);
   }
 }

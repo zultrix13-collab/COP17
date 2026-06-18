@@ -24,7 +24,7 @@ class Profile {
         id: m['id'] as String,
         email: m['email'] as String,
         name: (m['name'] as String?) ?? '',
-        locale: (m['locale'] as String?) ?? 'mn',
+        locale: (m['locale'] as String?) ?? 'en',
         tier: (m['tier'] as String?) ?? 'green',
         accreditationId: m['accreditation_id'] as String?,
       );
@@ -44,6 +44,13 @@ class ProfileRepository {
         .eq('id', user.id)
         .maybeSingle();
     return row == null ? null : Profile.fromMap(row);
+  }
+
+  Future<void> updateName(String name) async {
+    if (demoMode || reviewSession) return;
+    final user = supabase.auth.currentUser;
+    if (user == null) return;
+    await supabase.from('profiles').update({'name': name}).eq('id', user.id);
   }
 
   /// Listen for RLS-filtered updates to the caller's own profile — tier changes

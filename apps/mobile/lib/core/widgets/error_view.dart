@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class ErrorView extends StatelessWidget {
   final Object error;
   final VoidCallback? onRetry;
@@ -12,32 +14,33 @@ class ErrorView extends StatelessWidget {
     this.compact = false,
   });
 
-  static String friendlyMessage(Object error) {
+  static String friendlyMessage(AppL10n l10n, Object error) {
     final s = error.toString().toLowerCase();
     if (s.contains('socketexception') || s.contains('networkerror') || s.contains('failed host lookup')) {
-      return 'Интернэт холболт алдаатай байна.';
+      return l10n.errNetwork;
     }
     if (s.contains('rate limit') || s.contains('too many') || s.contains('429')) {
-      return 'Хэт олон удаа оролдлоо. 1 цагийн дараа дахин оролдоно уу.';
+      return l10n.errTooMany;
     }
     if (s.contains('user not found') || s.contains('email not confirmed') || s.contains('invalid login')) {
-      return 'И-мэйл хаяг бүртгэлгүй байна. Зохион байгуулагчтай холбогдоно уу.';
+      return l10n.errEmailNotRegistered;
     }
     if (s.contains('otp') || s.contains('token') && s.contains('invalid')) {
-      return 'Код буруу эсвэл хугацаа дууссан байна. Дахин код авна уу.';
+      return l10n.errOtpInvalid;
     }
     if (s.contains('401') || s.contains('unauthorized') || s.contains('not authenticated')) {
-      return 'Нэвтрэх шаардлагатай. Та дахин нэвтэрнэ үү.';
+      return l10n.errAuthRequired;
     }
     if (s.contains('timeout') || s.contains('timeoutexception') || s.contains('receivetimeout')) {
-      return 'Хүсэлт хугацаа дуусав. Дахин оролдоно уу.';
+      return l10n.errTimeout;
     }
-    return 'Алдаа гарлаа. Дахин оролдоно уу.';
+    return l10n.errGeneric;
   }
 
   @override
   Widget build(BuildContext context) {
-    final msg = friendlyMessage(error);
+    final l10n = AppL10n.of(context)!;
+    final msg = friendlyMessage(l10n, error);
     if (compact) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -51,9 +54,9 @@ class ErrorView extends StatelessWidget {
             const SizedBox(width: 4),
             GestureDetector(
               onTap: onRetry,
-              child: const Text(
-                'Дахин',
-                style: TextStyle(
+              child: Text(
+                l10n.retryShort,
+                style: const TextStyle(
                   fontSize: 12,
                   color: Color(0xFF1A6EF5),
                   decoration: TextDecoration.underline,
@@ -78,7 +81,7 @@ class ErrorView extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Дахин оролдох'),
+                label: Text(l10n.retry),
               ),
             ],
           ],

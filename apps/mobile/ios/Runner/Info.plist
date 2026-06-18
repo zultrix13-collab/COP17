@@ -20,16 +20,13 @@
 	<!-- Notifications -->
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>SIOP sends session reminders and urgent conference announcements.</string>
-	<!-- NFC — flutter_nfc_kit -->
-	<key>NFCReaderUsageDescription</key>
-	<string>SIOP uses NFC to read digital badge chips for fast check-in.</string>
 	<!-- Face ID / Touch ID — local_auth -->
 	<key>NSFaceIDUsageDescription</key>
 	<string>SIOP uses Face ID to securely unlock your account.</string>
 	<!-- Microphone — required by some camera/scanner SDKs even if unused -->
 	<key>NSMicrophoneUsageDescription</key>
 	<string>SIOP does not use the microphone. This is required by the camera framework.</string>
-	<!-- Bluetooth — required by some beacon/NFC SDKs -->
+	<!-- Bluetooth — venue beacon indoor navigation -->
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>SIOP uses Bluetooth to detect nearby venue beacons for indoor navigation.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>

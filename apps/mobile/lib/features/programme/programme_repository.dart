@@ -81,7 +81,7 @@ class ProgrammeRepository {
     final q = supabase
         .from('sessions')
         .select(
-            'id, title_mn, title_en, hall, starts_at, ends_at, capacity, access_tiers, description_mn, description_en, speakers')
+            'id, title_mn, title_en, hall, starts_at, ends_at, capacity, access_tiers, description_mn, description_en')
         .order('starts_at');
     final data = await q;
     final items = (data as List)

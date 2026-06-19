@@ -389,7 +389,7 @@ class _MissionCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      'A global forum for action on desertification, drought, and rangeland resilience.',
+                      'Together for Change: Science, Compassion, and Hope for Every Child.',
                       style: TextStyle(
                         fontSize: 18,
                         height: 1.2,
@@ -400,7 +400,7 @@ class _MissionCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Mongolia brings together governments, communities, and innovators to restore land and strengthen livelihoods.',
+                      'The 18th SIOP Asia Congress unites pediatric oncologists, researchers, and care teams from across Asia to advance childhood cancer care.',
                       style: TextStyle(
                         fontSize: 12.5,
                         height: 1.45,
@@ -443,10 +443,10 @@ class _EventStatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const items = <(String, String, IconData, Color)>[
-      ('10k+', 'Participants', Icons.groups_2_outlined, CopColors.primary),
-      ('81k', 'Sq meters', Icons.domain_outlined, CopColors.sky),
-      ('100+', 'Suppliers', Icons.handshake_outlined, CopColors.land),
-      ('80+', 'Projects', Icons.eco_outlined, CopColors.sun),
+      ('1,200+', 'Delegates', Icons.groups_2_outlined, CopColors.primary),
+      ('25+', 'Countries', Icons.public, CopColors.sky),
+      ('76', 'Sessions', Icons.event_note_outlined, CopColors.land),
+      ('90+', 'Speakers', Icons.record_voice_over_outlined, CopColors.sun),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -524,10 +524,10 @@ class _WidgetsRow extends StatelessWidget {
   Widget build(BuildContext context) => Row(children: const [
         Expanded(
             child: _StatTile(
-                icon: Icons.eco_outlined,
-                label: 'Restoration points',
-                value: '340',
-                sub: 'Next reward at 500',
+                icon: Icons.school_outlined,
+                label: 'CME credits',
+                value: '18',
+                sub: 'Next milestone at 24',
                 tint: CopColors.success)),
         SizedBox(width: 10),
         Expanded(
@@ -839,28 +839,28 @@ class _SponsorCard extends StatelessWidget {
           width: 54,
           height: 54,
           decoration: BoxDecoration(
-            color: CopColors.sun.withValues(alpha: 0.14),
+            color: CopColors.primary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(16),
           ),
-          child: const Icon(Icons.energy_savings_leaf_outlined,
-              color: CopColors.warning),
+          child: const Icon(Icons.groups_2_outlined,
+              color: CopColors.primary),
         ),
         const SizedBox(width: 12),
         Expanded(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              const Text('PLATINUM SPONSOR',
+              const Text('ORGANIZED BY',
                   style: TextStyle(
                       fontSize: 10,
-                      color: CopColors.warning,
+                      color: CopColors.primary,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.2)),
               const SizedBox(height: 2),
-              const Text('GreenTech Mongolia',
+              const Text('SIOP Asia & CCI Asia',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-              Text(AppL10n.of(context)!.sponsorSolar,
-                  style: const TextStyle(fontSize: 11, color: CopColors.inkMuted)),
+              const Text('Local Organizing Committee · Ulaanbaatar',
+                  style: TextStyle(fontSize: 11, color: CopColors.inkMuted)),
             ])),
         const Icon(Icons.arrow_forward_ios,
             size: 14, color: CopColors.inkMuted),

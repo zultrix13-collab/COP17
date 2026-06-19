@@ -21,4 +21,9 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
-      - run: flutter build apk --debug
+      # NOTE: `flutter build apk` is intentionally not run here. The Android
+      # project (apps/mobile/android) is gitignored along with its secrets
+      # (keystore, key.properties, google-services.json), so a CI runner cannot
+      # build it. iOS builds require macOS + signing and run locally/manually.
+      # analyze + test cover the Dart/Flutter code; native builds are verified
+      # at release time via build_testflight.sh / build_playstore.sh.
